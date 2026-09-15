@@ -19,6 +19,7 @@ from pydantic import BaseModel, Field
 
 from app.config import get_settings
 from app.services.decomposition import Period, SliceFilter
+from app.services.drilldown import parse_dimensions
 from app.services.sessions import (
     STATUS_AWAITING,
     STATUS_COMPLETED,
@@ -80,6 +81,10 @@ class DrilldownRequest(MessageRequest):
     region: str | None = None
     segment: str | None = None
     sku: str | None = None
+    #: 要透视的维度组合，例如 ``[["channel"], ["channel", "category"]]``；
+    #: 省略时按场景声明的维度自动选（每个组合最多 3 维，见需求说明书 §5.3）
+    dimensions: list[list[str] | str] | None = None
+    top_n: int = Field(default=5, ge=1, le=50)
 
 
 def _slice_from(payload: Any) -> SliceFilter:
@@ -172,13 +177,26 @@ def stream(session_id: int, since: int = Query(default=-1)) -> StreamingResponse
 
 @router.post("/{session_id}/drilldown")
 def drilldown(session_id: int, payload: DrilldownRequest) -> dict[str, Any]:
-    """维度下钻：在锁定切片之上只允许收紧。"""
+    """维度下钻（L2）：在锁定切片之上只允许收紧，随后跑透视与逐层守恒。"""
 
     extra = _slice_from(payload)
-    if extra.empty:
-        raise HTTPException(status_code=400, detail="下钻必须至少指定一个维度取值")
     try:
-        return service().drilldown(session_id, extra_slice=extra, actor=payload.actor).as_dict()
+        dimensions = parse_dimensions(payload.dimensions)
+    except Exception as error:  # noqa: BLE001 - 维度组合形状不对属于参数错误
+        raise HTTPException(status_code=400, detail=str(error)) from error
+    if extra.empty and not dimensions:
+        raise HTTPException(
+            status_code=400, detail="下钻必须至少指定一个维度取值，或指定要透视的维度"
+        )
+    try:
+        return service().drilldown(
+            session_id,
+            extra_slice=extra,
+            dimensions=dimensions,
+            top_n=payload.top_n,
+            actor=payload.actor,
+            message=payload.message,
+        ).as_dict()
     except Exception as error:  # noqa: BLE001
         raise _translate(error) from error
 
@@ -207,3 +225,10 @@ def evidence(session_id: int) -> dict[str, Any]:
     """证据链（SQL 摘要、样本量、p 值、效应量）。"""
 
     return {"items": service().evidence(session_id)}
+
+
+@router.get("/{session_id}/drilldowns")
+def drilldowns(session_id: int) -> dict[str, Any]:
+    """下钻记录：透视表、逐层守恒、覆盖率与关键变化特征（报告第 3 段的证据源）。"""
+
+    return {"items": service().drilldown_records(session_id)}

@@ -6,6 +6,13 @@
 * 唯一允许的浮点比较入口是 conservation.assert_conservation。
 """
 
+from .allocation import (
+    AllocationError,
+    Contribution,
+    ContributionTable,
+    allocate_by_share,
+    exact_contributions,
+)
 from .conservation import ConservationError, assert_conservation, conservation_residual
 from .diff import additive_contributions, contribution_rates
 from .inference import (
@@ -27,8 +34,11 @@ from .metrics_loader import MetricNode, MetricTree, load_metrics_file, load_metr
 from .tree import DecompositionError, NodeResult, TreeResult, decompose_tree
 
 __all__ = [
+    "AllocationError",
     "ConfidenceBreakdown",
     "ConservationError",
+    "Contribution",
+    "ContributionTable",
     "DecompositionError",
     "InferenceError",
     "LmdiError",
@@ -39,6 +49,7 @@ __all__ = [
     "TreeResult",
     "absolute_risk_difference",
     "additive_contributions",
+    "allocate_by_share",
     "assert_conservation",
     "composite_confidence",
     "conservation_residual",
@@ -47,6 +58,7 @@ __all__ = [
     "decompose_tree",
     "direction_consistency",
     "effect_score",
+    "exact_contributions",
     "lmdi_contributions",
     "load_metrics_file",
     "load_metrics_text",

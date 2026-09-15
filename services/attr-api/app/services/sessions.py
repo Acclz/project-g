@@ -26,6 +26,11 @@ from app.db import connect_app
 from app.sandbox.runner import SandboxRunner
 from app.services.analysis import DEFAULT_TARGETS, AnalysisRequest, run_analysis
 from app.services.decomposition import MetricEngine, Period, SliceFilter
+from app.services.drilldown import (
+    DrilldownRequest,
+    default_dimensions,
+    run_drilldown,
+)
 from app.services.seed import seed_reference_data
 
 STATUS_CREATED = "created"
@@ -102,6 +107,8 @@ class SessionService:
         self.settings = settings or self.engine.settings
         self.sandbox = sandbox or SandboxRunner(self.settings)
         self._lock = threading.Lock()
+        #: 步骤序号分配与落库的串行闸门（`session_steps` 的 (session_id, seq) 唯一）
+        self._step_lock = threading.Lock()
         self._running: set[int] = set()
         self._threads: dict[int, threading.Thread] = {}
         self._events: dict[int, list[dict[str, Any]]] = {}
@@ -258,9 +265,65 @@ class SessionService:
             )
             for step in report.steps:
                 self._emit(session_id, step["kind"], step["status"], step["payload"])
+            self._persist_steps(session_id, report.steps)
             self._persist_results(session_id, report)
             self._transition(session_id, STATUS_AWAITING, "分析完成，等待用户追问", actor)
         except Exception as error:  # noqa: BLE001 - 任何失败都要落到 failed 状态与事件流
+            self._failures[session_id] = f"{type(error).__name__}: {error}"
+            self._emit(session_id, "report", "failed", {"error": self._failures[session_id]})
+            self._transition(session_id, STATUS_FAILED, self._failures[session_id], actor)
+        finally:
+            with self._lock:
+                self._running.discard(session_id)
+
+    # ----------------------------------------------------------- L2 下钻链路
+
+    def _run_drilldown(
+        self,
+        session_id: int,
+        state: SessionState,
+        slice_filter: SliceFilter,
+        dimensions: tuple[tuple[str, ...], ...],
+        top_n: int,
+        message: str,
+        actor: str,
+        *,
+        inherited: SliceFilter,
+        narrowed: bool,
+    ) -> None:
+        """后台跑 L2：贴住收紧后的切片做透视，逐层守恒，新假设回 L1 验证。"""
+
+        try:
+            report = run_drilldown(
+                DrilldownRequest(
+                    scenario=state.scenario,
+                    base=state.base,
+                    current=state.current,
+                    slice_filter=slice_filter,
+                    dimensions=dimensions,
+                    top_n=top_n,
+                    title=state.title,
+                    actor=actor,
+                    message=message,
+                ),
+                engine=self.engine,
+                sandbox=self.sandbox,
+                settings=self.settings,
+                inherited_slice=inherited,
+                narrowed=narrowed,
+            )
+            for step in report.steps:
+                self._emit(session_id, step["kind"], step["status"], step["payload"])
+            self._persist_steps(session_id, report.steps)
+            self._persist_results(session_id, report.analysis)
+            self._persist_drilldown(session_id, report)
+            note = (
+                f"下钻完成：{len(report.pivots)} 张透视表，"
+                f"逐层守恒 {'全部通过' if report.conserved else '存在失败'}"
+            )
+            self._emit(session_id, "drilldown", "completed", {"note": note})
+            self._transition(session_id, STATUS_AWAITING, note, actor)
+        except Exception as error:  # noqa: BLE001 - 失败必须落到 failed 与事件流
             self._failures[session_id] = f"{type(error).__name__}: {error}"
             self._emit(session_id, "report", "failed", {"error": self._failures[session_id]})
             self._transition(session_id, STATUS_FAILED, self._failures[session_id], actor)
@@ -302,14 +365,82 @@ class SessionService:
         self,
         session_id: int,
         *,
-        extra_slice: SliceFilter,
+        extra_slice: SliceFilter | None = None,
+        dimensions: tuple[tuple[str, ...], ...] = (),
+        top_n: int = 5,
         actor: str = "analyst",
+        message: str = "",
     ) -> SessionState:
-        """下钻：在锁定上下文之上**只能收紧**切片；试图放宽或换口径一律拒绝。"""
+        """下钻（L2）：在锁定上下文之上**只能收紧**切片，然后跑透视与逐层守恒。
+
+        校验顺序是有意的：先判"是否越权变更锁定切片"（越权 ⇒ 409 并说明锁定项），
+        再判"同一会话是否已有执行中任务"（并发隔离）。这样用户拿到的提示永远是
+        更具体的那条："你改的维度被锁定了"，而不是笼统的"会话忙"。
+        """
 
         state = self.get(session_id)
-        merged = {key: tuple(values) for key, values in state.slice_filter.filters.items()}
-        for key, values in extra_slice.filters.items():
+        extra = extra_slice or SliceFilter()
+        merged = self._narrow(state.slice_filter, extra)
+        if extra.empty and not dimensions:
+            raise SessionError("下钻至少要指定维度取值，或指定要透视的维度组合")
+        plan = dimensions or default_dimensions(
+            self.engine, state.scenario, SliceFilter(merged)
+        )
+        with self._lock:
+            if session_id in self._running:
+                raise SessionBusy(
+                    f"会话 {session_id} 已有执行中的任务：同一会话同时只允许一个任务"
+                    "（需求说明书 §5.9 并发隔离）"
+                )
+            self._running.add(session_id)
+            self._transition(
+                session_id,
+                STATUS_ANALYSING,
+                "下钻已受理：锁定切片的子集上做维度透视",
+                actor,
+            )
+        if not extra.empty:
+            self._write_slice(session_id, merged)
+            # 切片变更必须写进会话记录（需求说明书 §5.3：扩大/收紧范围都要留痕）
+            self._persist_steps(
+                session_id,
+                [
+                    {
+                        "kind": "drilldown",
+                        "status": "accepted",
+                        "duration_ms": 0,
+                        "payload": {
+                            "accepted": True,
+                            "slice": merged,
+                            "inherited_slice": json.loads(state.slice_filter.as_json()),
+                            "note": "切片已收紧（只允许收紧，不放宽）",
+                        },
+                    }
+                ],
+            )
+            self._emit(
+                session_id,
+                "drilldown",
+                "accepted",
+                {"slice": merged, "note": "切片已收紧（只允许收紧，不放宽）"},
+            )
+        thread = threading.Thread(
+            target=self._run_drilldown,
+            args=(session_id, state, SliceFilter(merged), plan, top_n, message, actor),
+            kwargs={"inherited": state.slice_filter, "narrowed": not extra.empty},
+            name=f"session-{session_id}-drilldown",
+            daemon=True,
+        )
+        self._threads[session_id] = thread
+        thread.start()
+        return self.get(session_id)
+
+    @staticmethod
+    def _narrow(locked: SliceFilter, extra: SliceFilter) -> dict[str, tuple[str, ...]]:
+        """在锁定切片之上收紧：只允许把取值收成子集，放宽或替换一律拒绝。"""
+
+        merged = {key: tuple(values) for key, values in locked.filters.items()}
+        for key, values in extra.filters.items():
             if key in merged:
                 narrowed = tuple(value for value in values if value in merged[key])
                 if not narrowed:
@@ -320,6 +451,9 @@ class SessionService:
                 merged[key] = narrowed
             else:
                 merged[key] = tuple(values)
+        return merged
+
+    def _write_slice(self, session_id: int, merged: dict[str, tuple[str, ...]]) -> None:
         connection = connect_app(self.settings.app_db)
         try:
             connection.execute(
@@ -329,8 +463,6 @@ class SessionService:
             connection.commit()
         finally:
             connection.close()
-        self._emit(session_id, "drilldown", "completed", {"slice": merged})
-        return self.get(session_id)
 
     def hypotheses(self, session_id: int) -> list[dict[str, Any]]:
         """会话的假设列表（含置信度、状态与排除理由）。"""
@@ -359,6 +491,32 @@ class SessionService:
         finally:
             connection.close()
         return [dict(row) for row in rows]
+
+    def drilldown_records(self, session_id: int) -> list[dict[str, Any]]:
+        """会话里所有下钻步骤的载荷（透视表 + 逐层守恒 + 关键变化特征）。
+
+        七段式报告的第 3 段（细分维度下钻证据）与前端工作台都从这里取数，
+        保证"页面上看到的"和"报告里写的"是同一份持久化数据。
+        """
+
+        connection = connect_app(self.settings.app_db)
+        try:
+            rows = connection.execute(
+                "SELECT seq, status, payload_json, duration_ms FROM session_steps"
+                " WHERE session_id = ? AND kind = 'drilldown' ORDER BY seq",
+                (session_id,),
+            ).fetchall()
+        finally:
+            connection.close()
+        return [
+            {
+                "seq": row["seq"],
+                "status": row["status"],
+                "duration_ms": row["duration_ms"],
+                "payload": json.loads(row["payload_json"] or "{}"),
+            }
+            for row in rows
+        ]
 
     # --------------------------------------------------------------- 工具
 
@@ -454,46 +612,117 @@ class SessionService:
         finally:
             connection.close()
 
+    def _persist_drilldown(self, session_id: int, report) -> None:
+        """下钻小结落库：逐层守恒、覆盖率、关键变化特征与结论（报告第 3 段的证据源）。"""
+
+        self._persist_steps(
+            session_id,
+            [
+                {
+                    "kind": "drilldown",
+                    "status": "completed",
+                    "duration_ms": report.duration_ms,
+                    "payload": {
+                        "summary": True,
+                        "narrowed": report.narrowed,
+                        "inherited_slice": json.loads(report.inherited_slice.as_json()),
+                        "slice": json.loads(report.request.slice_filter.as_json()),
+                        "dimensions": [list(item) for item in report.request.dimensions],
+                        "conserved": report.conserved,
+                        "conservation": report.conservation,
+                        "highlights": report.highlights,
+                        "conclusion": report.conclusion,
+                        "coverage": [
+                            {
+                                "dimensions": list(pivot.dimensions),
+                                "coverage": pivot.table.coverage,
+                                "top_n": pivot.table.top_n,
+                                "heuristic": pivot.table.heuristic,
+                            }
+                            for pivot in report.pivots
+                        ],
+                    },
+                }
+            ],
+        )
+
     def _transition(self, session_id: int, status: str, note: str, actor: str) -> None:
         """状态迁移：更新 ``sessions.status`` 并在步骤流里留一条记录（每次迁移都落库）。"""
 
         if status not in VALID_STATUSES:
             raise SessionError(f"非法状态：{status}")
-        connection = connect_app(self.settings.app_db)
-        try:
-            next_seq = int(
+        with self._step_lock:
+            connection = connect_app(self.settings.app_db)
+            try:
                 connection.execute(
-                    "SELECT COALESCE(MAX(seq), 0) + 1 FROM session_steps WHERE session_id = ?",
-                    (session_id,),
-                ).fetchone()[0]
-            )
+                    "UPDATE sessions SET status = ? WHERE id = ?", (status, session_id)
+                )
+                self._insert_steps(
+                    connection,
+                    session_id,
+                    [
+                        {
+                            "kind": "plan",
+                            "status": status,
+                            "duration_ms": 0,
+                            "payload": {
+                                "note": note,
+                                "actor": actor,
+                                "at": datetime.now().isoformat(timespec="seconds"),
+                                "data_digest": self.data_digest(),
+                            },
+                        }
+                    ],
+                )
+                connection.commit()
+            finally:
+                connection.close()
+        self._emit(session_id, "plan", status, {"note": note, "actor": actor})
+
+    def _persist_steps(self, session_id: int, steps: list[dict[str, Any]]) -> None:
+        """把链路步骤落进 ``session_steps``（SSE 的内存流只是同一份数据的实时视图）。
+
+        落库是硬要求：报告组装与前端刷新都读这张表，只放在内存里刷新一次就没了。
+        """
+
+        if not steps:
+            return
+        with self._step_lock:
+            connection = connect_app(self.settings.app_db)
+            try:
+                self._insert_steps(connection, session_id, steps)
+                connection.commit()
+            finally:
+                connection.close()
+
+    @staticmethod
+    def _insert_steps(connection, session_id: int, steps: list[dict[str, Any]]) -> None:
+        """按 ``MAX(seq)+1`` 追加步骤；序号分配在 ``_step_lock`` 内完成，避免撞唯一键。"""
+
+        next_seq = int(
             connection.execute(
-                "UPDATE sessions SET status = ? WHERE id = ?", (status, session_id)
-            )
-            connection.execute(
-                "INSERT INTO session_steps (session_id, seq, kind, status, payload_json,"
-                " duration_ms) VALUES (?,?,?,?,?,?)",
+                "SELECT COALESCE(MAX(seq), 0) FROM session_steps WHERE session_id = ?",
+                (session_id,),
+            ).fetchone()[0]
+        )
+        rows = []
+        for step in steps:
+            next_seq += 1
+            rows.append(
                 (
                     session_id,
                     next_seq,
-                    "plan",
-                    status,
-                    json.dumps(
-                        {
-                            "note": note,
-                            "actor": actor,
-                            "at": datetime.now().isoformat(timespec="seconds"),
-                            "data_digest": self.data_digest(),
-                        },
-                        ensure_ascii=False,
-                    ),
-                    0,
-                ),
+                    step["kind"],
+                    step["status"],
+                    json.dumps(step.get("payload", {}), ensure_ascii=False),
+                    int(step.get("duration_ms", 0)),
+                )
             )
-            connection.commit()
-        finally:
-            connection.close()
-        self._emit(session_id, "plan", status, {"note": note, "actor": actor})
+        connection.executemany(
+            "INSERT INTO session_steps (session_id, seq, kind, status, payload_json,"
+            " duration_ms) VALUES (?,?,?,?,?,?)",
+            rows,
+        )
 
     def _emit(self, session_id: int, kind: str, status: str, payload: dict[str, Any]) -> None:
         """把事件追加到内存流（SSE 实时读；持久化版本在 ``session_steps``）。"""

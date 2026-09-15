@@ -1,0 +1,120 @@
+{
+  "dataset": "attribution_eval",
+  "metrics": {
+    "total": 4,
+    "top1_rate": 0.75,
+    "top3_rate": 1.0,
+    "median_relative_error": 0.06780695969485281,
+    "max_relative_error": 0.21237832670091167,
+    "all_conserved": true,
+    "sample_note": "首轮基线样本 4 条（预埋真因数量决定），P6 扩到 ≥20 条"
+  },
+  "cases": [
+    {
+      "ground_truth_id": 1,
+      "scenario": "ecom",
+      "slice": {
+        "channel": [
+          "paid_ads"
+        ]
+      },
+      "window": [
+        "2026-06-05",
+        "2026-06-11"
+      ],
+      "expected_factor": "cvr",
+      "ranking": [
+        "cvr",
+        "aov",
+        "uv"
+      ],
+      "top1_hit": true,
+      "top3_hit": true,
+      "truth_contribution_cents": -17336421,
+      "observed_contribution_cents": -18511951,
+      "relative_error": 0.06780695969485281,
+      "max_relative_residual": 1.4134934656014426e-14,
+      "conserved": true
+    },
+    {
+      "ground_truth_id": 2,
+      "scenario": "ecom",
+      "slice": {
+        "category": [
+          "appliance"
+        ]
+      },
+      "window": [
+        "2026-03-09",
+        "2026-03-15"
+      ],
+      "expected_factor": "uv",
+      "ranking": [
+        "uv",
+        "aov",
+        "cvr"
+      ],
+      "top1_hit": true,
+      "top3_hit": true,
+      "truth_contribution_cents": -28991673,
+      "observed_contribution_cents": -35148876,
+      "relative_error": 0.21237832670091167,
+      "max_relative_residual": 6.793021722672813e-15,
+      "conserved": true
+    },
+    {
+      "ground_truth_id": 3,
+      "scenario": "fmcg",
+      "slice": {
+        "category": [
+          "grain_oil",
+          "dairy"
+        ]
+      },
+      "window": [
+        "2026-04-06",
+        "2026-04-19"
+      ],
+      "expected_factor": "raw_material_cost",
+      "ranking": [
+        "raw_material_cost",
+        "revenue",
+        "logistics_cost"
+      ],
+      "top1_hit": true,
+      "top3_hit": true,
+      "truth_contribution_cents": -45165017,
+      "observed_contribution_cents": -46759210,
+      "relative_error": 0.035297075167712216,
+      "max_relative_residual": 3.073654734585285e-13,
+      "conserved": true
+    },
+    {
+      "ground_truth_id": 4,
+      "scenario": "fmcg",
+      "slice": {
+        "channel": [
+          "distributor"
+        ]
+      },
+      "window": [
+        "2026-02-02",
+        "2026-02-08"
+      ],
+      "expected_factor": "logistics_cost",
+      "ranking": [
+        "revenue",
+        "logistics_cost",
+        "raw_material_cost"
+      ],
+      "top1_hit": false,
+      "top3_hit": true,
+      "truth_contribution_cents": -18333617,
+      "observed_contribution_cents": -18384857,
+      "relative_error": 0.0027948658467120808,
+      "max_relative_residual": 5.627249458683766e-14,
+      "conserved": true
+    }
+  ],
+  "passed": true
+}

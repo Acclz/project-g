@@ -1,0 +1,1692 @@
+{
+  "cases": [
+    {
+      "ground_truth_id": 1,
+      "scenario": "ecom",
+      "note": "大促后付费投放渠道支付成功率下滑 22%，GMV 随之走低（场景 A 主案例）；因子口径 cvr（0.127689 → 0.101281）；LMDI 复核残差 3.191e-01 分",
+      "locate": {
+        "phase": "locate",
+        "scenario": "ecom",
+        "base": {
+          "start": "2026-05-29",
+          "end": "2026-06-04",
+          "days": 7,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-06-05",
+          "end": "2026-06-11",
+          "days": 7,
+          "label": "注入窗口"
+        },
+        "dimension": "channel",
+        "truth_values": [
+          "paid_ads"
+        ],
+        "truth_contribution_cents": -17336421,
+        "truth_ranks": {
+          "paid_ads": 1
+        },
+        "truth_contributions": {
+          "paid_ads": -28394217.0
+        },
+        "best_rank": 1,
+        "top_n": 5,
+        "all_in_top_n": true,
+        "direction_ok": true,
+        "coverage": 0.9522657895356317,
+        "conserved": true,
+        "layer_delta": -38158618.0,
+        "residual": 0.0,
+        "rows": [
+          {
+            "key": [
+              "paid_ads"
+            ],
+            "contribution": -28394217.0,
+            "base": 94882388.0,
+            "current": 66488171.0,
+            "contribution_rate": 0.7441102033621868,
+            "rank": 1,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "natural_search"
+            ],
+            "contribution": -6609114.0,
+            "base": 63213531.0,
+            "current": 56604417.0,
+            "contribution_rate": 0.17320108395959205,
+            "rank": 2,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "short_video"
+            ],
+            "contribution": -2626599.0,
+            "base": 45130466.0,
+            "current": 42503867.0,
+            "contribution_rate": 0.06883370356861457,
+            "rank": 3,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "livestream"
+            ],
+            "contribution": -2131418.0,
+            "base": 49261256.0,
+            "current": 47129838.0,
+            "contribution_rate": 0.0558567922978762,
+            "rank": 4,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "private_domain"
+            ],
+            "contribution": 1824339.0,
+            "base": 29681148.0,
+            "current": 31505487.0,
+            "contribution_rate": -0.04780935724663823,
+            "rank": 5,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "distributor"
+            ],
+            "contribution": -1000793.0,
+            "base": 10457089.0,
+            "current": 9456296.0,
+            "contribution_rate": 0.026227181498030144,
+            "rank": 6,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "hypermarket"
+            ],
+            "contribution": 931478.0,
+            "base": 11521764.0,
+            "current": 12453242.0,
+            "contribution_rate": -0.02441068489430094,
+            "rank": 7,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "catering"
+            ],
+            "contribution": -152294.0,
+            "base": 6465809.0,
+            "current": 6313515.0,
+            "contribution_rate": 0.003991077454639474,
+            "rank": 8,
+            "in_top": false,
+            "note": ""
+          }
+        ],
+        "render": "维度透视（channel，共 8 个组合，TOP 5 覆盖率 95.2%，按组合精确计算）\n   1. paid_ads：-28,394,217 分（贡献率 +74.4%） [TOP]\n   2. natural_search：-6,609,114 分（贡献率 +17.3%） [TOP]\n   3. short_video：-2,626,599 分（贡献率 +6.9%） [TOP]\n   4. livestream：-2,131,418 分（贡献率 +5.6%） [TOP]\n   5. private_domain：+1,824,339 分（贡献率 -4.8%） [TOP]"
+      },
+      "narrow": {
+        "phase": "narrow",
+        "locked_slice": {
+          "channel": [
+            "paid_ads"
+          ]
+        },
+        "dimensions": [
+          "category"
+        ],
+        "coverage": 0.9519469224868843,
+        "conserved": true,
+        "layer_delta": -28394217.0,
+        "residual": 0.0,
+        "rows": [
+          {
+            "key": [
+              "appliance"
+            ],
+            "contribution": -21530257.0,
+            "base": 42886245.0,
+            "current": 21355988.0,
+            "contribution_rate": 0.7582620432886035,
+            "rank": 1,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "apparel"
+            ],
+            "contribution": -4411210.0,
+            "base": 19468535.0,
+            "current": 15057325.0,
+            "contribution_rate": 0.15535593039948944,
+            "rank": 2,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "health"
+            ],
+            "contribution": -911284.0,
+            "base": 5817139.0,
+            "current": 4905855.0,
+            "contribution_rate": 0.032093999985983064,
+            "rank": 3,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "snack"
+            ],
+            "contribution": -474091.0,
+            "base": 1351469.0,
+            "current": 877378.0,
+            "contribution_rate": 0.01669674497451365,
+            "rank": 4,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "personal_care"
+            ],
+            "contribution": -424249.0,
+            "base": 1931887.0,
+            "current": 1507638.0,
+            "contribution_rate": 0.014941387536764968,
+            "rank": 5,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "tobacco_liquor"
+            ],
+            "contribution": -407085.0,
+            "base": 6458366.0,
+            "current": 6051281.0,
+            "contribution_rate": 0.014336898249386486,
+            "rank": 6,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "grain_oil"
+            ],
+            "contribution": 349100.0,
+            "base": 8451696.0,
+            "current": 8800796.0,
+            "contribution_rate": -0.012294757062679348,
+            "rank": 7,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "dairy"
+            ],
+            "contribution": -261678.0,
+            "base": 2207336.0,
+            "current": 1945658.0,
+            "contribution_rate": 0.009215890686473235,
+            "rank": 8,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "home_cleaning"
+            ],
+            "contribution": -208766.0,
+            "base": 1396242.0,
+            "current": 1187476.0,
+            "contribution_rate": 0.007352412640926144,
+            "rank": 9,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "beauty"
+            ],
+            "contribution": -74587.0,
+            "base": 3681008.0,
+            "current": 3606421.0,
+            "contribution_rate": 0.0026268377113550976,
+            "rank": 10,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "paper"
+            ],
+            "contribution": -69867.0,
+            "base": 888211.0,
+            "current": 818344.0,
+            "contribution_rate": 0.002460606679169917,
+            "rank": 11,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "beverage"
+            ],
+            "contribution": 29757.0,
+            "base": 344254.0,
+            "current": 374011.0,
+            "contribution_rate": -0.0010479950899861053,
+            "rank": 12,
+            "in_top": false,
+            "note": ""
+          }
+        ],
+        "render": "维度透视（category，共 12 个组合，TOP 5 覆盖率 95.2%，按组合精确计算）\n   1. appliance：-21,530,257 分（贡献率 +75.8%） [TOP]\n   2. apparel：-4,411,210 分（贡献率 +15.5%） [TOP]\n   3. health：-911,284 分（贡献率 +3.2%） [TOP]\n   4. snack：-474,091 分（贡献率 +1.7%） [TOP]\n   5. personal_care：-424,249 分（贡献率 +1.5%） [TOP]"
+      },
+      "session": {
+        "phase": "session",
+        "session_id": 21,
+        "locked_slice": {
+          "channel": [
+            "paid_ads"
+          ]
+        },
+        "drilldown_slice": {
+          "channel": [
+            "paid_ads"
+          ]
+        },
+        "status": "awaiting_user",
+        "steps": 11,
+        "records": 2,
+        "summary_conserved": true,
+        "coverage": [
+          {
+            "dimensions": [
+              "category"
+            ],
+            "coverage": 0.9519469224868843,
+            "top_n": 5,
+            "heuristic": false
+          }
+        ],
+        "widened_blocked": true,
+        "highlights": [
+          "category：绝对贡献最大的是 appliance（-21,530,257 分）；层总变动 -28,394,217 分；TOP 5 覆盖率 95.2%",
+          "在收紧后的切片上复跑 L1：生成假设 3 条、通过验证 0 条（新结论依赖新假设时，走的就是这条验证流程）"
+        ]
+      }
+    },
+    {
+      "ground_truth_id": 2,
+      "scenario": "ecom",
+      "note": "家电厨具品类曝光量下滑 28%，转化率不变，属\"流量侧\"异动；因子口径 uv（12516.000000 → 8997.000000）；LMDI 复核残差 -1.849e-01 分",
+      "locate": {
+        "phase": "locate",
+        "scenario": "ecom",
+        "base": {
+          "start": "2026-03-02",
+          "end": "2026-03-08",
+          "days": 7,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-03-09",
+          "end": "2026-03-15",
+          "days": 7,
+          "label": "注入窗口"
+        },
+        "dimension": "category",
+        "truth_values": [
+          "appliance"
+        ],
+        "truth_contribution_cents": -28991673,
+        "truth_ranks": {
+          "appliance": 1
+        },
+        "truth_contributions": {
+          "appliance": -38387971.0
+        },
+        "best_rank": 1,
+        "top_n": 5,
+        "all_in_top_n": true,
+        "direction_ok": true,
+        "coverage": 0.9894322358717879,
+        "conserved": true,
+        "layer_delta": -34018175.0,
+        "residual": 0.0,
+        "rows": [
+          {
+            "key": [
+              "appliance"
+            ],
+            "contribution": -38387971.0,
+            "base": 112510757.0,
+            "current": 74122786.0,
+            "contribution_rate": 1.1284547451472633,
+            "rank": 1,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "apparel"
+            ],
+            "contribution": 5902540.0,
+            "base": 50352352.0,
+            "current": 56254892.0,
+            "contribution_rate": -0.17351136561558636,
+            "rank": 2,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "health"
+            ],
+            "contribution": -3606609.0,
+            "base": 19472624.0,
+            "current": 15866015.0,
+            "contribution_rate": 0.10602006133485997,
+            "rank": 3,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "grain_oil"
+            ],
+            "contribution": 2265324.0,
+            "base": 27522051.0,
+            "current": 29787375.0,
+            "contribution_rate": -0.06659157935427165,
+            "rank": 4,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "home_cleaning"
+            ],
+            "contribution": -404589.0,
+            "base": 4703575.0,
+            "current": 4298986.0,
+            "contribution_rate": 0.011893318792086877,
+            "rank": 5,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "beauty"
+            ],
+            "contribution": 235235.0,
+            "base": 11862099.0,
+            "current": 12097334.0,
+            "contribution_rate": -0.006914980007010958,
+            "rank": 6,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "beverage"
+            ],
+            "contribution": 129296.0,
+            "base": 1186911.0,
+            "current": 1316207.0,
+            "contribution_rate": -0.003800791782627963,
+            "rank": 7,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "dairy"
+            ],
+            "contribution": -51178.0,
+            "base": 6305967.0,
+            "current": 6254789.0,
+            "contribution_rate": 0.0015044310872055894,
+            "rank": 8,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "personal_care"
+            ],
+            "contribution": -42337.0,
+            "base": 4902457.0,
+            "current": 4860120.0,
+            "contribution_rate": 0.0012445406021927984,
+            "rank": 9,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "tobacco_liquor"
+            ],
+            "contribution": -37874.0,
+            "base": 19731215.0,
+            "current": 19693341.0,
+            "contribution_rate": 0.0011133460275279318,
+            "rank": 10,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "snack"
+            ],
+            "contribution": -32090.0,
+            "base": 3376198.0,
+            "current": 3344108.0,
+            "contribution_rate": 0.0009433192697727024,
+            "rank": 11,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "paper"
+            ],
+            "contribution": 12078.0,
+            "base": 2791103.0,
+            "current": 2803181.0,
+            "contribution_rate": -0.0003550455014121128,
+            "rank": 12,
+            "in_top": false,
+            "note": ""
+          }
+        ],
+        "render": "维度透视（category，共 12 个组合，TOP 5 覆盖率 98.9%，按组合精确计算）\n   1. appliance：-38,387,971 分（贡献率 +112.8%） [TOP]\n   2. apparel：+5,902,540 分（贡献率 -17.4%） [TOP]\n   3. health：-3,606,609 分（贡献率 +10.6%） [TOP]\n   4. grain_oil：+2,265,324 分（贡献率 -6.7%） [TOP]\n   5. home_cleaning：-404,589 分（贡献率 +1.2%） [TOP]"
+      },
+      "narrow": {
+        "phase": "narrow",
+        "locked_slice": {
+          "category": [
+            "appliance"
+          ]
+        },
+        "dimensions": [
+          "channel"
+        ],
+        "coverage": 0.918806284395703,
+        "conserved": true,
+        "layer_delta": -38387971.0,
+        "residual": 0.0,
+        "rows": [
+          {
+            "key": [
+              "paid_ads"
+            ],
+            "contribution": -12278015.0,
+            "base": 35228797.0,
+            "current": 22950782.0,
+            "contribution_rate": 0.31984016555602796,
+            "rank": 1,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "natural_search"
+            ],
+            "contribution": -9469317.0,
+            "base": 23562961.0,
+            "current": 14093644.0,
+            "contribution_rate": 0.24667406881181608,
+            "rank": 2,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "livestream"
+            ],
+            "contribution": -6425615.0,
+            "base": 16137325.0,
+            "current": 9711710.0,
+            "contribution_rate": 0.16738615854430025,
+            "rank": 3,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "short_video"
+            ],
+            "contribution": -5068763.0,
+            "base": 15223083.0,
+            "current": 10154320.0,
+            "contribution_rate": 0.13204039880096816,
+            "rank": 4,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "private_domain"
+            ],
+            "contribution": -2029399.0,
+            "base": 10776425.0,
+            "current": 8747026.0,
+            "contribution_rate": 0.052865492682590595,
+            "rank": 5,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "distributor"
+            ],
+            "contribution": -1714866.0,
+            "base": 4239700.0,
+            "current": 2524834.0,
+            "contribution_rate": 0.04467196247491174,
+            "rank": 6,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "hypermarket"
+            ],
+            "contribution": -1026342.0,
+            "base": 4852030.0,
+            "current": 3825688.0,
+            "contribution_rate": 0.026736031451102222,
+            "rank": 7,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "catering"
+            ],
+            "contribution": -375654.0,
+            "base": 2490436.0,
+            "current": 2114782.0,
+            "contribution_rate": 0.009785721678283022,
+            "rank": 8,
+            "in_top": false,
+            "note": ""
+          }
+        ],
+        "render": "维度透视（channel，共 8 个组合，TOP 5 覆盖率 91.9%，按组合精确计算）\n   1. paid_ads：-12,278,015 分（贡献率 +32.0%） [TOP]\n   2. natural_search：-9,469,317 分（贡献率 +24.7%） [TOP]\n   3. livestream：-6,425,615 分（贡献率 +16.7%） [TOP]\n   4. short_video：-5,068,763 分（贡献率 +13.2%） [TOP]\n   5. private_domain：-2,029,399 分（贡献率 +5.3%） [TOP]"
+      },
+      "session": {
+        "phase": "session",
+        "session_id": 22,
+        "locked_slice": {
+          "category": [
+            "appliance"
+          ]
+        },
+        "drilldown_slice": {
+          "category": [
+            "appliance"
+          ]
+        },
+        "status": "awaiting_user",
+        "steps": 11,
+        "records": 2,
+        "summary_conserved": true,
+        "coverage": [
+          {
+            "dimensions": [
+              "channel"
+            ],
+            "coverage": 0.918806284395703,
+            "top_n": 5,
+            "heuristic": false
+          }
+        ],
+        "widened_blocked": true,
+        "highlights": [
+          "channel：绝对贡献最大的是 paid_ads（-12,278,015 分）；层总变动 -38,387,971 分；TOP 5 覆盖率 91.9%",
+          "在收紧后的切片上复跑 L1：生成假设 3 条、通过验证 2 条（新结论依赖新假设时，走的就是这条验证流程）"
+        ]
+      }
+    },
+    {
+      "ground_truth_id": 3,
+      "scenario": "fmcg",
+      "note": "粮油与乳制品单位原料成本上升 8%（PPI 成本形态），毛利额被侵蚀；成本项变动 45165017 分，毛利额贡献 = −Δ成本（差额分析，sign = -1）",
+      "locate": {
+        "phase": "locate",
+        "scenario": "fmcg",
+        "base": {
+          "start": "2026-03-23",
+          "end": "2026-04-05",
+          "days": 14,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-04-06",
+          "end": "2026-04-19",
+          "days": 14,
+          "label": "注入窗口"
+        },
+        "dimension": "category",
+        "truth_values": [
+          "grain_oil",
+          "dairy"
+        ],
+        "truth_contribution_cents": -45165017,
+        "truth_ranks": {
+          "grain_oil": 1,
+          "dairy": 3
+        },
+        "truth_contributions": {
+          "grain_oil": -36738311.0,
+          "dairy": -8418759.0
+        },
+        "best_rank": 1,
+        "top_n": 5,
+        "all_in_top_n": true,
+        "direction_ok": true,
+        "coverage": 0.9565829684983025,
+        "conserved": true,
+        "layer_delta": -58866712.0,
+        "residual": 0.0,
+        "rows": [
+          {
+            "key": [
+              "grain_oil"
+            ],
+            "contribution": -36738311.0,
+            "base": 69558323.0,
+            "current": 32820012.0,
+            "contribution_rate": 0.624093137731219,
+            "rank": 1,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "apparel"
+            ],
+            "contribution": -10095416.0,
+            "base": 473562012.0,
+            "current": 463466596.0,
+            "contribution_rate": 0.17149617597123482,
+            "rank": 2,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "dairy"
+            ],
+            "contribution": -8418759.0,
+            "base": 14703450.0,
+            "current": 6284691.0,
+            "contribution_rate": 0.14301391591227314,
+            "rank": 3,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "appliance"
+            ],
+            "contribution": -6046058.0,
+            "base": 309297940.0,
+            "current": 303251882.0,
+            "contribution_rate": 0.1027075879488564,
+            "rank": 4,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "tobacco_liquor"
+            ],
+            "contribution": 3036059.0,
+            "base": 201288043.0,
+            "current": 204324102.0,
+            "contribution_rate": -0.05157514148233725,
+            "rank": 5,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "beauty"
+            ],
+            "contribution": -1174390.0,
+            "base": 111049859.0,
+            "current": 109875469.0,
+            "contribution_rate": 0.019949984636478423,
+            "rank": 6,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "health"
+            ],
+            "contribution": 904047.0,
+            "base": 163052154.0,
+            "current": 163956201.0,
+            "contribution_rate": -0.015357524979482461,
+            "rank": 7,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "personal_care"
+            ],
+            "contribution": -360181.0,
+            "base": 28285237.0,
+            "current": 27925056.0,
+            "contribution_rate": 0.006118585322040748,
+            "rank": 8,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "home_cleaning"
+            ],
+            "contribution": 209939.0,
+            "base": 9897887.0,
+            "current": 10107826.0,
+            "contribution_rate": -0.003566344931920098,
+            "rank": 9,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "beverage"
+            ],
+            "contribution": -204549.0,
+            "base": -8099012.0,
+            "current": -8303561.0,
+            "contribution_rate": 0.003474782148525639,
+            "rank": 10,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "snack"
+            ],
+            "contribution": 43898.0,
+            "base": 675114.0,
+            "current": 719012.0,
+            "contribution_rate": -0.0007457185650185457,
+            "rank": 11,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "paper"
+            ],
+            "contribution": -22991.0,
+            "base": -1052311.0,
+            "current": -1075302.0,
+            "contribution_rate": 0.00039056028813024246,
+            "rank": 12,
+            "in_top": false,
+            "note": ""
+          }
+        ],
+        "render": "维度透视（category，共 12 个组合，TOP 5 覆盖率 95.7%，按组合精确计算）\n   1. grain_oil：-36,738,311 分（贡献率 +62.4%） [TOP]\n   2. apparel：-10,095,416 分（贡献率 +17.1%） [TOP]\n   3. dairy：-8,418,759 分（贡献率 +14.3%） [TOP]\n   4. appliance：-6,046,058 分（贡献率 +10.3%） [TOP]\n   5. tobacco_liquor：+3,036,059 分（贡献率 -5.2%） [TOP]"
+      },
+      "narrow": {
+        "phase": "narrow",
+        "locked_slice": {
+          "category": [
+            "grain_oil",
+            "dairy"
+          ]
+        },
+        "dimensions": [
+          "channel"
+        ],
+        "coverage": 0.872498769295705,
+        "conserved": true,
+        "layer_delta": -45157070.0,
+        "residual": 0.0,
+        "rows": [
+          {
+            "key": [
+              "hypermarket"
+            ],
+            "contribution": -15706182.0,
+            "base": 34025275.0,
+            "current": 18319093.0,
+            "contribution_rate": 0.34781224734022825,
+            "rank": 1,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "distributor"
+            ],
+            "contribution": -11969869.0,
+            "base": 24458566.0,
+            "current": 12488697.0,
+            "contribution_rate": 0.26507187025198936,
+            "rank": 2,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "catering"
+            ],
+            "contribution": -5361775.0,
+            "base": 11378012.0,
+            "current": 6016237.0,
+            "contribution_rate": 0.11873611374697252,
+            "rank": 3,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "paid_ads"
+            ],
+            "contribution": -3963146.0,
+            "base": 4728665.0,
+            "current": 765519.0,
+            "contribution_rate": 0.08776357722057698,
+            "rank": 4,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "natural_search"
+            ],
+            "contribution": -2398516.0,
+            "base": 2866510.0,
+            "current": 467994.0,
+            "contribution_rate": 0.05311496073593792,
+            "rank": 5,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "livestream"
+            ],
+            "contribution": -2391823.0,
+            "base": 2808762.0,
+            "current": 416939.0,
+            "contribution_rate": 0.052966744742296165,
+            "rank": 6,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "short_video"
+            ],
+            "contribution": -1930849.0,
+            "base": 2278443.0,
+            "current": 347594.0,
+            "contribution_rate": 0.04275850935412771,
+            "rank": 7,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "private_domain"
+            ],
+            "contribution": -1434910.0,
+            "base": 1717540.0,
+            "current": 282630.0,
+            "contribution_rate": 0.03177597660787115,
+            "rank": 8,
+            "in_top": false,
+            "note": ""
+          }
+        ],
+        "render": "维度透视（channel，共 8 个组合，TOP 5 覆盖率 87.2%，按组合精确计算）\n   1. hypermarket：-15,706,182 分（贡献率 +34.8%） [TOP]\n   2. distributor：-11,969,869 分（贡献率 +26.5%） [TOP]\n   3. catering：-5,361,775 分（贡献率 +11.9%） [TOP]\n   4. paid_ads：-3,963,146 分（贡献率 +8.8%） [TOP]\n   5. natural_search：-2,398,516 分（贡献率 +5.3%） [TOP]"
+      },
+      "session": {
+        "phase": "session",
+        "session_id": 23,
+        "locked_slice": {
+          "category": [
+            "grain_oil",
+            "dairy"
+          ]
+        },
+        "drilldown_slice": {
+          "category": [
+            "grain_oil",
+            "dairy"
+          ]
+        },
+        "status": "awaiting_user",
+        "steps": 13,
+        "records": 2,
+        "summary_conserved": true,
+        "coverage": [
+          {
+            "dimensions": [
+              "channel"
+            ],
+            "coverage": 0.872498769295705,
+            "top_n": 5,
+            "heuristic": false
+          }
+        ],
+        "widened_blocked": true,
+        "highlights": [
+          "channel：绝对贡献最大的是 hypermarket（-15,706,182 分）；层总变动 -45,157,070 分；TOP 5 覆盖率 87.2%",
+          "在收紧后的切片上复跑 L1：生成假设 5 条、通过验证 4 条（新结论依赖新假设时，走的就是这条验证流程）"
+        ]
+      }
+    },
+    {
+      "ground_truth_id": 4,
+      "scenario": "fmcg",
+      "note": "经销商渠道物流履约成本上涨 60%，属可核对的单点成本异动；成本项变动 18333617 分，毛利额贡献 = −Δ成本（差额分析，sign = -1）",
+      "locate": {
+        "phase": "locate",
+        "scenario": "fmcg",
+        "base": {
+          "start": "2026-01-26",
+          "end": "2026-02-01",
+          "days": 7,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-02-02",
+          "end": "2026-02-08",
+          "days": 7,
+          "label": "注入窗口"
+        },
+        "dimension": "channel",
+        "truth_values": [
+          "distributor"
+        ],
+        "truth_contribution_cents": -18333617,
+        "truth_ranks": {
+          "distributor": 1
+        },
+        "truth_contributions": {
+          "distributor": -29731950.0
+        },
+        "best_rank": 1,
+        "top_n": 5,
+        "all_in_top_n": true,
+        "direction_ok": true,
+        "coverage": 0.950603998237996,
+        "conserved": true,
+        "layer_delta": -45971877.0,
+        "residual": 0.0,
+        "rows": [
+          {
+            "key": [
+              "distributor"
+            ],
+            "contribution": -29731950.0,
+            "base": 176429844.0,
+            "current": 146697894.0,
+            "contribution_rate": 0.6467421375899008,
+            "rank": 1,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "hypermarket"
+            ],
+            "contribution": -7254384.0,
+            "base": 252088431.0,
+            "current": 244834047.0,
+            "contribution_rate": 0.15780047440742956,
+            "rank": 2,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "catering"
+            ],
+            "contribution": -4410273.0,
+            "base": 78347464.0,
+            "current": 73937191.0,
+            "contribution_rate": 0.09593415122032106,
+            "rank": 3,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "livestream"
+            ],
+            "contribution": -1494716.0,
+            "base": 27565299.0,
+            "current": 26070583.0,
+            "contribution_rate": 0.03251370397601995,
+            "rank": 4,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "paid_ads"
+            ],
+            "contribution": -1345651.0,
+            "base": 46055927.0,
+            "current": 44710276.0,
+            "contribution_rate": 0.029271178116133913,
+            "rank": 5,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "short_video"
+            ],
+            "contribution": -1279710.0,
+            "base": 22320319.0,
+            "current": 21040609.0,
+            "contribution_rate": 0.02783680118173117,
+            "rank": 6,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "private_domain"
+            ],
+            "contribution": -737079.0,
+            "base": 16565614.0,
+            "current": 15828535.0,
+            "contribution_rate": 0.016033258768181253,
+            "rank": 7,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "natural_search"
+            ],
+            "contribution": 281886.0,
+            "base": 27246265.0,
+            "current": 27528151.0,
+            "contribution_rate": -0.006131705259717805,
+            "rank": 8,
+            "in_top": false,
+            "note": ""
+          }
+        ],
+        "render": "维度透视（channel，共 8 个组合，TOP 5 覆盖率 95.1%，按组合精确计算）\n   1. distributor：-29,731,950 分（贡献率 +64.7%） [TOP]\n   2. hypermarket：-7,254,384 分（贡献率 +15.8%） [TOP]\n   3. catering：-4,410,273 分（贡献率 +9.6%） [TOP]\n   4. livestream：-1,494,716 分（贡献率 +3.3%） [TOP]\n   5. paid_ads：-1,345,651 分（贡献率 +2.9%） [TOP]"
+      },
+      "narrow": {
+        "phase": "narrow",
+        "locked_slice": {
+          "channel": [
+            "distributor"
+          ]
+        },
+        "dimensions": [
+          "sku"
+        ],
+        "coverage": 0.3758684966064747,
+        "conserved": true,
+        "layer_delta": -29731950.0,
+        "residual": 0.0,
+        "rows": [
+          {
+            "key": [
+              "SKU-0039"
+            ],
+            "contribution": -3166927.0,
+            "base": 12213420.0,
+            "current": 9046493.0,
+            "contribution_rate": 0.10651595337675464,
+            "rank": 1,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0034"
+            ],
+            "contribution": -2751634.0,
+            "base": 14489775.0,
+            "current": 11738141.0,
+            "contribution_rate": 0.09254805016152658,
+            "rank": 2,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0036"
+            ],
+            "contribution": -2609489.0,
+            "base": 16784859.0,
+            "current": 14175370.0,
+            "contribution_rate": 0.08776716629753514,
+            "rank": 3,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0035"
+            ],
+            "contribution": -2416355.0,
+            "base": 14885615.0,
+            "current": 12469260.0,
+            "contribution_rate": 0.0812713259641564,
+            "rank": 4,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0018"
+            ],
+            "contribution": -2116914.0,
+            "base": 7332839.0,
+            "current": 5215925.0,
+            "contribution_rate": 0.07119997174756448,
+            "rank": 5,
+            "in_top": true,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0010"
+            ],
+            "contribution": -1825410.0,
+            "base": 9365650.0,
+            "current": 7540240.0,
+            "contribution_rate": 0.061395569412702494,
+            "rank": 6,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0009"
+            ],
+            "contribution": -1540875.0,
+            "base": 8364322.0,
+            "current": 6823447.0,
+            "contribution_rate": 0.05182556139102884,
+            "rank": 7,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0003"
+            ],
+            "contribution": -1233700.0,
+            "base": 2977892.0,
+            "current": 1744192.0,
+            "contribution_rate": 0.04149408296462223,
+            "rank": 8,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0037"
+            ],
+            "contribution": 1221185.0,
+            "base": 8799047.0,
+            "current": 10020232.0,
+            "contribution_rate": -0.04107315530935576,
+            "rank": 9,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0038"
+            ],
+            "contribution": -1199291.0,
+            "base": 10375461.0,
+            "current": 9176170.0,
+            "contribution_rate": 0.04033677575806498,
+            "rank": 10,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0001"
+            ],
+            "contribution": -1016853.0,
+            "base": 1782203.0,
+            "current": 765350.0,
+            "contribution_rate": 0.03420068310353004,
+            "rank": 11,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0002"
+            ],
+            "contribution": -963722.0,
+            "base": 2121188.0,
+            "current": 1157466.0,
+            "contribution_rate": 0.032413682923588934,
+            "rank": 12,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0033"
+            ],
+            "contribution": -952484.0,
+            "base": 14292312.0,
+            "current": 13339828.0,
+            "contribution_rate": 0.03203570569706999,
+            "rank": 13,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0040"
+            ],
+            "contribution": 935202.0,
+            "base": 8316460.0,
+            "current": 9251662.0,
+            "contribution_rate": -0.031454445470276926,
+            "rank": 14,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0020"
+            ],
+            "contribution": -930741.0,
+            "base": 7207990.0,
+            "current": 6277249.0,
+            "contribution_rate": 0.031304404857400873,
+            "rank": 15,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0012"
+            ],
+            "contribution": -694892.0,
+            "base": -91137.0,
+            "current": -786029.0,
+            "contribution_rate": 0.023371894544421068,
+            "rank": 16,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0004"
+            ],
+            "contribution": -654541.0,
+            "base": 2950325.0,
+            "current": 2295784.0,
+            "contribution_rate": 0.02201473499047321,
+            "rank": 17,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0013"
+            ],
+            "contribution": -623354.0,
+            "base": 93987.0,
+            "current": -529367.0,
+            "contribution_rate": 0.020965796054412844,
+            "rank": 18,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0015"
+            ],
+            "contribution": -577342.0,
+            "base": 493398.0,
+            "current": -83944.0,
+            "contribution_rate": 0.01941823526542995,
+            "rank": 19,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0021"
+            ],
+            "contribution": -576338.0,
+            "base": 364778.0,
+            "current": -211560.0,
+            "contribution_rate": 0.019384466878223594,
+            "rank": 20,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0029"
+            ],
+            "contribution": -557442.0,
+            "base": 4778252.0,
+            "current": 4220810.0,
+            "contribution_rate": 0.018748921614626688,
+            "rank": 21,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0028"
+            ],
+            "contribution": -449356.0,
+            "base": 4266477.0,
+            "current": 3817121.0,
+            "contribution_rate": 0.015113573109062809,
+            "rank": 22,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0016"
+            ],
+            "contribution": -439549.0,
+            "base": 658936.0,
+            "current": 219387.0,
+            "contribution_rate": 0.01478372592446846,
+            "rank": 23,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0014"
+            ],
+            "contribution": -431239.0,
+            "base": 235981.0,
+            "current": -195258.0,
+            "contribution_rate": 0.01450422861601745,
+            "rank": 24,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0030"
+            ],
+            "contribution": -416413.0,
+            "base": -105931.0,
+            "current": -522344.0,
+            "contribution_rate": 0.01400557312924312,
+            "rank": 25,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0017"
+            ],
+            "contribution": -396395.0,
+            "base": 827566.0,
+            "current": 431171.0,
+            "contribution_rate": 0.013332290683927559,
+            "rank": 26,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0022"
+            ],
+            "contribution": -382543.0,
+            "base": 424013.0,
+            "current": 41470.0,
+            "contribution_rate": 0.012866394568805612,
+            "rank": 27,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0005"
+            ],
+            "contribution": -381131.0,
+            "base": -399617.0,
+            "current": -780748.0,
+            "contribution_rate": 0.0128189035700652,
+            "rank": 28,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0026"
+            ],
+            "contribution": -362418.0,
+            "base": 1449476.0,
+            "current": 1087058.0,
+            "contribution_rate": 0.01218951330134754,
+            "rank": 29,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0023"
+            ],
+            "contribution": -352079.0,
+            "base": 672527.0,
+            "current": 320448.0,
+            "contribution_rate": 0.011841772907596037,
+            "rank": 30,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0019"
+            ],
+            "contribution": -350431.0,
+            "base": 6148418.0,
+            "current": 5797987.0,
+            "contribution_rate": 0.011786344319831023,
+            "rank": 31,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0027"
+            ],
+            "contribution": 345454.0,
+            "base": 4270874.0,
+            "current": 4616328.0,
+            "contribution_rate": -0.01161894863942661,
+            "rank": 32,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0032"
+            ],
+            "contribution": -318278.0,
+            "base": 124441.0,
+            "current": -193837.0,
+            "contribution_rate": 0.01070491508293267,
+            "rank": 33,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0031"
+            ],
+            "contribution": -316462.0,
+            "base": 11556.0,
+            "current": -304906.0,
+            "contribution_rate": 0.010643836008065398,
+            "rank": 34,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0024"
+            ],
+            "contribution": -313450.0,
+            "base": 962975.0,
+            "current": 649525.0,
+            "contribution_rate": 0.010542530846446331,
+            "rank": 35,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0006"
+            ],
+            "contribution": -298943.0,
+            "base": -255930.0,
+            "current": -554873.0,
+            "contribution_rate": 0.010054604558395934,
+            "rank": 36,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0007"
+            ],
+            "contribution": -271145.0,
+            "base": -207448.0,
+            "current": -478593.0,
+            "contribution_rate": 0.009119650746082918,
+            "rank": 37,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0008"
+            ],
+            "contribution": -236252.0,
+            "base": -69441.0,
+            "current": -305693.0,
+            "contribution_rate": 0.007946064755254868,
+            "rank": 38,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0011"
+            ],
+            "contribution": -116439.0,
+            "base": 8470694.0,
+            "current": 8354255.0,
+            "contribution_rate": 0.003916292069642254,
+            "rank": 39,
+            "in_top": false,
+            "note": ""
+          },
+          {
+            "key": [
+              "SKU-0025"
+            ],
+            "contribution": 7036.0,
+            "base": 1045641.0,
+            "current": 1052677.0,
+            "contribution_rate": -0.00023664778125888144,
+            "rank": 40,
+            "in_top": false,
+            "note": ""
+          }
+        ],
+        "render": "维度透视（sku，共 40 个组合，TOP 5 覆盖率 37.6%，按组合精确计算）\n   1. SKU-0039：-3,166,927 分（贡献率 +10.7%） [TOP]\n   2. SKU-0034：-2,751,634 分（贡献率 +9.3%） [TOP]\n   3. SKU-0036：-2,609,489 分（贡献率 +8.8%） [TOP]\n   4. SKU-0035：-2,416,355 分（贡献率 +8.1%） [TOP]\n   5. SKU-0018：-2,116,914 分（贡献率 +7.1%） [TOP]"
+      },
+      "session": {
+        "phase": "session",
+        "session_id": 24,
+        "locked_slice": {
+          "channel": [
+            "distributor"
+          ]
+        },
+        "drilldown_slice": {
+          "channel": [
+            "distributor"
+          ]
+        },
+        "status": "awaiting_user",
+        "steps": 13,
+        "records": 2,
+        "summary_conserved": true,
+        "coverage": [
+          {
+            "dimensions": [
+              "sku"
+            ],
+            "coverage": 0.3758684966064747,
+            "top_n": 5,
+            "heuristic": false
+          }
+        ],
+        "widened_blocked": true,
+        "highlights": [
+          "sku：绝对贡献最大的是 SKU-0039（-3,166,927 分）；层总变动 -29,731,950 分；TOP 5 覆盖率 37.6%",
+          "在收紧后的切片上复跑 L1：生成假设 5 条、通过验证 4 条（新结论依赖新假设时，走的就是这条验证流程）"
+        ]
+      }
+    }
+  ],
+  "total": 4,
+  "all_conserved": true,
+  "all_direction_ok": true,
+  "all_in_top_n": true,
+  "sessions": {
+    "count": 4,
+    "all_conserved": true,
+    "all_widen_blocked": true
+  },
+  "note": "口径说明：透视表的贡献是该维度组合在指标上的完整两期变化（含季节与其他因子），真值记录的是注入本身的贡献，因此这里只核对排名与方向，不比较金额；金额级别的严格比对由 P6 评测集负责。所有金额单位为分。"
+}

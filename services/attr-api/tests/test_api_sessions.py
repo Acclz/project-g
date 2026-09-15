@@ -87,6 +87,40 @@ def test_drilldown_requires_a_dimension(client: TestClient) -> None:
     assert response.status_code == 400
 
 
+def test_drilldown_accepts_pivot_dimensions_without_widening(client: TestClient) -> None:
+    """只指定透视维度时不算放宽切片：切片保持锁定值，任务照跑。"""
+
+    session_id = _create(client)
+    response = client.post(
+        f"/api/sessions/{session_id}/drilldown",
+        json={"dimensions": [["category", "region"]], "top_n": 3},
+    )
+    assert response.status_code == 200, response.text
+    assert response.json()["slice"] == {"channel": ["paid_ads"]}
+    assert response.json()["status"] in ("analysing", "awaiting_user", "failed")
+
+
+def test_drilldown_rejects_too_many_dimensions(client: TestClient) -> None:
+    session_id = _create(client)
+    response = client.post(
+        f"/api/sessions/{session_id}/drilldown",
+        json={"dimensions": [["channel", "category", "region", "segment"]]},
+    )
+    assert response.status_code == 400
+    assert "3" in response.json()["detail"]
+
+
+def test_drilldowns_endpoint_returns_records(client: TestClient) -> None:
+    session_id = _create(client)
+    empty = client.get(f"/api/sessions/{session_id}/drilldowns")
+    assert empty.status_code == 200
+    assert empty.json()["items"] == []
+    client.post(f"/api/sessions/{session_id}/drilldown", json={"region": "east"})
+    listed = client.get(f"/api/sessions/{session_id}/drilldowns")
+    assert listed.status_code == 200
+    assert listed.json()["items"], "下钻受理后要能查到记录"
+
+
 def test_message_starts_run_and_second_is_conflict(client: TestClient) -> None:
     session_id = _create(client)
     first = client.post(f"/api/sessions/{session_id}/messages", json={"message": "为什么下滑"})

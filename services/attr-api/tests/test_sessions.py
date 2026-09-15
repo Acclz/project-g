@@ -105,3 +105,49 @@ def test_control_actions(service: SessionService) -> None:
     assert cancelled.status == "failed"
     with pytest.raises(SessionError):
         service.control(session_id, "not-a-real-action")
+
+
+def test_steps_are_persisted_for_reload(service: SessionService) -> None:
+    """L1 的步骤要落 ``session_steps``：只放内存里，前端刷新一次就没了。"""
+
+    session_id = _create(service)
+    service.start(session_id)
+    done = service.wait(session_id, timeout=600)
+    assert done.status in (STATUS_AWAITING, "failed"), done.status
+    kinds = [step["kind"] for step in done.steps]
+    if done.status == STATUS_AWAITING:
+        assert "query" in kinds and "hypothesis" in kinds and "verify" in kinds
+        assert [step["seq"] for step in done.steps] == list(range(1, len(done.steps) + 1))
+
+
+def test_drilldown_runs_l2_and_persists_pivots(service: SessionService) -> None:
+    """L2：收紧切片 → 透视表与逐层守恒落库（报告第 3 段的证据源）。"""
+
+    session_id = _create(service)
+    accepted = service.drilldown(
+        session_id,
+        extra_slice=SliceFilter({"region": ("east",)}),
+        dimensions=(("category",),),
+        top_n=3,
+    )
+    assert accepted.slice_filter.filters == {"channel": ("paid_ads",), "region": ("east",)}
+    assert accepted.status in ("analysing", STATUS_AWAITING)
+    done = service.wait(session_id, timeout=600)
+    records = service.drilldown_records(session_id)
+    assert records, "下钻记录必须落库"
+    summary = [item for item in records if item["payload"].get("summary")]
+    assert summary, "下钻小结（守恒 + 覆盖率 + 关键变化特征）必须落库"
+    payload = summary[-1]["payload"]
+    assert payload["slice"] == {"channel": ["paid_ads"], "region": ["east"]}
+    assert payload["narrowed"] is True
+    if done.status == STATUS_AWAITING:
+        assert payload["conserved"] is True
+        assert payload["conservation"] and payload["highlights"]
+        assert payload["coverage"][0]["top_n"] == 3
+        assert done.steps[-1]["kind"] in ("drilldown", "plan")
+
+
+def test_drilldown_rejects_empty_request(service: SessionService) -> None:
+    session_id = _create(service)
+    with pytest.raises(SessionError):
+        service.drilldown(session_id, dimensions=())

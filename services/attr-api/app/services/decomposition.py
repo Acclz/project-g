@@ -16,6 +16,7 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from datetime import date, timedelta
 from pathlib import Path
@@ -23,17 +24,20 @@ from typing import Any
 
 from app.config import REPO_ROOT, Settings, get_settings
 from app.db import connect_warehouse_readonly
-from attribution import DecompositionError as AttributionError
 from attribution import (
+    ContributionTable,
     MetricNode,
     MetricTree,
     TreeResult,
+    allocate_by_share,
     assert_conservation,
     conservation_residual,
     contribution_rates,
     decompose_tree,
+    exact_contributions,
     load_metrics_file,
 )
+from attribution import DecompositionError as AttributionError
 
 METRICS_PATH = REPO_ROOT / "corpus" / "warehouse" / "metrics.yaml"
 
@@ -56,6 +60,9 @@ FACT_DIM_COLUMNS: dict[str, dict[str, str]] = {
     },
     "fmcg": {"channel": "channel_id", "region": "region_id", "sku": "sku_id"},
 }
+
+#: 单次交叉最多几个维度（需求说明书 §5.3：控制组合爆炸）
+MAX_DRILLDOWN_DIMENSIONS = 3
 
 
 class DecompositionError(ValueError):
@@ -245,6 +252,50 @@ class DecompositionReport:
             for item in self.skipped_targets:
                 lines.append(f"   {item['code']}：{item['reason']}")
         return "\n".join(lines)
+
+
+@dataclass
+class DimensionPivot:
+    """一次维度下钻的透视表：锁定切片之下、按维度组合精确计算的贡献（技术规格 §5.5）。
+
+    ``layer_delta`` 是**指标树在同一切片上**给出的总变动（独立来源），透视图的总变动必须与它
+    一致——两个来源对不上就直接抛守恒错误，不允许"看起来差不多"就放过。
+    """
+
+    scenario: str
+    dimensions: tuple[str, ...]
+    slice_filter: SliceFilter
+    base: Period
+    current: Period
+    table: ContributionTable
+    layer_base: float
+    layer_current: float
+    layer_delta: float
+    layer_residual: float
+
+    @property
+    def coverage(self) -> float:
+        return self.table.coverage
+
+    @property
+    def conserved(self) -> bool:
+        return True
+
+    def as_dict(self) -> dict[str, Any]:
+        return {
+            "scenario": self.scenario,
+            "dimensions": list(self.dimensions),
+            "slice": json.loads(self.slice_filter.as_json()),
+            "base": self.base.as_dict(),
+            "current": self.current.as_dict(),
+            "layer_delta": self.layer_delta,
+            "layer_residual": self.layer_residual,
+            "conserved": self.conserved,
+            **self.table.as_dict(),
+        }
+
+    def render(self, *, limit: int | None = None) -> str:
+        return self.table.render(limit=limit)
 
 
 class MetricEngine:
@@ -475,6 +526,200 @@ class MetricEngine:
             conserved=True,
         )
 
+    def dimension_table(
+        self,
+        scenario: str,
+        base: Period,
+        current: Period,
+        *,
+        dimensions: Sequence[str] = ("channel",),
+        slice_filter: SliceFilter | None = None,
+        top_n: int = 5,
+        max_dimensions: int = MAX_DRILLDOWN_DIMENSIONS,
+        tolerance: float | None = None,
+        connection=None,
+    ) -> DimensionPivot:
+        """按维度组合做透视：每个组合的贡献**精确**来自数仓分组取数（不靠分摊凑）。
+
+        口径（技术规格 §5.5 优先路径）：根指标对事实行可加，所以按组合分组直接算差值就能得到
+        ``Σ组合贡献 = 层总变动``。换来的硬约束是：透视表的总变动必须等于指标树在同一切片上
+        给出的总变动，两者不一致就抛守恒错误（``expected_delta`` 那条交叉校验）。
+
+        只有某组合取值为 NULL（缺数据、因子在该组合内无法定义）时才降级为按占比分摊，
+        并如实标记 ``heuristic=True``。
+        """
+
+        active_slice = slice_filter or SliceFilter()
+        active_tolerance = (
+            self.settings.attr_conservation_tolerance if tolerance is None else tolerance
+        )
+        names = tuple(str(item) for item in dimensions)
+        tree = self.tree(scenario)
+        if not names:
+            raise DecompositionError("下钻至少要指定一个维度")
+        if len(set(names)) != len(names):
+            raise DecompositionError(f"下钻维度有重复项：{list(names)}")
+        if len(names) > max_dimensions:
+            raise DecompositionError(
+                f"单次交叉最多 {max_dimensions} 个维度（需求说明书 §5.3），"
+                f"收到 {len(names)} 个：{list(names)}"
+            )
+        # 允许下钻的维度跟"能不能切片"用同一个能力口径（``_slice_clause`` / ``_group_sources``）：
+        # 快消的 category 虽然没写进场景 dimensions，但事实表经 dim_sku 折算后确实支持，
+        # 把它挡在门外只是把"能算的"说成"不能算"，反而误导。
+        supported = self.supported_group_dimensions(scenario)
+        unsupported = [name for name in names if name not in supported]
+        if unsupported:
+            raise DecompositionError(
+                f"场景 {scenario} 不支持这些维度下钻：{unsupported}"
+                f"（可用：{list(supported)}）"
+            )
+
+        own_connection = connection is None
+        conn = connection or connect_warehouse_readonly(self.settings.warehouse_db)
+        try:
+            selects, joins, groups = self._group_sources(scenario, names)
+            where = self._slice_clause(conn, scenario, active_slice)
+            query = (
+                f"SELECT {', '.join(selects)}, {tree.root.sql} AS value"
+                f" FROM {self.fact_table(scenario)} AS fact"
+                f" {' '.join(joins)}"
+                f" WHERE fact.day BETWEEN ? AND ?{where}"
+                f" GROUP BY {', '.join(groups)}"
+            )
+            base_rows = self._group_rows(conn, query, base)
+            current_rows = self._group_rows(conn, query, current)
+            layer_base = self._root_value(conn, scenario, base, active_slice)
+            layer_current = self._root_value(conn, scenario, current, active_slice)
+        finally:
+            if own_connection:
+                conn.close()
+
+        layer_delta = layer_current - layer_base
+        missing = sorted(
+            [list(key) for key, value in base_rows.items() if value is None]
+            + [list(key) for key, value in current_rows.items() if value is None]
+        )
+        if missing:
+            # 降级路径：按该组合在层内的占比分摊层总变动，并如实标成启发式
+            shares = {
+                key: (value or 0.0) for key, value in current_rows.items() if value is not None
+            }
+            table = allocate_by_share(
+                layer_delta,
+                shares,
+                dimensions=names,
+                top_n=top_n,
+                tolerance=active_tolerance,
+                max_dimensions=max_dimensions,
+                note=(
+                    f"这些组合取值为 NULL（缺数据）：{missing}；"
+                    "按现期占比分摊层总变动，属启发式、非唯一解"
+                ),
+            )
+            layer_residual = 0.0
+        else:
+            table = exact_contributions(
+                {key: value for key, value in base_rows.items() if value is not None},
+                {key: value for key, value in current_rows.items() if value is not None},
+                dimensions=names,
+                top_n=top_n,
+                tolerance=active_tolerance,
+                max_dimensions=max_dimensions,
+                expected_delta=layer_delta,
+            )
+            layer_residual = table.residual
+        return DimensionPivot(
+            scenario=scenario,
+            dimensions=names,
+            slice_filter=active_slice,
+            base=base,
+            current=current,
+            table=table,
+            layer_base=layer_base,
+            layer_current=layer_current,
+            layer_delta=layer_delta,
+            layer_residual=layer_residual,
+        )
+
+    @staticmethod
+    def supported_group_dimensions(scenario: str) -> list[str]:
+        """该场景事实表真正支持的分组维度（与 ``_slice_clause`` 的能力集一致）。"""
+
+        fact_columns = FACT_DIM_COLUMNS.get(scenario, {})
+        names = [name for name in DIM_LOOKUP if name in fact_columns]
+        if scenario == "fmcg":
+            names.append("category")  # 经 dw.dim_sku 折算，见 _slice_clause
+        return sorted(names)
+
+    def _group_sources(
+        self, scenario: str, dimensions: tuple[str, ...]
+    ) -> tuple[list[str], list[str], list[str]]:
+        """把维度名翻译成"分组列 + 维表 join"：编码经维表取，SQL 里不拼用户字符串。"""
+
+        fact_columns = FACT_DIM_COLUMNS.get(scenario, {})
+        selects: list[str] = []
+        joins: list[str] = []
+        groups: list[str] = []
+        joined: set[str] = set()
+        for dimension in dimensions:
+            if dimension not in DIM_LOOKUP:
+                raise DecompositionError(f"未知维度：{dimension}")
+            table, key = DIM_LOOKUP[dimension]
+            alias = f"dim_{dimension}"
+            if dimension in fact_columns:
+                expression = f"fact.{fact_columns[dimension]}"
+            elif scenario == "fmcg" and dimension == "category":
+                # 快消事实表没有 category_id：经 dim_sku 折算一次（与 _slice_clause 同一口径）
+                if "sku" not in joined:
+                    joins.append(
+                        "LEFT JOIN dw.dim_sku AS dim_sku ON fact.sku_id = dim_sku.sku_id"
+                    )
+                    joined.add("sku")
+                expression = "dim_sku.category_id"
+            else:
+                raise DecompositionError(
+                    f"场景 {scenario} 的事实表不支持按 {dimension} 分组下钻"
+                )
+            if dimension not in joined:
+                joins.append(f"LEFT JOIN {table} AS {alias} ON {expression} = {alias}.{key}")
+                joined.add(dimension)
+            code = f"COALESCE({alias}.code, 'unknown')"
+            selects.append(f"{code} AS {dimension}")
+            groups.append(code)
+        return selects, joins, groups
+
+    @staticmethod
+    def _group_rows(conn, query: str, period: Period) -> dict[tuple[str, ...], float | None]:
+        """执行分组查询：``{(组合编码…): 取值}``；取值为 NULL 时保留 None（触发降级路径）。"""
+
+        rows = conn.execute(query, (period.start, period.end)).fetchall()
+        values: dict[tuple[str, ...], float | None] = {}
+        for row in rows:
+            key = tuple(str(item) for item in row[:-1])
+            raw = row[-1]
+            values[key] = None if raw is None else float(raw)
+        return values
+
+    def _root_value(
+        self, conn, scenario: str, period: Period, slice_filter: SliceFilter
+    ) -> float:
+        """只取根指标一次：作为透视表的独立交叉校验值（不跑整棵树）。"""
+
+        tree = self.tree(scenario)
+        where = self._slice_clause(conn, scenario, slice_filter)
+        row = conn.execute(
+            f"SELECT {tree.root.sql} FROM {self.fact_table(scenario)} AS fact"
+            f" WHERE fact.day BETWEEN ? AND ?{where}",
+            (period.start, period.end),
+        ).fetchone()
+        if row is None or row[0] is None:
+            raise DecompositionError(
+                f"根指标 {tree.root.code} 在 {period.start}~{period.end}"
+                f"（切片 {slice_filter.as_json()}）无数据"
+            )
+        return float(row[0])
+
     def _screen_targets(
         self,
         scenario: str,
@@ -567,6 +812,7 @@ def _format_value(value: float, *, signed: bool = False) -> str:
 __all__ = [
     "DecompositionError",
     "DecompositionReport",
+    "DimensionPivot",
     "MetricEngine",
     "NodeReport",
     "Period",
