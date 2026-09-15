@@ -1,0 +1,19 @@
+{
+  "seed": 20260915,
+  "days": 546,
+  "start_day": "2025-01-01",
+  "end_day": "2026-06-30",
+  "profile": "full",
+  "facts_total_rows": 4152997,
+  "facts_rows": {
+    "dim_date": 72,
+    "fact_ecom_daily": 1009706,
+    "fact_order": 1920179,
+    "fact_fmcg_daily": 1223040
+  },
+  "ground_truth_rows": 4,
+  "skipped_injections": [],
+  "duration_s": 40.393,
+  "generated_at": "2026-09-15T11:26:00",
+  "reset_duration_s": 0.085
+}

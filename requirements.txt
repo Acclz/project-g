@@ -11,8 +11,8 @@ python-multipart>=0.0.9
 
 # 存储
 sqlalchemy>=2.0.30,<2.1
-psycopg[binary]>=3.2
 alembic>=1.13
+# 数据库文件用 Python 标准库 sqlite3，不引入额外驱动（D-22 从 PostgreSQL 改为 SQLite）
 
 # 认证
 PyJWT>=2.8

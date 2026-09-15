@@ -40,14 +40,14 @@ class MetricNode:
     precision: int | None = None
     caliber: str | None = None
     sign: float = 1.0
-    children: list["MetricNode"] = field(default_factory=list)
+    children: list[MetricNode] = field(default_factory=list)
 
     @property
     def decomposable(self) -> bool:
         """是否允许作为分解对象。"""
         return self.structure in (ADDITIVE, MULTIPLICATIVE) and bool(self.children)
 
-    def find(self, code: str) -> "MetricNode | None":
+    def find(self, code: str) -> MetricNode | None:
         if self.code == code:
             return self
         for child in self.children:
@@ -93,7 +93,10 @@ def _build_node(payload: dict[str, Any], path: str) -> MetricNode:
     method = payload.get("method")
     if method is not None and method not in VALID_METHODS:
         raise MetricsValidationError(f"{path}: method 非法：{method}")
-    children = [_build_node(child, f"{path}/{child.get('code', '?')}") for child in payload.get("children", [])]
+    children = [
+        _build_node(child, f"{path}/{child.get('code', '?')}")
+        for child in payload.get("children", [])
+    ]
     node = MetricNode(
         code=payload["code"],
         name=payload["name"],

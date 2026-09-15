@@ -1,0 +1,50 @@
+# 真值注入清单：生成器据此在合成数仓里预埋"已知真因"，并产出 ground_truth 期望值。
+#
+# 约定：
+#   - multiplier 是"注入倍率"：0.78 = 该因子下滑 22%，1.08 = 该因子上升 8%。
+#   - filter 用维度编码（channel / category / region / segment / sku），空表示全量。
+#   - factor 指指标树上的节点编码，leaf_factor 指真正被改动的叶子因子（报告需要展示到叶子）。
+#   - 期望值由 app/warehouse/groundtruth.py 的解析式独立算出，禁止用被测系统的分解结果回填。
+version: 1
+updated: "2026-09-15"
+
+injections:
+  - id: ecom-202606-paid-ads-cvr
+    scenario: ecom
+    factor: cvr
+    leaf_factor: pay_success_rate
+    multiplier: 0.78
+    window: ["2026-06-05", "2026-06-11"]
+    filter:
+      channel: [paid_ads]
+    note: 大促后付费投放渠道支付成功率下滑 22%，GMV 随之走低（场景 A 主案例）
+
+  - id: ecom-202603-appliance-uv
+    scenario: ecom
+    factor: uv
+    leaf_factor: impressions
+    multiplier: 0.72
+    window: ["2026-03-09", "2026-03-15"]
+    filter:
+      category: [appliance]
+    note: 家电厨具品类曝光量下滑 28%，转化率不变，属"流量侧"异动
+
+  - id: fmcg-202604-grain-oil-cost
+    scenario: fmcg
+    factor: raw_material_cost
+    leaf_factor: unit_cost
+    multiplier: 1.08
+    window: ["2026-04-06", "2026-04-19"]
+    filter:
+      category: [grain_oil, dairy]
+    note: 粮油与乳制品单位原料成本上升 8%（PPI 成本形态），毛利额被侵蚀
+
+  - id: fmcg-202602-distributor-logistics
+    scenario: fmcg
+    factor: logistics_cost
+    leaf_factor: logistics_per_unit
+    multiplier: 1.6
+    window: ["2026-02-02", "2026-02-08"]
+    filter:
+      channel: [distributor]
+    note: 经销商渠道物流履约成本上涨 60%，属可核对的单点成本异动

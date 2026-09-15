@@ -1,0 +1,22 @@
+[project]
+name = "attr-api"
+version = "0.1.0"
+description = "经营归因分析系统的 FastAPI 服务：路由、会话编排、审计、沙箱调度、报告组装"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115,<1.0",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.3",
+    "sqlalchemy>=2.0.30,<2.1",
+    "PyYAML>=6.0",
+    "numpy>=1.26",
+    "pandas>=2.2",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]

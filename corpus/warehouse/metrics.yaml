@@ -5,9 +5,13 @@
 #   method:    diff（差额分析）/ lmdi（对数平均迪氏指数法）
 #   unit:      金额统一以"分"入仓，展示按 precision 转"元"
 #   caliber:   口径标识，必须能在 calibers 段找到；口径变更 → 新版本，不改旧版本
+#   sql:       SQLite 方言（v1.1 随 D-22 变更）；场景内的 `fact` 是该场景事实表的别名，
+#              落地写法见 app/warehouse/verify.py（`FROM dw.<fact_table> AS fact`）
+#   sql_dialect: sqlite
 
 version: 1
 updated: "2026-09-15"
+sql_dialect: sqlite
 
 dimensions:
   - code: channel
@@ -39,9 +43,10 @@ dimensions:
 calibers:
   gmv_paid_success:
     version: 1
-    statement: 支付成功且观察期内未取消、未退款的订单金额
+    statement: 支付成功且观察期内未退款的订单金额（fact_order.status = 'paid'）
     time_field: dw.fact_order.paid_at
     excludes: [下单未支付, 已取消, 已退款]
+    implementation: dw.fact_ecom_daily.gmv_cents 即该口径金额；refund_cents 单独留痕，不重复扣减
     version_policy: 口径变更必须升版本，历史会话与报告绑定当时版本
   gross_profit_ex_tax:
     version: 1
@@ -88,53 +93,53 @@ scenarios:
               level: derived
               structure: unresolvable     # 比率型：只展示，禁止作为分解对象
               formula: "clicks / impressions"
-              sql: "SUM(fact.clicks)::numeric / NULLIF(SUM(fact.impressions), 0)"
+              sql: "1.0 * SUM(fact.clicks) / NULLIF(SUM(fact.impressions), 0)"
         - code: cvr
           name: 支付转化率
           level: derived
           structure: multiplicative
           formula: "cart_rate * order_rate * pay_success_rate"
           method: lmdi
-          sql: "SUM(fact.orders_paid)::numeric / NULLIF(SUM(fact.visitors), 0)"
+          sql: "1.0 * SUM(fact.orders_paid) / NULLIF(SUM(fact.visitors), 0)"
           children:
             - code: cart_rate
               name: 加购率
               level: derived
               structure: unresolvable
               formula: "add_to_cart / visitors"
-              sql: "SUM(fact.add_to_cart)::numeric / NULLIF(SUM(fact.visitors), 0)"
+              sql: "1.0 * SUM(fact.add_to_cart) / NULLIF(SUM(fact.visitors), 0)"
             - code: order_rate
               name: 下单率
               level: derived
               structure: unresolvable
               formula: "orders_created / add_to_cart"
-              sql: "SUM(fact.orders_created)::numeric / NULLIF(SUM(fact.add_to_cart), 0)"
+              sql: "1.0 * SUM(fact.orders_created) / NULLIF(SUM(fact.add_to_cart), 0)"
             - code: pay_success_rate
               name: 支付成功率
               level: derived
               structure: unresolvable
               formula: "orders_paid / orders_created"
-              sql: "SUM(fact.orders_paid)::numeric / NULLIF(SUM(fact.orders_created), 0)"
+              sql: "1.0 * SUM(fact.orders_paid) / NULLIF(SUM(fact.orders_created), 0)"
         - code: aov
           name: 客单价
           level: derived
           structure: multiplicative
           formula: "unit_price * attach_rate"
           method: lmdi
-          sql: "SUM(fact.gmv_cents)::numeric / NULLIF(SUM(fact.orders_paid), 0)"
+          sql: "1.0 * SUM(fact.gmv_cents) / NULLIF(SUM(fact.orders_paid), 0)"
           children:
             - code: unit_price
               name: 件单价
               level: derived
               structure: unresolvable
               formula: "gmv / units"
-              sql: "SUM(fact.gmv_cents)::numeric / NULLIF(SUM(fact.units), 0)"
+              sql: "1.0 * SUM(fact.gmv_cents) / NULLIF(SUM(fact.units), 0)"
             - code: attach_rate
               name: 连带率
               level: derived
               structure: unresolvable
               formula: "units / orders_paid"
-              sql: "SUM(fact.units)::numeric / NULLIF(SUM(fact.orders_paid), 0)"
+              sql: "1.0 * SUM(fact.units) / NULLIF(SUM(fact.orders_paid), 0)"
 
   - code: fmcg
     name: 快消品
@@ -162,7 +167,7 @@ scenarios:
           sql: "SUM(fact.revenue_cents)"
           children:
             - {code: units, name: 销量, level: atomic, sql: "SUM(fact.units)"}
-            - {code: avg_price, name: 平均单价, level: derived, structure: unresolvable, formula: "revenue / units", sql: "SUM(fact.revenue_cents)::numeric / NULLIF(SUM(fact.units), 0)"}
+            - {code: avg_price, name: 平均单价, level: derived, structure: unresolvable, formula: "revenue / units", sql: "1.0 * SUM(fact.revenue_cents) / NULLIF(SUM(fact.units), 0)"}
         - code: raw_material_cost
           name: 原材料成本
           level: derived
@@ -173,7 +178,7 @@ scenarios:
           sql: "SUM(fact.raw_material_cents)"
           children:
             - {code: raw_units, name: 耗用数量, level: atomic, sql: "SUM(fact.units)"}
-            - {code: unit_cost, name: 单位原料成本, level: derived, structure: unresolvable, formula: "raw_material_cost / units", sql: "SUM(fact.raw_material_cents)::numeric / NULLIF(SUM(fact.units), 0)"}
+            - {code: unit_cost, name: 单位原料成本, level: derived, structure: unresolvable, formula: "raw_material_cost / units", sql: "1.0 * SUM(fact.raw_material_cents) / NULLIF(SUM(fact.units), 0)"}
         - code: logistics_cost
           name: 物流履约成本
           level: atomic
@@ -191,14 +196,14 @@ scenarios:
           sql: "SUM(fact.channel_commission_cents)"
           children:
             - {code: commission_base, name: 计佣基数, level: derived, structure: unresolvable, formula: "revenue", sql: "SUM(fact.revenue_cents)"}
-            - {code: commission_rate, name: 佣金率, level: derived, structure: unresolvable, formula: "channel_commission / revenue", sql: "SUM(fact.channel_commission_cents)::numeric / NULLIF(SUM(fact.revenue_cents), 0)"}
+            - {code: commission_rate, name: 佣金率, level: derived, structure: unresolvable, formula: "channel_commission / revenue", sql: "1.0 * SUM(fact.channel_commission_cents) / NULLIF(SUM(fact.revenue_cents), 0)"}
         - code: other_cost
           name: 其他成本
           level: atomic
           structure: additive
           method: diff
           sign: -1
-          sql: "SUM(fact.other_cents)"
+          sql: "SUM(fact.other_cost_cents)"
 
 # What-If 可干预因子（只有出现在这里的因子才允许进入推演输入）
 intervenable_factors:

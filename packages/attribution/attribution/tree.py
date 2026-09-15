@@ -5,13 +5,19 @@
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass, field
-from typing import Mapping
 
-from .conservation import DEFAULT_TOLERANCE, assert_conservation, conservation_residual
+from .conservation import DEFAULT_TOLERANCE, assert_conservation
 from .diff import additive_contributions
 from .lmdi import lmdi_contributions
-from .metrics_loader import ADDITIVE, MULTIPLICATIVE, MetricNode, MetricTree, MetricsValidationError
+from .metrics_loader import (
+    ADDITIVE,
+    MULTIPLICATIVE,
+    MetricNode,
+    MetricsValidationError,
+    MetricTree,
+)
 
 
 class DecompositionError(ValueError):
@@ -83,14 +89,18 @@ def decompose_tree(
             _record(node, base_total, curr_total, contributions, "diff", {}, results, order)
 
         elif node.structure == MULTIPLICATIVE:
-            base_children = {c.code: _require(base_values, c.code, node.code) for c in node.children}
+            base_children = {
+                c.code: _require(base_values, c.code, node.code) for c in node.children
+            }
             curr_children = {
                 c.code: _require(current_values, c.code, node.code) for c in node.children
             }
             base_total = _node_value(node.code, base_values, _product(base_children.values()))
             curr_total = _node_value(node.code, current_values, _product(curr_children.values()))
             _assert_identity(node, base_total, _product(base_children.values()), tolerance, "base")
-            _assert_identity(node, curr_total, _product(curr_children.values()), tolerance, "current")
+            _assert_identity(
+                node, curr_total, _product(curr_children.values()), tolerance, "current"
+            )
             contributions, meta = lmdi_contributions(
                 base_children, curr_children, base_total, curr_total, tolerance=tolerance
             )
@@ -163,4 +173,10 @@ def _product(values) -> float:
     return result
 
 
-__all__ = ["DecompositionError", "NodeResult", "TreeResult", "decompose_tree", "MetricsValidationError"]
+__all__ = [
+    "DecompositionError",
+    "NodeResult",
+    "TreeResult",
+    "decompose_tree",
+    "MetricsValidationError",
+]
