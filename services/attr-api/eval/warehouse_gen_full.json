@@ -13,7 +13,7 @@
   },
   "ground_truth_rows": 4,
   "skipped_injections": [],
-  "duration_s": 40.393,
-  "generated_at": "2026-09-15T11:26:00",
-  "reset_duration_s": 0.085
+  "duration_s": 36.1,
+  "generated_at": "2026-09-15T15:11:50",
+  "reset_duration_s": 0.054
 }

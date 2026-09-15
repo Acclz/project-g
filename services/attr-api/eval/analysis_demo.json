@@ -1,0 +1,3143 @@
+{
+  "cases": [
+    {
+      "scenario": "ecom",
+      "title": "真因 #1（ecom）",
+      "base": {
+        "start": "2026-05-29",
+        "end": "2026-06-04",
+        "days": 7,
+        "label": "上一期"
+      },
+      "current": {
+        "start": "2026-06-05",
+        "end": "2026-06-11",
+        "days": 7,
+        "label": "注入窗口"
+      },
+      "slice": {
+        "channel": [
+          "paid_ads"
+        ]
+      },
+      "session_id": 11,
+      "duration_ms": 22188,
+      "decomposition": {
+        "scenario": "ecom",
+        "scenario_name": "电商零售",
+        "metric": {
+          "code": "gmv",
+          "name": "GMV"
+        },
+        "base": {
+          "start": "2026-05-29",
+          "end": "2026-06-04",
+          "days": 7,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-06-05",
+          "end": "2026-06-11",
+          "days": 7,
+          "label": "注入窗口"
+        },
+        "slice": {
+          "channel": [
+            "paid_ads"
+          ]
+        },
+        "tolerance": 1e-09,
+        "max_residual": 1.1175870895385742e-07,
+        "max_relative_residual": 1.4134934656014426e-14,
+        "ok": true,
+        "nodes": [
+          {
+            "code": "gmv",
+            "name": "GMV",
+            "method": "lmdi",
+            "base_total": 94882388.0,
+            "current_total": 66488171.0,
+            "delta": -28394217.0,
+            "residual": 1.1175870895385742e-07,
+            "relative_residual": 3.9359672765006135e-15,
+            "contributions": [
+              {
+                "factor": "cvr",
+                "contribution": -18511951.1392699,
+                "rate": 0.651962022381878
+              },
+              {
+                "factor": "aov",
+                "contribution": -13142627.561956165,
+                "rate": 0.4628628273833424
+              },
+              {
+                "factor": "uv",
+                "contribution": 3260361.701225954,
+                "rate": -0.11482484976521642
+              }
+            ],
+            "detail": {
+              "residual": 1.1175870895385742e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 94882388.0,
+              "original_total_current": 66488171.0,
+              "recomputed_total_base": 94882388.0,
+              "recomputed_total_current": 66488171.0,
+              "decomposable": true,
+              "level": "composite",
+              "structure": "multiplicative",
+              "formula": "uv * cvr * aov",
+              "caliber": "gmv_paid_success",
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "uv",
+            "name": "访客数",
+            "method": "lmdi",
+            "base_total": 49402.0,
+            "current_total": 51461.0,
+            "delta": 2059.0,
+            "residual": 2.9103830456733704e-11,
+            "relative_residual": 1.4134934656014426e-14,
+            "contributions": [
+              {
+                "factor": "impressions",
+                "contribution": 2525.3353245056473,
+                "rate": 1.2264863159328059
+              },
+              {
+                "factor": "ctr",
+                "contribution": -466.3353245056182,
+                "rate": -0.22648631593279173
+              }
+            ],
+            "detail": {
+              "residual": 2.9103830456733704e-11,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 49402.0,
+              "original_total_current": 51461.0,
+              "recomputed_total_base": 49402.0,
+              "recomputed_total_current": 51461.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "impressions * ctr",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "cvr",
+            "name": "支付转化率",
+            "method": "lmdi",
+            "base_total": 0.12770738026800535,
+            "current_total": 0.10128058141116573,
+            "delta": -0.026426798856839614,
+            "residual": 1.3877787807814457e-17,
+            "relative_residual": 1.3877787807814457e-17,
+            "contributions": [
+              {
+                "factor": "pay_success_rate",
+                "contribution": -0.026376973088931093,
+                "rate": 0.9981145742176932
+              },
+              {
+                "factor": "cart_rate",
+                "contribution": -0.00011464330879331868,
+                "rate": 0.004338145887981716
+              },
+              {
+                "factor": "order_rate",
+                "contribution": 6.481754088478332e-05,
+                "rate": -0.0024527201056743827
+              }
+            ],
+            "detail": {
+              "residual": 1.3877787807814457e-17,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 0.12770738026800535,
+              "original_total_current": 0.10128058141116573,
+              "recomputed_total_base": 0.12770738026800535,
+              "recomputed_total_current": 0.10128058141116573,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "cart_rate * order_rate * pay_success_rate",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "aov",
+            "name": "客单价",
+            "method": "lmdi",
+            "base_total": 15039.211919480107,
+            "current_total": 12756.74808135073,
+            "delta": -2282.463838129377,
+            "residual": 9.094947017729282e-13,
+            "relative_residual": 3.9847058541716763e-16,
+            "contributions": [
+              {
+                "factor": "unit_price",
+                "contribution": -2467.3848401767973,
+                "rate": 1.0810181519453883
+              },
+              {
+                "factor": "attach_rate",
+                "contribution": 184.92100204742127,
+                "rate": -0.08101815194538883
+              }
+            ],
+            "detail": {
+              "residual": 9.094947017729282e-13,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 15039.211919480107,
+              "original_total_current": 12756.74808135073,
+              "recomputed_total_base": 15039.211919480107,
+              "recomputed_total_current": 12756.74808135073,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "unit_price * attach_rate",
+              "caliber": null,
+              "sign": 1.0
+            }
+          }
+        ],
+        "skipped_targets": []
+      },
+      "hypotheses": [
+        {
+          "hypothesis": {
+            "statement": "支付转化率（cvr）在切片 channel=paid_ads上的变化是GMV变动的主要来源之一",
+            "expected_direction": "down",
+            "verification": "在沙箱里取支付转化率的日序列，比较「切片 channel=paid_ads」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "1.0 * SUM(fact.orders_paid) / NULLIF(SUM(fact.visitors), 0)",
+            "counter_check": "若该假设成立，切片 channel=paid_ads内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "cvr",
+            "factor_name": "支付转化率",
+            "scope_label": "切片 channel=paid_ads",
+            "source": "template",
+            "scenario": "ecom",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "channel": [
+                "paid_ads"
+              ]
+            }
+          },
+          "status": "excluded",
+          "confidence": {
+            "significance_score": 0.4,
+            "effect_score": 0.4726,
+            "coverage_score": 1.0,
+            "total": 0.5754
+          },
+          "final_confidence": 0.5754,
+          "reason": "p=0.0706（10000 次置换，种子 20260915）、效应量=-0.404、覆盖 42/21 天；置信度 0.575 低于阈值 0.6，标记为已排除；第 1 步（控制变量）：在 category=appliance 内部复核，p=0.685 不显著（效应量 0.09）：该关系更像共同驱动，判定为共同驱动",
+          "direction_ok": true,
+          "penalties": [],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "579dee4b215b196f",
+            "sample_size": 84,
+            "p_value": 0.0705929407059294,
+            "effect_size": -0.4044510737613162,
+            "audit_id": 637,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -0.0031736511719104715,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "aee65e2d0b7aeb5c",
+              "observation_window": {
+                "start": "2026-05-01",
+                "end": "2026-06-11",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.7441102033621868
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "客单价（aov）在切片 channel=paid_ads上的变化是GMV变动的主要来源之一",
+            "expected_direction": "down",
+            "verification": "在沙箱里取客单价的日序列，比较「切片 channel=paid_ads」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "1.0 * SUM(fact.gmv_cents) / NULLIF(SUM(fact.orders_paid), 0)",
+            "counter_check": "若该假设成立，切片 channel=paid_ads内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "aov",
+            "factor_name": "客单价",
+            "scope_label": "切片 channel=paid_ads",
+            "source": "template",
+            "scenario": "ecom",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "channel": [
+                "paid_ads"
+              ]
+            }
+          },
+          "status": "excluded",
+          "confidence": {
+            "significance_score": 0.0,
+            "effect_score": 0.2,
+            "coverage_score": 1.0,
+            "total": 0.32
+          },
+          "final_confidence": 0.17,
+          "reason": "p=0.3907（10000 次置换，种子 20260915）、效应量=0.192、覆盖 42/21 天；置信度 0.170 低于阈值 0.6，标记为已排除；第 3 步（安慰剂维度）：在理论上不应成立的维度（category=beauty）上同样显著（p=0.000）：且强度相当（|效应量| 1.31 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动",
+          "direction_ok": false,
+          "penalties": [
+            {
+              "reason": "反例检查：切片内变化方向与预期相反，置信度下调",
+              "delta": -0.15
+            }
+          ],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "35f632de2aff2db6",
+            "sample_size": 84,
+            "p_value": 0.39066093390660933,
+            "effect_size": 0.1923323010401168,
+            "audit_id": 649,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": 233.03755415589512,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "920e60981ba0c20e",
+              "observation_window": {
+                "start": "2026-05-01",
+                "end": "2026-06-11",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.7441102033621868
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "访客数（uv）在切片 channel=paid_ads上的变化是GMV变动的主要来源之一",
+            "expected_direction": "up",
+            "verification": "在沙箱里取访客数的日序列，比较「切片 channel=paid_ads」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.visitors)",
+            "counter_check": "若该假设成立，切片 channel=paid_ads内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "uv",
+            "factor_name": "访客数",
+            "scope_label": "切片 channel=paid_ads",
+            "source": "template",
+            "scenario": "ecom",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "channel": [
+                "paid_ads"
+              ]
+            }
+          },
+          "status": "excluded",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 0.85,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-13.534、覆盖 42/21 天；第 3 步（安慰剂维度）：在理论上不应成立的维度（category=beauty）上同样显著（p=0.000）：且强度相当（|效应量| 12.47 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动",
+          "direction_ok": false,
+          "penalties": [
+            {
+              "reason": "反例检查：切片内变化方向与预期相反，置信度下调",
+              "delta": -0.15
+            }
+          ],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "c3807f162b513210",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -13.534424826673472,
+            "audit_id": 661,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -16084.0,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "1af1bb6d3f32cb79",
+              "observation_window": {
+                "start": "2026-05-01",
+                "end": "2026-06-11",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.7441102033621868
+            }
+          }
+        }
+      ],
+      "pseudo_correlation": [
+        {
+          "factor": "cvr",
+          "verdict": "共同驱动",
+          "penalty_total": 0.3,
+          "reasons": [
+            "第 1 步（控制变量）：在 category=appliance 内部复核，p=0.685 不显著（效应量 0.09）：该关系更像共同驱动，判定为共同驱动"
+          ],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "共同驱动",
+              "detail": "在 category=appliance 内部复核，p=0.685 不显著（效应量 0.09）：该关系更像共同驱动，判定为共同驱动",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "原因晚于结果",
+              "detail": "因子首次显著偏离在 第 36 天，目标指标在 第 12 天，原因晚于结果 ⇒ 置信度下调 0.3（技术规格 §5.9 第 2 条）",
+              "penalty": 0.3
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（category=beauty）p=0.141、|效应量| 0.32：不显著",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "aov",
+          "verdict": "趋势性共同驱动",
+          "penalty_total": 0.0,
+          "reasons": [
+            "第 3 步（安慰剂维度）：在理论上不应成立的维度（category=beauty）上同样显著（p=0.000）：且强度相当（|效应量| 1.31 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动"
+          ],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 category=appliance 内部复核仍显著（p=0.000，效应量 12.14）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 1 天 不晚于目标指标 第 12 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "趋势性共同驱动",
+              "detail": "在理论上不应成立的维度（category=beauty）上同样显著（p=0.000）：且强度相当（|效应量| 1.31 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "uv",
+          "verdict": "趋势性共同驱动",
+          "penalty_total": 0.0,
+          "reasons": [
+            "第 3 步（安慰剂维度）：在理论上不应成立的维度（category=beauty）上同样显著（p=0.000）：且强度相当（|效应量| 12.47 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动"
+          ],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 category=beauty 内部复核仍显著（p=0.000，效应量 -14.63）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 10 天 不晚于目标指标 第 12 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "趋势性共同驱动",
+              "detail": "在理论上不应成立的维度（category=beauty）上同样显著（p=0.000）：且强度相当（|效应量| 12.47 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动",
+              "penalty": 0.0
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "event": {
+            "id": 2,
+            "name": "平台发放渠道流量券",
+            "type": "平台政策",
+            "window": [
+              "2026-06-03",
+              "2026-06-10"
+            ],
+            "dimensions": {
+              "channel": [
+                "paid_ads",
+                "livestream"
+              ]
+            },
+            "note": "平台流量券推高曝光但拉低转化质量，属外生变量"
+          },
+          "dimension_overlap": 1.0,
+          "time_proximity": 1.0,
+          "relevance": 1.0,
+          "tier": "因果链",
+          "is_exogenous": true,
+          "reason": "维度重合度 1.00（交集 ['channel']）、时间接近度 1.00（时间窗重叠）"
+        },
+        {
+          "event": {
+            "id": 1,
+            "name": "竞品在付费渠道全线降价 15%",
+            "type": "竞品动作",
+            "window": [
+              "2026-06-04",
+              "2026-06-12"
+            ],
+            "dimensions": {
+              "channel": [
+                "paid_ads"
+              ],
+              "category": [
+                "grain_oil",
+                "beverage"
+              ]
+            },
+            "note": "竞品在付费投放渠道打价格战，行业普遍出现\"高流量低转化\""
+          },
+          "dimension_overlap": 0.5,
+          "time_proximity": 1.0,
+          "relevance": 0.7,
+          "tier": "因果链",
+          "is_exogenous": true,
+          "reason": "维度重合度 0.50（交集 ['channel']）、时间接近度 1.00（时间窗重叠）"
+        }
+      ],
+      "causal_chain": [
+        {
+          "event": {
+            "id": 2,
+            "name": "平台发放渠道流量券",
+            "type": "平台政策",
+            "window": [
+              "2026-06-03",
+              "2026-06-10"
+            ],
+            "dimensions": {
+              "channel": [
+                "paid_ads",
+                "livestream"
+              ]
+            },
+            "note": "平台流量券推高曝光但拉低转化质量，属外生变量"
+          },
+          "relevance": 1.0,
+          "tier": "因果链",
+          "is_exogenous": true,
+          "reason": "维度重合度 1.00（交集 ['channel']）、时间接近度 1.00（时间窗重叠）"
+        },
+        {
+          "event": {
+            "id": 1,
+            "name": "竞品在付费渠道全线降价 15%",
+            "type": "竞品动作",
+            "window": [
+              "2026-06-04",
+              "2026-06-12"
+            ],
+            "dimensions": {
+              "channel": [
+                "paid_ads"
+              ],
+              "category": [
+                "grain_oil",
+                "beverage"
+              ]
+            },
+            "note": "竞品在付费投放渠道打价格战，行业普遍出现\"高流量低转化\""
+          },
+          "relevance": 0.7,
+          "tier": "因果链",
+          "is_exogenous": true,
+          "reason": "维度重合度 0.50（交集 ['channel']）、时间接近度 1.00（时间窗重叠）"
+        }
+      ],
+      "conclusion": {
+        "primary_cause": "cvr：贡献 -18,511,951 分（贡献率 65.2%），由分解直接给出，最大相对残差 1.41e-14",
+        "secondary_causes": [
+          "aov：贡献 -13,142,628 分（贡献率 46.3%）",
+          "uv：贡献 3,260,362 分（贡献率 -11.5%）"
+        ],
+        "verified_hypotheses": [],
+        "excluded_hypotheses": [
+          {
+            "statement": "支付转化率（cvr）在切片 channel=paid_ads上的变化是GMV变动的主要来源之一",
+            "reason": "p=0.0706（10000 次置换，种子 20260915）、效应量=-0.404、覆盖 42/21 天；置信度 0.575 低于阈值 0.6，标记为已排除；第 1 步（控制变量）：在 category=appliance 内部复核，p=0.685 不显著（效应量 0.09）：该关系更像共同驱动，判定为共同驱动"
+          },
+          {
+            "statement": "客单价（aov）在切片 channel=paid_ads上的变化是GMV变动的主要来源之一",
+            "reason": "p=0.3907（10000 次置换，种子 20260915）、效应量=0.192、覆盖 42/21 天；置信度 0.170 低于阈值 0.6，标记为已排除；第 3 步（安慰剂维度）：在理论上不应成立的维度（category=beauty）上同样显著（p=0.000）：且强度相当（|效应量| 1.31 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动"
+          },
+          {
+            "statement": "访客数（uv）在切片 channel=paid_ads上的变化是GMV变动的主要来源之一",
+            "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-13.534、覆盖 42/21 天；第 3 步（安慰剂维度）：在理论上不应成立的维度（category=beauty）上同样显著（p=0.000）：且强度相当（|效应量| 12.47 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动"
+          }
+        ],
+        "exogenous_note": "平台发放渠道流量券、竞品在付费渠道全线降价 15%（外部因素，非内部操作问题）",
+        "disclaimer": "贡献额来自确定性分解；假设与置信度来自沙箱证据与统计检验，两者口径不同，不混用"
+      },
+      "steps": [
+        {
+          "seq": 1,
+          "kind": "query",
+          "status": "completed",
+          "duration_ms": 13,
+          "payload": {
+            "nodes": [
+              "gmv",
+              "uv",
+              "cvr",
+              "aov"
+            ],
+            "max_relative_residual": 1.4134934656014426e-14
+          }
+        },
+        {
+          "seq": 2,
+          "kind": "hypothesis",
+          "status": "completed",
+          "duration_ms": 419,
+          "payload": {
+            "count": 3,
+            "source": "template"
+          }
+        },
+        {
+          "seq": 3,
+          "kind": "verify",
+          "status": "excluded",
+          "duration_ms": 7017,
+          "payload": {
+            "factor": "cvr",
+            "final_confidence": 0.5754,
+            "pseudo_verdict": "共同驱动"
+          }
+        },
+        {
+          "seq": 4,
+          "kind": "verify",
+          "status": "excluded",
+          "duration_ms": 7327,
+          "payload": {
+            "factor": "aov",
+            "final_confidence": 0.17,
+            "pseudo_verdict": "趋势性共同驱动"
+          }
+        },
+        {
+          "seq": 5,
+          "kind": "verify",
+          "status": "excluded",
+          "duration_ms": 7409,
+          "payload": {
+            "factor": "uv",
+            "final_confidence": 0.85,
+            "pseudo_verdict": "趋势性共同驱动"
+          }
+        },
+        {
+          "seq": 6,
+          "kind": "event",
+          "status": "completed",
+          "duration_ms": 1,
+          "payload": {
+            "matched": 2,
+            "in_chain": 2
+          }
+        }
+      ],
+      "fallback_note": "未配置 LLM_API_KEY，使用确定性模板草案",
+      "ground_truth": {
+        "id": 1,
+        "factor": "cvr",
+        "injected_contribution_cents": -17336421
+      }
+    },
+    {
+      "scenario": "ecom",
+      "title": "真因 #2（ecom）",
+      "base": {
+        "start": "2026-03-02",
+        "end": "2026-03-08",
+        "days": 7,
+        "label": "上一期"
+      },
+      "current": {
+        "start": "2026-03-09",
+        "end": "2026-03-15",
+        "days": 7,
+        "label": "注入窗口"
+      },
+      "slice": {
+        "category": [
+          "appliance"
+        ]
+      },
+      "session_id": 12,
+      "duration_ms": 22053,
+      "decomposition": {
+        "scenario": "ecom",
+        "scenario_name": "电商零售",
+        "metric": {
+          "code": "gmv",
+          "name": "GMV"
+        },
+        "base": {
+          "start": "2026-03-02",
+          "end": "2026-03-08",
+          "days": 7,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-03-09",
+          "end": "2026-03-15",
+          "days": 7,
+          "label": "注入窗口"
+        },
+        "slice": {
+          "category": [
+            "appliance"
+          ]
+        },
+        "tolerance": 1e-09,
+        "max_residual": 2.60770320892334e-07,
+        "max_relative_residual": 6.793021722672813e-15,
+        "ok": true,
+        "nodes": [
+          {
+            "code": "gmv",
+            "name": "GMV",
+            "method": "lmdi",
+            "base_total": 112510757.0,
+            "current_total": 74122786.0,
+            "delta": -38387971.0,
+            "residual": 2.60770320892334e-07,
+            "relative_residual": 6.793021722672813e-15,
+            "contributions": [
+              {
+                "factor": "uv",
+                "contribution": -35148876.169517,
+                "rate": 0.9156221403188255
+              },
+              {
+                "factor": "aov",
+                "contribution": -4001173.646091973,
+                "rate": 0.10422988092004062
+              },
+              {
+                "factor": "cvr",
+                "contribution": 762078.8156092364,
+                "rate": -0.019852021238872884
+              }
+            ],
+            "detail": {
+              "residual": 2.60770320892334e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 112510757.0,
+              "original_total_current": 74122786.0,
+              "recomputed_total_base": 112510757.0,
+              "recomputed_total_current": 74122786.0,
+              "decomposable": true,
+              "level": "composite",
+              "structure": "multiplicative",
+              "formula": "uv * cvr * aov",
+              "caliber": "gmv_paid_success",
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "uv",
+            "name": "访客数",
+            "method": "lmdi",
+            "base_total": 13184.0,
+            "current_total": 8997.0,
+            "delta": -4187.0,
+            "residual": 4.547473508864641e-12,
+            "relative_residual": 1.0860935058191165e-15,
+            "contributions": [
+              {
+                "factor": "impressions",
+                "contribution": -4298.478524442247,
+                "rate": 1.0266249162747187
+              },
+              {
+                "factor": "ctr",
+                "contribution": 111.47852444225173,
+                "rate": -0.02662491627471978
+              }
+            ],
+            "detail": {
+              "residual": 4.547473508864641e-12,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 13184.0,
+              "original_total_current": 8997.0,
+              "recomputed_total_base": 13184.0,
+              "recomputed_total_current": 8997.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "impressions * ctr",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "cvr",
+            "name": "支付转化率",
+            "method": "lmdi",
+            "base_total": 0.12742718446601942,
+            "current_total": 0.12848727353562298,
+            "delta": 0.0010600890696035592,
+            "residual": 5.5294310796760726e-17,
+            "relative_residual": 5.5294310796760726e-17,
+            "contributions": [
+              {
+                "factor": "cart_rate",
+                "contribution": 0.0009051148173687219,
+                "rate": 0.8538101592795472
+              },
+              {
+                "factor": "order_rate",
+                "contribution": 0.0007392189759205021,
+                "rate": 0.6973177982081707
+              },
+              {
+                "factor": "pay_success_rate",
+                "contribution": -0.0005842447236857201,
+                "rate": -0.5511279574877701
+              }
+            ],
+            "detail": {
+              "residual": 5.5294310796760726e-17,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 0.12742718446601942,
+              "original_total_current": 0.12848727353562298,
+              "recomputed_total_base": 0.12742718446601942,
+              "recomputed_total_current": 0.12848727353562298,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "cart_rate * order_rate * pay_success_rate",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "aov",
+            "name": "客单价",
+            "method": "lmdi",
+            "base_total": 66970.68869047619,
+            "current_total": 64120.0570934256,
+            "delta": -2850.6315970505893,
+            "residual": 1.1368683772161603e-11,
+            "relative_residual": 3.988128028863579e-15,
+            "contributions": [
+              {
+                "factor": "unit_price",
+                "contribution": -2267.442156205715,
+                "rate": 0.7954174641688978
+              },
+              {
+                "factor": "attach_rate",
+                "contribution": -583.1894408448628,
+                "rate": 0.20458253583109817
+              }
+            ],
+            "detail": {
+              "residual": 1.1368683772161603e-11,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 66970.68869047619,
+              "original_total_current": 64120.0570934256,
+              "recomputed_total_base": 66970.68869047619,
+              "recomputed_total_current": 64120.0570934256,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "unit_price * attach_rate",
+              "caliber": null,
+              "sign": 1.0
+            }
+          }
+        ],
+        "skipped_targets": []
+      },
+      "hypotheses": [
+        {
+          "hypothesis": {
+            "statement": "访客数（uv）在切片 category=appliance上的变化是GMV变动的主要来源之一",
+            "expected_direction": "down",
+            "verification": "在沙箱里取访客数的日序列，比较「切片 category=appliance」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.visitors)",
+            "counter_check": "若该假设成立，切片 category=appliance内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "uv",
+            "factor_name": "访客数",
+            "scope_label": "切片 category=appliance",
+            "source": "template",
+            "scenario": "ecom",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "category": [
+                "appliance"
+              ]
+            }
+          },
+          "status": "verified",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 1.0,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-15.692、覆盖 42/21 天",
+          "direction_ok": true,
+          "penalties": [],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "ec939f01031c4813",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -15.692241474024014,
+            "audit_id": 673,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -17724.52380952381,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "a20a4c41cb67dc3a",
+              "observation_window": {
+                "start": "2026-02-02",
+                "end": "2026-03-15",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 1.1284547451472633
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "客单价（aov）在切片 category=appliance上的变化是GMV变动的主要来源之一",
+            "expected_direction": "down",
+            "verification": "在沙箱里取客单价的日序列，比较「切片 category=appliance」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "1.0 * SUM(fact.gmv_cents) / NULLIF(SUM(fact.orders_paid), 0)",
+            "counter_check": "若该假设成立，切片 category=appliance内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "aov",
+            "factor_name": "客单价",
+            "scope_label": "切片 category=appliance",
+            "source": "template",
+            "scenario": "ecom",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "category": [
+                "appliance"
+              ]
+            }
+          },
+          "status": "verified",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 0.85,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=22.005、覆盖 42/21 天",
+          "direction_ok": false,
+          "penalties": [
+            {
+              "reason": "反例检查：切片内变化方向与预期相反，置信度下调",
+              "delta": -0.15
+            }
+          ],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "a9fa358c8015ef67",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": 22.004596590706466,
+            "audit_id": 685,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": 51471.91582071738,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "b2a008e17f9eaeef",
+              "observation_window": {
+                "start": "2026-02-02",
+                "end": "2026-03-15",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 1.1284547451472633
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "支付转化率（cvr）在切片 category=appliance上的变化是GMV变动的主要来源之一",
+            "expected_direction": "up",
+            "verification": "在沙箱里取支付转化率的日序列，比较「切片 category=appliance」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "1.0 * SUM(fact.orders_paid) / NULLIF(SUM(fact.visitors), 0)",
+            "counter_check": "若该假设成立，切片 category=appliance内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "cvr",
+            "factor_name": "支付转化率",
+            "scope_label": "切片 category=appliance",
+            "source": "template",
+            "scenario": "ecom",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "category": [
+                "appliance"
+              ]
+            }
+          },
+          "status": "excluded",
+          "confidence": {
+            "significance_score": 0.0,
+            "effect_score": 0.2,
+            "coverage_score": 1.0,
+            "total": 0.32
+          },
+          "final_confidence": 0.32,
+          "reason": "p=0.9858（10000 次置换，种子 20260915）、效应量=0.004、覆盖 42/21 天；置信度 0.320 低于阈值 0.6，标记为已排除；第 1 步（控制变量）：在 channel=distributor 内部复核，p=0.135 不显著（效应量 0.33）：该关系更像共同驱动，判定为共同驱动",
+          "direction_ok": true,
+          "penalties": [],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "758b4ce8e14b6ddc",
+            "sample_size": 84,
+            "p_value": 0.9858014198580142,
+            "effect_size": 0.003865834153122431,
+            "audit_id": 697,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": 2.5026737562078294e-05,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "3ef65335109ec9e1",
+              "observation_window": {
+                "start": "2026-02-02",
+                "end": "2026-03-15",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 1.1284547451472633
+            }
+          }
+        }
+      ],
+      "pseudo_correlation": [
+        {
+          "factor": "uv",
+          "verdict": "通过四步检查",
+          "penalty_total": 0.0,
+          "reasons": [],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 channel=catering 内部复核仍显著（p=0.000，效应量 -8.25）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 6 天 不晚于目标指标 第 6 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（channel=hypermarket）p=0.000、|效应量| 4.30：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "aov",
+          "verdict": "通过四步检查",
+          "penalty_total": 0.0,
+          "reasons": [],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 channel=catering 内部复核仍显著（p=0.012，效应量 -0.55）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 4 天 不晚于目标指标 第 6 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（channel=hypermarket）p=0.000、|效应量| 17.37：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "cvr",
+          "verdict": "共同驱动",
+          "penalty_total": 0.0,
+          "reasons": [
+            "第 1 步（控制变量）：在 channel=distributor 内部复核，p=0.135 不显著（效应量 0.33）：该关系更像共同驱动，判定为共同驱动"
+          ],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "共同驱动",
+              "detail": "在 channel=distributor 内部复核，p=0.135 不显著（效应量 0.33）：该关系更像共同驱动，判定为共同驱动",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 5 天 不晚于目标指标 第 6 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（channel=hypermarket）p=0.847、|效应量| 0.04：不显著",
+              "penalty": 0.0
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "event": {
+            "id": 3,
+            "name": "家电品类补贴退坡",
+            "type": "政策调整",
+            "window": [
+              "2026-03-05",
+              "2026-03-20"
+            ],
+            "dimensions": {
+              "category": [
+                "appliance"
+              ]
+            },
+            "note": "补贴退坡导致家电品类曝光与成交同步走低"
+          },
+          "dimension_overlap": 1.0,
+          "time_proximity": 1.0,
+          "relevance": 1.0,
+          "tier": "因果链",
+          "is_exogenous": true,
+          "reason": "维度重合度 1.00（交集 ['category']）、时间接近度 1.00（时间窗重叠）"
+        }
+      ],
+      "causal_chain": [
+        {
+          "event": {
+            "id": 3,
+            "name": "家电品类补贴退坡",
+            "type": "政策调整",
+            "window": [
+              "2026-03-05",
+              "2026-03-20"
+            ],
+            "dimensions": {
+              "category": [
+                "appliance"
+              ]
+            },
+            "note": "补贴退坡导致家电品类曝光与成交同步走低"
+          },
+          "relevance": 1.0,
+          "tier": "因果链",
+          "is_exogenous": true,
+          "reason": "维度重合度 1.00（交集 ['category']）、时间接近度 1.00（时间窗重叠）"
+        }
+      ],
+      "conclusion": {
+        "primary_cause": "uv：贡献 -35,148,876 分（贡献率 91.6%），由分解直接给出，最大相对残差 6.79e-15",
+        "secondary_causes": [
+          "aov：贡献 -4,001,174 分（贡献率 10.4%）",
+          "cvr：贡献 762,079 分（贡献率 -2.0%）"
+        ],
+        "verified_hypotheses": [
+          "访客数（uv）在切片 category=appliance上的变化是GMV变动的主要来源之一",
+          "客单价（aov）在切片 category=appliance上的变化是GMV变动的主要来源之一"
+        ],
+        "excluded_hypotheses": [
+          {
+            "statement": "支付转化率（cvr）在切片 category=appliance上的变化是GMV变动的主要来源之一",
+            "reason": "p=0.9858（10000 次置换，种子 20260915）、效应量=0.004、覆盖 42/21 天；置信度 0.320 低于阈值 0.6，标记为已排除；第 1 步（控制变量）：在 channel=distributor 内部复核，p=0.135 不显著（效应量 0.33）：该关系更像共同驱动，判定为共同驱动"
+          }
+        ],
+        "exogenous_note": "家电品类补贴退坡（外部因素，非内部操作问题）",
+        "disclaimer": "贡献额来自确定性分解；假设与置信度来自沙箱证据与统计检验，两者口径不同，不混用"
+      },
+      "steps": [
+        {
+          "seq": 1,
+          "kind": "query",
+          "status": "completed",
+          "duration_ms": 10,
+          "payload": {
+            "nodes": [
+              "gmv",
+              "uv",
+              "cvr",
+              "aov"
+            ],
+            "max_relative_residual": 6.793021722672813e-15
+          }
+        },
+        {
+          "seq": 2,
+          "kind": "hypothesis",
+          "status": "completed",
+          "duration_ms": 481,
+          "payload": {
+            "count": 3,
+            "source": "template"
+          }
+        },
+        {
+          "seq": 3,
+          "kind": "verify",
+          "status": "verified",
+          "duration_ms": 7308,
+          "payload": {
+            "factor": "uv",
+            "final_confidence": 1.0,
+            "pseudo_verdict": "通过四步检查"
+          }
+        },
+        {
+          "seq": 4,
+          "kind": "verify",
+          "status": "verified",
+          "duration_ms": 7014,
+          "payload": {
+            "factor": "aov",
+            "final_confidence": 0.85,
+            "pseudo_verdict": "通过四步检查"
+          }
+        },
+        {
+          "seq": 5,
+          "kind": "verify",
+          "status": "excluded",
+          "duration_ms": 7236,
+          "payload": {
+            "factor": "cvr",
+            "final_confidence": 0.32,
+            "pseudo_verdict": "共同驱动"
+          }
+        },
+        {
+          "seq": 6,
+          "kind": "event",
+          "status": "completed",
+          "duration_ms": 1,
+          "payload": {
+            "matched": 1,
+            "in_chain": 1
+          }
+        }
+      ],
+      "fallback_note": "未配置 LLM_API_KEY，使用确定性模板草案",
+      "ground_truth": {
+        "id": 2,
+        "factor": "uv",
+        "injected_contribution_cents": -28991673
+      }
+    },
+    {
+      "scenario": "fmcg",
+      "title": "真因 #3（fmcg）",
+      "base": {
+        "start": "2026-03-23",
+        "end": "2026-04-05",
+        "days": 14,
+        "label": "上一期"
+      },
+      "current": {
+        "start": "2026-04-06",
+        "end": "2026-04-19",
+        "days": 14,
+        "label": "注入窗口"
+      },
+      "slice": {
+        "category": [
+          "grain_oil",
+          "dairy"
+        ]
+      },
+      "session_id": 13,
+      "duration_ms": 39650,
+      "decomposition": {
+        "scenario": "fmcg",
+        "scenario_name": "快消品",
+        "metric": {
+          "code": "gross_profit",
+          "name": "毛利额"
+        },
+        "base": {
+          "start": "2026-03-23",
+          "end": "2026-04-05",
+          "days": 14,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-04-06",
+          "end": "2026-04-19",
+          "days": 14,
+          "label": "注入窗口"
+        },
+        "slice": {
+          "category": [
+            "grain_oil",
+            "dairy"
+          ]
+        },
+        "tolerance": 1e-09,
+        "max_residual": 5.960464477539062e-07,
+        "max_relative_residual": 3.073654734585285e-13,
+        "ok": true,
+        "nodes": [
+          {
+            "code": "gross_profit",
+            "name": "毛利额",
+            "method": "diff",
+            "base_total": 84261773.0,
+            "current_total": 39104703.0,
+            "delta": -45157070.0,
+            "residual": 0.0,
+            "relative_residual": 0.0,
+            "contributions": [
+              {
+                "factor": "raw_material_cost",
+                "contribution": -46759210.0,
+                "rate": 1.0354792726808892
+              },
+              {
+                "factor": "revenue",
+                "contribution": 1614999.0,
+                "rate": -0.035764034291861715
+              },
+              {
+                "factor": "logistics_cost",
+                "contribution": 273504.0,
+                "rate": -0.006056726001044798
+              },
+              {
+                "factor": "channel_commission",
+                "contribution": -205670.0,
+                "rate": 0.004554547050993344
+              },
+              {
+                "factor": "other_cost",
+                "contribution": -80693.0,
+                "rate": 0.001786940561023999
+              }
+            ],
+            "detail": {
+              "decomposable": true,
+              "level": "composite",
+              "structure": "additive",
+              "formula": "revenue - raw_material_cost - logistics_cost - channel_commission - other_cost",
+              "caliber": "gross_profit_ex_tax",
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "revenue",
+            "name": "营收",
+            "method": "lmdi",
+            "base_total": 771357665.0,
+            "current_total": 772972664.0,
+            "delta": 1614999.0,
+            "residual": 4.9639493227005e-07,
+            "relative_residual": 3.073654734585285e-13,
+            "contributions": [
+              {
+                "factor": "avg_price",
+                "contribution": 4172085.969118669,
+                "rate": 2.583336564987761
+              },
+              {
+                "factor": "units",
+                "contribution": -2557086.9691191656,
+                "rate": -1.5833365649880684
+              }
+            ],
+            "detail": {
+              "residual": 4.9639493227005e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 771357665.0,
+              "original_total_current": 772972664.0,
+              "recomputed_total_base": 771357665.0,
+              "recomputed_total_current": 772972664.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "units * avg_price",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "raw_material_cost",
+            "name": "原材料成本",
+            "method": "lmdi",
+            "base_total": 562979472.0,
+            "current_total": 609738682.0,
+            "delta": 46759210.0,
+            "residual": 5.960464477539062e-07,
+            "relative_residual": 1.2747145380640653e-14,
+            "contributions": [
+              {
+                "factor": "unit_cost",
+                "contribution": 48699956.43353777,
+                "rate": 1.0415051159661972
+              },
+              {
+                "factor": "raw_units",
+                "contribution": -1940746.433538365,
+                "rate": -0.04150511596620997
+              }
+            ],
+            "detail": {
+              "residual": 5.960464477539062e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 562979472.0,
+              "original_total_current": 609738682.0,
+              "recomputed_total_base": 562979472.0,
+              "recomputed_total_current": 609738682.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "units * unit_cost",
+              "caliber": null,
+              "sign": -1.0
+            }
+          },
+          {
+            "code": "channel_commission",
+            "name": "渠道佣金",
+            "method": "lmdi",
+            "base_total": 11400107.0,
+            "current_total": 11605777.0,
+            "delta": 205670.0,
+            "residual": 2.3865140974521637e-09,
+            "relative_residual": 1.1603608194934427e-14,
+            "contributions": [
+              {
+                "factor": "commission_rate",
+                "contribution": 181611.9972111306,
+                "rate": 0.8830261934707571
+              },
+              {
+                "factor": "commission_base",
+                "contribution": 24058.002788871792,
+                "rate": 0.1169738065292546
+              }
+            ],
+            "detail": {
+              "residual": 2.3865140974521637e-09,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 11400107.0,
+              "original_total_current": 11605777.0,
+              "recomputed_total_base": 11400107.0,
+              "recomputed_total_current": 11605777.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "revenue * commission_rate",
+              "caliber": null,
+              "sign": -1.0
+            }
+          }
+        ],
+        "skipped_targets": []
+      },
+      "hypotheses": [
+        {
+          "hypothesis": {
+            "statement": "原材料成本（raw_material_cost）在切片 category=grain_oil/dairy上的变化是毛利额变动的主要来源之一",
+            "expected_direction": "down",
+            "verification": "在沙箱里取原材料成本的日序列，比较「切片 category=grain_oil/dairy」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.raw_material_cents)",
+            "counter_check": "若该假设成立，切片 category=grain_oil/dairy内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "raw_material_cost",
+            "factor_name": "原材料成本",
+            "scope_label": "切片 category=grain_oil/dairy",
+            "source": "template",
+            "scenario": "fmcg",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "category": [
+                "grain_oil",
+                "dairy"
+              ]
+            }
+          },
+          "status": "verified",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 1.0,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-31.227、覆盖 42/21 天",
+          "direction_ok": true,
+          "penalties": [],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "9403f6a4fa6a4caa",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -31.226749237443755,
+            "audit_id": 709,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -244181060.1666667,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "d059566e1ecd287c",
+              "observation_window": {
+                "start": "2026-03-09",
+                "end": "2026-04-19",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.7671070536434921
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "营收（revenue）在切片 category=grain_oil/dairy上的变化是毛利额变动的主要来源之一",
+            "expected_direction": "up",
+            "verification": "在沙箱里取营收的日序列，比较「切片 category=grain_oil/dairy」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.revenue_cents)",
+            "counter_check": "若该假设成立，切片 category=grain_oil/dairy内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "revenue",
+            "factor_name": "营收",
+            "scope_label": "切片 category=grain_oil/dairy",
+            "source": "template",
+            "scenario": "fmcg",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "category": [
+                "grain_oil",
+                "dairy"
+              ]
+            }
+          },
+          "status": "excluded",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 0.55,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-33.238、覆盖 42/21 天；四步检查下调后置信度 0.550 低于阈值 0.6",
+          "direction_ok": false,
+          "penalties": [
+            {
+              "reason": "反例检查：切片内变化方向与预期相反，置信度下调",
+              "delta": -0.15
+            },
+            {
+              "reason": "因子首次显著偏离在 第 6 天，目标指标在 第 31 天，原因晚于结果 ⇒ 置信度下调 0.3（技术规格 §5.9 第 2 条）",
+              "delta": -0.3
+            }
+          ],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "b7943522a66ff86d",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -33.23805075493497,
+            "audit_id": 721,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -373040076.5714286,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "956c000c440911bf",
+              "observation_window": {
+                "start": "2026-03-09",
+                "end": "2026-04-19",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.7671070536434921
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "物流履约成本（logistics_cost）在切片 category=grain_oil/dairy上的变化是毛利额变动的主要来源之一",
+            "expected_direction": "up",
+            "verification": "在沙箱里取物流履约成本的日序列，比较「切片 category=grain_oil/dairy」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.logistics_cents)",
+            "counter_check": "若该假设成立，切片 category=grain_oil/dairy内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "logistics_cost",
+            "factor_name": "物流履约成本",
+            "scope_label": "切片 category=grain_oil/dairy",
+            "source": "template",
+            "scenario": "fmcg",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "category": [
+                "grain_oil",
+                "dairy"
+              ]
+            }
+          },
+          "status": "verified",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 0.85,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-34.616、覆盖 42/21 天",
+          "direction_ok": false,
+          "penalties": [
+            {
+              "reason": "反例检查：切片内变化方向与预期相反，置信度下调",
+              "delta": -0.15
+            }
+          ],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "7732ea5f86944aba",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -34.615707573178945,
+            "audit_id": 733,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -13206111.5,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "7e3d74b467d5b118",
+              "observation_window": {
+                "start": "2026-03-09",
+                "end": "2026-04-19",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.7671070536434921
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "渠道佣金（channel_commission）在切片 category=grain_oil/dairy上的变化是毛利额变动的主要来源之一",
+            "expected_direction": "down",
+            "verification": "在沙箱里取渠道佣金的日序列，比较「切片 category=grain_oil/dairy」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.channel_commission_cents)",
+            "counter_check": "若该假设成立，切片 category=grain_oil/dairy内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "channel_commission",
+            "factor_name": "渠道佣金",
+            "scope_label": "切片 category=grain_oil/dairy",
+            "source": "template",
+            "scenario": "fmcg",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "category": [
+                "grain_oil",
+                "dairy"
+              ]
+            }
+          },
+          "status": "verified",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 1.0,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-33.369、覆盖 42/21 天",
+          "direction_ok": true,
+          "penalties": [],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "d42490228b111784",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -33.3690284520911,
+            "audit_id": 745,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -5525438.976190477,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "0c9aadbdf68b8087",
+              "observation_window": {
+                "start": "2026-03-09",
+                "end": "2026-04-19",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.7671070536434921
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "其他成本（other_cost）在切片 category=grain_oil/dairy上的变化是毛利额变动的主要来源之一",
+            "expected_direction": "down",
+            "verification": "在沙箱里取其他成本的日序列，比较「切片 category=grain_oil/dairy」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.other_cost_cents)",
+            "counter_check": "若该假设成立，切片 category=grain_oil/dairy内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "other_cost",
+            "factor_name": "其他成本",
+            "scope_label": "切片 category=grain_oil/dairy",
+            "source": "template",
+            "scenario": "fmcg",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "category": [
+                "grain_oil",
+                "dairy"
+              ]
+            }
+          },
+          "status": "verified",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 0.7,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-33.238、覆盖 42/21 天",
+          "direction_ok": true,
+          "penalties": [
+            {
+              "reason": "因子首次显著偏离在 第 6 天，目标指标在 第 31 天，原因晚于结果 ⇒ 置信度下调 0.3（技术规格 §5.9 第 2 条）",
+              "delta": -0.3
+            }
+          ],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "85217e864606e982",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -33.23808463020495,
+            "audit_id": 757,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -18651991.857142854,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "dd690e135e6701b2",
+              "observation_window": {
+                "start": "2026-03-09",
+                "end": "2026-04-19",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.7671070536434921
+            }
+          }
+        }
+      ],
+      "pseudo_correlation": [
+        {
+          "factor": "raw_material_cost",
+          "verdict": "通过四步检查",
+          "penalty_total": 0.0,
+          "reasons": [],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 channel=catering 内部复核仍显著（p=0.000，效应量 -21.27）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 3 天 不晚于目标指标 第 31 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（channel=hypermarket）p=0.000、|效应量| 11.48：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "revenue",
+          "verdict": "通过但已下调置信度",
+          "penalty_total": 0.3,
+          "reasons": [
+            "四步检查未发现硬伤，但累计下调置信度 0.30"
+          ],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 channel=catering 内部复核仍显著（p=0.000，效应量 -27.11）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "原因晚于结果",
+              "detail": "因子首次显著偏离在 第 6 天，目标指标在 第 31 天，原因晚于结果 ⇒ 置信度下调 0.3（技术规格 §5.9 第 2 条）",
+              "penalty": 0.3
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（channel=hypermarket）p=0.000、|效应量| 13.58：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "logistics_cost",
+          "verdict": "通过四步检查",
+          "penalty_total": 0.0,
+          "reasons": [],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 channel=catering 内部复核仍显著（p=0.000，效应量 -28.79）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 3 天 不晚于目标指标 第 31 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（channel=hypermarket）p=0.000、|效应量| 5.36：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "channel_commission",
+          "verdict": "通过四步检查",
+          "penalty_total": 0.0,
+          "reasons": [],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 channel=catering 内部复核仍显著（p=0.000，效应量 -25.59）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 18 天 不晚于目标指标 第 31 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（channel=hypermarket）p=0.000、|效应量| 25.59：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "other_cost",
+          "verdict": "通过但已下调置信度",
+          "penalty_total": 0.3,
+          "reasons": [
+            "四步检查未发现硬伤，但累计下调置信度 0.30"
+          ],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 channel=catering 内部复核仍显著（p=0.000，效应量 -27.11）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "原因晚于结果",
+              "detail": "因子首次显著偏离在 第 6 天，目标指标在 第 31 天，原因晚于结果 ⇒ 置信度下调 0.3（技术规格 §5.9 第 2 条）",
+              "penalty": 0.3
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（channel=hypermarket）p=0.000、|效应量| 13.58：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "event": {
+            "id": 4,
+            "name": "粮油原料价格公告上涨",
+            "type": "成本冲击",
+            "window": [
+              "2026-04-03",
+              "2026-04-20"
+            ],
+            "dimensions": {
+              "category": [
+                "grain_oil",
+                "dairy"
+              ]
+            },
+            "note": "上游原料提价公告，直接推高单位原料成本"
+          },
+          "dimension_overlap": 1.0,
+          "time_proximity": 1.0,
+          "relevance": 1.0,
+          "tier": "因果链",
+          "is_exogenous": true,
+          "reason": "维度重合度 1.00（交集 ['category']）、时间接近度 1.00（时间窗重叠）"
+        }
+      ],
+      "causal_chain": [
+        {
+          "event": {
+            "id": 4,
+            "name": "粮油原料价格公告上涨",
+            "type": "成本冲击",
+            "window": [
+              "2026-04-03",
+              "2026-04-20"
+            ],
+            "dimensions": {
+              "category": [
+                "grain_oil",
+                "dairy"
+              ]
+            },
+            "note": "上游原料提价公告，直接推高单位原料成本"
+          },
+          "relevance": 1.0,
+          "tier": "因果链",
+          "is_exogenous": true,
+          "reason": "维度重合度 1.00（交集 ['category']）、时间接近度 1.00（时间窗重叠）"
+        }
+      ],
+      "conclusion": {
+        "primary_cause": "raw_material_cost：贡献 -46,759,210 分（贡献率 103.5%），由分解直接给出，最大相对残差 3.07e-13",
+        "secondary_causes": [
+          "revenue：贡献 1,614,999 分（贡献率 -3.6%）",
+          "logistics_cost：贡献 273,504 分（贡献率 -0.6%）"
+        ],
+        "verified_hypotheses": [
+          "原材料成本（raw_material_cost）在切片 category=grain_oil/dairy上的变化是毛利额变动的主要来源之一",
+          "物流履约成本（logistics_cost）在切片 category=grain_oil/dairy上的变化是毛利额变动的主要来源之一",
+          "渠道佣金（channel_commission）在切片 category=grain_oil/dairy上的变化是毛利额变动的主要来源之一",
+          "其他成本（other_cost）在切片 category=grain_oil/dairy上的变化是毛利额变动的主要来源之一"
+        ],
+        "excluded_hypotheses": [
+          {
+            "statement": "营收（revenue）在切片 category=grain_oil/dairy上的变化是毛利额变动的主要来源之一",
+            "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-33.238、覆盖 42/21 天；四步检查下调后置信度 0.550 低于阈值 0.6"
+          }
+        ],
+        "exogenous_note": "粮油原料价格公告上涨（外部因素，非内部操作问题）",
+        "disclaimer": "贡献额来自确定性分解；假设与置信度来自沙箱证据与统计检验，两者口径不同，不混用"
+      },
+      "steps": [
+        {
+          "seq": 1,
+          "kind": "query",
+          "status": "completed",
+          "duration_ms": 50,
+          "payload": {
+            "nodes": [
+              "gross_profit",
+              "revenue",
+              "raw_material_cost",
+              "channel_commission"
+            ],
+            "max_relative_residual": 3.073654734585285e-13
+          }
+        },
+        {
+          "seq": 2,
+          "kind": "hypothesis",
+          "status": "completed",
+          "duration_ms": 524,
+          "payload": {
+            "count": 5,
+            "source": "template"
+          }
+        },
+        {
+          "seq": 3,
+          "kind": "verify",
+          "status": "verified",
+          "duration_ms": 7681,
+          "payload": {
+            "factor": "raw_material_cost",
+            "final_confidence": 1.0,
+            "pseudo_verdict": "通过四步检查"
+          }
+        },
+        {
+          "seq": 4,
+          "kind": "verify",
+          "status": "excluded",
+          "duration_ms": 7840,
+          "payload": {
+            "factor": "revenue",
+            "final_confidence": 0.55,
+            "pseudo_verdict": "通过但已下调置信度"
+          }
+        },
+        {
+          "seq": 5,
+          "kind": "verify",
+          "status": "verified",
+          "duration_ms": 7675,
+          "payload": {
+            "factor": "logistics_cost",
+            "final_confidence": 0.85,
+            "pseudo_verdict": "通过四步检查"
+          }
+        },
+        {
+          "seq": 6,
+          "kind": "verify",
+          "status": "verified",
+          "duration_ms": 7577,
+          "payload": {
+            "factor": "channel_commission",
+            "final_confidence": 1.0,
+            "pseudo_verdict": "通过四步检查"
+          }
+        },
+        {
+          "seq": 7,
+          "kind": "verify",
+          "status": "verified",
+          "duration_ms": 8299,
+          "payload": {
+            "factor": "other_cost",
+            "final_confidence": 0.7,
+            "pseudo_verdict": "通过但已下调置信度"
+          }
+        },
+        {
+          "seq": 8,
+          "kind": "event",
+          "status": "completed",
+          "duration_ms": 1,
+          "payload": {
+            "matched": 1,
+            "in_chain": 1
+          }
+        }
+      ],
+      "fallback_note": "未配置 LLM_API_KEY，使用确定性模板草案",
+      "ground_truth": {
+        "id": 3,
+        "factor": "raw_material_cost",
+        "injected_contribution_cents": -45165017
+      }
+    },
+    {
+      "scenario": "fmcg",
+      "title": "真因 #4（fmcg）",
+      "base": {
+        "start": "2026-01-26",
+        "end": "2026-02-01",
+        "days": 7,
+        "label": "上一期"
+      },
+      "current": {
+        "start": "2026-02-02",
+        "end": "2026-02-08",
+        "days": 7,
+        "label": "注入窗口"
+      },
+      "slice": {
+        "channel": [
+          "distributor"
+        ]
+      },
+      "session_id": 14,
+      "duration_ms": 37109,
+      "decomposition": {
+        "scenario": "fmcg",
+        "scenario_name": "快消品",
+        "metric": {
+          "code": "gross_profit",
+          "name": "毛利额"
+        },
+        "base": {
+          "start": "2026-01-26",
+          "end": "2026-02-01",
+          "days": 7,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-02-02",
+          "end": "2026-02-08",
+          "days": 7,
+          "label": "注入窗口"
+        },
+        "slice": {
+          "channel": [
+            "distributor"
+          ]
+        },
+        "tolerance": 1e-09,
+        "max_residual": 9.648501873016357e-07,
+        "max_relative_residual": 5.627249458683766e-14,
+        "ok": true,
+        "nodes": [
+          {
+            "code": "gross_profit",
+            "name": "毛利额",
+            "method": "diff",
+            "base_total": 176429844.0,
+            "current_total": 146697894.0,
+            "delta": -29731950.0,
+            "residual": 0.0,
+            "relative_residual": 0.0,
+            "contributions": [
+              {
+                "factor": "revenue",
+                "contribution": -26891771.0,
+                "rate": 0.9044738404309169
+              },
+              {
+                "factor": "logistics_cost",
+                "contribution": -18384857.0,
+                "rate": 0.6183535556867276
+              },
+              {
+                "factor": "raw_material_cost",
+                "contribution": 14200095.0,
+                "rate": -0.47760389076397614
+              },
+              {
+                "factor": "other_cost",
+                "contribution": 1344583.0,
+                "rate": -0.04522350535366836
+              },
+              {
+                "factor": "channel_commission",
+                "contribution": 0.0,
+                "rate": -0.0
+              }
+            ],
+            "detail": {
+              "decomposable": true,
+              "level": "composite",
+              "structure": "additive",
+              "formula": "revenue - raw_material_cost - logistics_cost - channel_commission - other_cost",
+              "caliber": "gross_profit_ex_tax",
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "revenue",
+            "name": "营收",
+            "method": "lmdi",
+            "base_total": 708375183.0,
+            "current_total": 681483412.0,
+            "delta": -26891771.0,
+            "residual": 9.648501873016357e-07,
+            "relative_residual": 3.587901247938024e-14,
+            "contributions": [
+              {
+                "factor": "avg_price",
+                "contribution": -27049548.57343001,
+                "rate": 1.0058671321211983
+              },
+              {
+                "factor": "units",
+                "contribution": 157777.5734309744,
+                "rate": -0.005867132121234201
+              }
+            ],
+            "detail": {
+              "residual": 9.648501873016357e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 708375183.0,
+              "original_total_current": 681483412.0,
+              "recomputed_total_base": 708375183.0,
+              "recomputed_total_current": 681483412.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "units * avg_price",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "raw_material_cost",
+            "name": "原材料成本",
+            "method": "lmdi",
+            "base_total": 466021822.0,
+            "current_total": 451821727.0,
+            "delta": -14200095.0,
+            "residual": 7.990747690200806e-07,
+            "relative_residual": 5.627249458683766e-14,
+            "contributions": [
+              {
+                "factor": "unit_cost",
+                "contribution": -14304293.835435694,
+                "rate": 1.0073378970658784
+              },
+              {
+                "factor": "raw_units",
+                "contribution": 104198.83543649263,
+                "rate": -0.007337897065934604
+              }
+            ],
+            "detail": {
+              "residual": 7.990747690200806e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 466021822.0,
+              "original_total_current": 451821727.0,
+              "recomputed_total_base": 466021822.0,
+              "recomputed_total_current": 451821727.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "units * unit_cost",
+              "caliber": null,
+              "sign": -1.0
+            }
+          }
+        ],
+        "skipped_targets": [
+          {
+            "code": "channel_commission",
+            "reason": "子因子取值非正（commission_rate）：LMDI 要求因子严格为正，按零值预案改为不分解"
+          }
+        ]
+      },
+      "hypotheses": [
+        {
+          "hypothesis": {
+            "statement": "营收（revenue）在切片 channel=distributor上的变化是毛利额变动的主要来源之一",
+            "expected_direction": "down",
+            "verification": "在沙箱里取营收的日序列，比较「切片 channel=distributor」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.revenue_cents)",
+            "counter_check": "若该假设成立，切片 channel=distributor内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "revenue",
+            "factor_name": "营收",
+            "scope_label": "切片 channel=distributor",
+            "source": "template",
+            "scenario": "fmcg",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "channel": [
+                "distributor"
+              ]
+            }
+          },
+          "status": "verified",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 1.0,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-2.421、覆盖 42/21 天",
+          "direction_ok": true,
+          "penalties": [],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "e6409be0404ce45c",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -2.4205920806716668,
+            "audit_id": 769,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -395737489.07142854,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "1db1fb41482362d6",
+              "observation_window": {
+                "start": "2025-12-29",
+                "end": "2026-02-08",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.6467421375899008
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "物流履约成本（logistics_cost）在切片 channel=distributor上的变化是毛利额变动的主要来源之一",
+            "expected_direction": "down",
+            "verification": "在沙箱里取物流履约成本的日序列，比较「切片 channel=distributor」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.logistics_cents)",
+            "counter_check": "若该假设成立，切片 channel=distributor内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "logistics_cost",
+            "factor_name": "物流履约成本",
+            "scope_label": "切片 channel=distributor",
+            "source": "template",
+            "scenario": "fmcg",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "channel": [
+                "distributor"
+              ]
+            }
+          },
+          "status": "verified",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 0.7,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-2.519、覆盖 42/21 天",
+          "direction_ok": true,
+          "penalties": [
+            {
+              "reason": "因子首次显著偏离在 第 19 天，目标指标在 第 18 天，原因晚于结果 ⇒ 置信度下调 0.3（技术规格 §5.9 第 2 条）",
+              "delta": -0.3
+            }
+          ],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "1c35a8e6889a7e73",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -2.5192547919757047,
+            "audit_id": 781,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -17008279.5,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "7141f048f8da523b",
+              "observation_window": {
+                "start": "2025-12-29",
+                "end": "2026-02-08",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.6467421375899008
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "原材料成本（raw_material_cost）在切片 channel=distributor上的变化是毛利额变动的主要来源之一",
+            "expected_direction": "up",
+            "verification": "在沙箱里取原材料成本的日序列，比较「切片 channel=distributor」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.raw_material_cents)",
+            "counter_check": "若该假设成立，切片 channel=distributor内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "raw_material_cost",
+            "factor_name": "原材料成本",
+            "scope_label": "切片 channel=distributor",
+            "source": "template",
+            "scenario": "fmcg",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "channel": [
+                "distributor"
+              ]
+            }
+          },
+          "status": "verified",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 0.85,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-2.411、覆盖 42/21 天",
+          "direction_ok": false,
+          "penalties": [
+            {
+              "reason": "反例检查：切片内变化方向与预期相反，置信度下调",
+              "delta": -0.15
+            }
+          ],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "204247aaedd1a98a",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -2.410992159810219,
+            "audit_id": 793,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -262450479.69047618,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "e0a7dd28d236d300",
+              "observation_window": {
+                "start": "2025-12-29",
+                "end": "2026-02-08",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.6467421375899008
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "其他成本（other_cost）在切片 channel=distributor上的变化是毛利额变动的主要来源之一",
+            "expected_direction": "up",
+            "verification": "在沙箱里取其他成本的日序列，比较「切片 channel=distributor」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.other_cost_cents)",
+            "counter_check": "若该假设成立，切片 channel=distributor内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "other_cost",
+            "factor_name": "其他成本",
+            "scope_label": "切片 channel=distributor",
+            "source": "template",
+            "scenario": "fmcg",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "channel": [
+                "distributor"
+              ]
+            }
+          },
+          "status": "verified",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 0.85,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-2.421、覆盖 42/21 天",
+          "direction_ok": false,
+          "penalties": [
+            {
+              "reason": "反例检查：切片内变化方向与预期相反，置信度下调",
+              "delta": -0.15
+            }
+          ],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "ea2e99e680069380",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -2.420590081506124,
+            "audit_id": 805,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -19786866.19047619,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "e3abd40db6d1a4ac",
+              "observation_window": {
+                "start": "2025-12-29",
+                "end": "2026-02-08",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.6467421375899008
+            }
+          }
+        },
+        {
+          "hypothesis": {
+            "statement": "渠道佣金（channel_commission）在切片 channel=distributor上的变化是毛利额变动的主要来源之一",
+            "expected_direction": "up",
+            "verification": "在沙箱里取渠道佣金的日序列，比较「切片 channel=distributor」与其他切片同期表现（置换检验，10000 次，固定种子）",
+            "sql_draft": "SUM(fact.channel_commission_cents)",
+            "counter_check": "若该假设成立，切片 channel=distributor内部各子切片应呈现同方向变化；若出现方向相反的明显反例，则下调置信度",
+            "factor": "channel_commission",
+            "factor_name": "渠道佣金",
+            "scope_label": "切片 channel=distributor",
+            "source": "template",
+            "scenario": "fmcg",
+            "model": "",
+            "note": "无 LLM 密钥时的确定性模板草案（数值一律由系统计算）",
+            "slice": {
+              "channel": [
+                "distributor"
+              ]
+            }
+          },
+          "status": "excluded",
+          "confidence": {
+            "significance_score": 1.0,
+            "effect_score": 1.0,
+            "coverage_score": 1.0,
+            "total": 1.0
+          },
+          "final_confidence": 0.85,
+          "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-3.303、覆盖 42/21 天；第 3 步（安慰剂维度）：在理论上不应成立的维度（region=north）上同样显著（p=0.000）：且强度相当（|效应量| 3.24 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动",
+          "direction_ok": false,
+          "penalties": [
+            {
+              "reason": "反例检查：切片内变化方向与预期相反，置信度下调",
+              "delta": -0.15
+            }
+          ],
+          "evidence": {
+            "kind": "permutation_test",
+            "sql_digest": "4debeaeedd9834bd",
+            "sample_size": 84,
+            "p_value": 9.999000099990002e-05,
+            "effect_size": -3.303028954625025,
+            "audit_id": 817,
+            "detail": {
+              "statistic_kind": "mean_difference",
+              "permutations": 10000,
+              "seed": 20260915,
+              "statistic": -7780766.880952381,
+              "inside_days": 42,
+              "outside_days": 42,
+              "outside_sql_digest": "8ace70735f9e07f6",
+              "observation_window": {
+                "start": "2025-12-29",
+                "end": "2026-02-08",
+                "days": 42,
+                "label": "观察窗口"
+              },
+              "contribution_share": 0.6467421375899008
+            }
+          }
+        }
+      ],
+      "pseudo_correlation": [
+        {
+          "factor": "revenue",
+          "verdict": "通过四步检查",
+          "penalty_total": 0.0,
+          "reasons": [],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 sku=SKU-0002 内部复核仍显著（p=0.000，效应量 -3.23）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 18 天 不晚于目标指标 第 18 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（region=north）p=0.000、|效应量| 1.17：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "logistics_cost",
+          "verdict": "通过但已下调置信度",
+          "penalty_total": 0.3,
+          "reasons": [
+            "四步检查未发现硬伤，但累计下调置信度 0.30"
+          ],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 sku=SKU-0003 内部复核仍显著（p=0.000，效应量 -3.60）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "原因晚于结果",
+              "detail": "因子首次显著偏离在 第 19 天，目标指标在 第 18 天，原因晚于结果 ⇒ 置信度下调 0.3（技术规格 §5.9 第 2 条）",
+              "penalty": 0.3
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（region=north）p=0.000、|效应量| 1.53：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "raw_material_cost",
+          "verdict": "通过四步检查",
+          "penalty_total": 0.0,
+          "reasons": [],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 sku=SKU-0002 内部复核仍显著（p=0.000，效应量 -3.19）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 18 天 不晚于目标指标 第 18 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（region=north）p=0.000、|效应量| 1.16：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "other_cost",
+          "verdict": "通过四步检查",
+          "penalty_total": 0.0,
+          "reasons": [],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "在 sku=SKU-0002 内部复核仍显著（p=0.000，效应量 -3.23）",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "因子首次显著偏离 第 18 天 不晚于目标指标 第 18 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "安慰剂维度（region=north）p=0.000、|效应量| 1.17：未达到「同样显著且强度相当」的判据",
+              "penalty": 0.0
+            }
+          ]
+        },
+        {
+          "factor": "channel_commission",
+          "verdict": "趋势性共同驱动",
+          "penalty_total": 0.0,
+          "reasons": [
+            "第 3 步（安慰剂维度）：在理论上不应成立的维度（region=north）上同样显著（p=0.000）：且强度相当（|效应量| 3.24 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动"
+          ],
+          "steps": [
+            {
+              "step": 4,
+              "name": "样本充分性",
+              "executed": true,
+              "verdict": "通过",
+              "detail": "样本量 84 ≥ 60、覆盖 42 天 ≥ 21 天",
+              "penalty": 0.0
+            },
+            {
+              "step": 1,
+              "name": "控制变量",
+              "executed": false,
+              "verdict": "跳过",
+              "detail": "子维度 sku 下没有足够样本可复核",
+              "penalty": 0.0
+            },
+            {
+              "step": 2,
+              "name": "时间先行性",
+              "executed": true,
+              "verdict": "跳过",
+              "detail": "窗口内没有出现超过 1.5σ 的显著偏离，无法比较先后",
+              "penalty": 0.0
+            },
+            {
+              "step": 3,
+              "name": "安慰剂维度",
+              "executed": true,
+              "verdict": "趋势性共同驱动",
+              "detail": "在理论上不应成立的维度（region=north）上同样显著（p=0.000）：且强度相当（|效应量| 3.24 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动",
+              "penalty": 0.0
+            }
+          ]
+        }
+      ],
+      "events": [
+        {
+          "event": {
+            "id": 5,
+            "name": "经销商物流服务商调价",
+            "type": "成本冲击",
+            "window": [
+              "2026-01-29",
+              "2026-02-06"
+            ],
+            "dimensions": {
+              "channel": [
+                "distributor"
+              ]
+            },
+            "note": "物流服务商对经销渠道调价，属单点成本异动"
+          },
+          "dimension_overlap": 1.0,
+          "time_proximity": 1.0,
+          "relevance": 1.0,
+          "tier": "因果链",
+          "is_exogenous": true,
+          "reason": "维度重合度 1.00（交集 ['channel']）、时间接近度 1.00（时间窗重叠）"
+        }
+      ],
+      "causal_chain": [
+        {
+          "event": {
+            "id": 5,
+            "name": "经销商物流服务商调价",
+            "type": "成本冲击",
+            "window": [
+              "2026-01-29",
+              "2026-02-06"
+            ],
+            "dimensions": {
+              "channel": [
+                "distributor"
+              ]
+            },
+            "note": "物流服务商对经销渠道调价，属单点成本异动"
+          },
+          "relevance": 1.0,
+          "tier": "因果链",
+          "is_exogenous": true,
+          "reason": "维度重合度 1.00（交集 ['channel']）、时间接近度 1.00（时间窗重叠）"
+        }
+      ],
+      "conclusion": {
+        "primary_cause": "revenue：贡献 -26,891,771 分（贡献率 90.4%），由分解直接给出，最大相对残差 5.63e-14",
+        "secondary_causes": [
+          "logistics_cost：贡献 -18,384,857 分（贡献率 61.8%）",
+          "raw_material_cost：贡献 14,200,095 分（贡献率 -47.8%）"
+        ],
+        "verified_hypotheses": [
+          "营收（revenue）在切片 channel=distributor上的变化是毛利额变动的主要来源之一",
+          "物流履约成本（logistics_cost）在切片 channel=distributor上的变化是毛利额变动的主要来源之一",
+          "原材料成本（raw_material_cost）在切片 channel=distributor上的变化是毛利额变动的主要来源之一",
+          "其他成本（other_cost）在切片 channel=distributor上的变化是毛利额变动的主要来源之一"
+        ],
+        "excluded_hypotheses": [
+          {
+            "statement": "渠道佣金（channel_commission）在切片 channel=distributor上的变化是毛利额变动的主要来源之一",
+            "reason": "p=0.0001（10000 次置换，种子 20260915）、效应量=-3.303、覆盖 42/21 天；第 3 步（安慰剂维度）：在理论上不应成立的维度（region=north）上同样显著（p=0.000）：且强度相当（|效应量| 3.24 ≥ 80%×假设切片）⇒ 判定为趋势性共同驱动"
+          }
+        ],
+        "exogenous_note": "经销商物流服务商调价（外部因素，非内部操作问题）",
+        "disclaimer": "贡献额来自确定性分解；假设与置信度来自沙箱证据与统计检验，两者口径不同，不混用"
+      },
+      "steps": [
+        {
+          "seq": 1,
+          "kind": "query",
+          "status": "completed",
+          "duration_ms": 17,
+          "payload": {
+            "nodes": [
+              "gross_profit",
+              "revenue",
+              "raw_material_cost"
+            ],
+            "max_relative_residual": 5.627249458683766e-14
+          }
+        },
+        {
+          "seq": 2,
+          "kind": "hypothesis",
+          "status": "completed",
+          "duration_ms": 428,
+          "payload": {
+            "count": 5,
+            "source": "template"
+          }
+        },
+        {
+          "seq": 3,
+          "kind": "verify",
+          "status": "verified",
+          "duration_ms": 7904,
+          "payload": {
+            "factor": "revenue",
+            "final_confidence": 1.0,
+            "pseudo_verdict": "通过四步检查"
+          }
+        },
+        {
+          "seq": 4,
+          "kind": "verify",
+          "status": "verified",
+          "duration_ms": 7118,
+          "payload": {
+            "factor": "logistics_cost",
+            "final_confidence": 0.7,
+            "pseudo_verdict": "通过但已下调置信度"
+          }
+        },
+        {
+          "seq": 5,
+          "kind": "verify",
+          "status": "verified",
+          "duration_ms": 7108,
+          "payload": {
+            "factor": "raw_material_cost",
+            "final_confidence": 0.85,
+            "pseudo_verdict": "通过四步检查"
+          }
+        },
+        {
+          "seq": 6,
+          "kind": "verify",
+          "status": "verified",
+          "duration_ms": 7356,
+          "payload": {
+            "factor": "other_cost",
+            "final_confidence": 0.85,
+            "pseudo_verdict": "通过四步检查"
+          }
+        },
+        {
+          "seq": 7,
+          "kind": "verify",
+          "status": "excluded",
+          "duration_ms": 7175,
+          "payload": {
+            "factor": "channel_commission",
+            "final_confidence": 0.85,
+            "pseudo_verdict": "趋势性共同驱动"
+          }
+        },
+        {
+          "seq": 8,
+          "kind": "event",
+          "status": "completed",
+          "duration_ms": 1,
+          "payload": {
+            "matched": 1,
+            "in_chain": 1
+          }
+        }
+      ],
+      "fallback_note": "未配置 LLM_API_KEY，使用确定性模板草案",
+      "ground_truth": {
+        "id": 4,
+        "factor": "logistics_cost",
+        "injected_contribution_cents": -18333617
+      }
+    }
+  ],
+  "total": 4
+}

@@ -1,0 +1,72 @@
+# 业务大事件日历种子数据（技术规格 §5.10、需求说明书 §5.7）
+#
+# 作用：把"外部发生了什么"从人脑记忆变成可匹配的数据。异动归因里最危险的一类误判，
+# 就是把外部冲击（竞品降价、平台发券、原料调价）当成内部执行问题；有日历才能把它们
+# 作为**外生变量**写进因果链。
+#
+# 字段：
+#   name/type    事件名称与类型（竞品动作 / 平台政策 / 成本冲击 / 内部动作 / 外部环境）
+#   window       起止日期（闭区间）
+#   dimensions   事件影响的维度编码（与指标字典的 dimensions 对齐）
+#   note         备注，报告里会原样引用
+version: 1
+updated: "2026-09-15"
+
+events:
+  - name: 竞品在付费渠道全线降价 15%
+    type: 竞品动作
+    window: ["2026-06-04", "2026-06-12"]
+    dimensions:
+      channel: [paid_ads]
+      category: [grain_oil, beverage]
+    note: 竞品在付费投放渠道打价格战，行业普遍出现"高流量低转化"
+
+  - name: 平台发放渠道流量券
+    type: 平台政策
+    window: ["2026-06-03", "2026-06-10"]
+    dimensions:
+      channel: [paid_ads, livestream]
+    note: 平台流量券推高曝光但拉低转化质量，属外生变量
+
+  - name: 家电品类补贴退坡
+    type: 政策调整
+    window: ["2026-03-05", "2026-03-20"]
+    dimensions:
+      category: [appliance]
+    note: 补贴退坡导致家电品类曝光与成交同步走低
+
+  - name: 粮油原料价格公告上涨
+    type: 成本冲击
+    window: ["2026-04-03", "2026-04-20"]
+    dimensions:
+      category: [grain_oil, dairy]
+    note: 上游原料提价公告，直接推高单位原料成本
+
+  - name: 经销商物流服务商调价
+    type: 成本冲击
+    window: ["2026-01-29", "2026-02-06"]
+    dimensions:
+      channel: [distributor]
+    note: 物流服务商对经销渠道调价，属单点成本异动
+
+  - name: 年货节大促
+    type: 内部动作
+    window: ["2026-01-15", "2026-01-25"]
+    dimensions:
+      channel: [natural_search, paid_ads, private_domain, hypermarket]
+      category: [grain_oil, beverage, tobacco_liquor, snack, dairy]
+    note: 年度最大促销窗口之一，会显著抬高当期营收基数
+
+  - name: 6·18 大促
+    type: 内部动作
+    window: ["2026-06-15", "2026-06-20"]
+    dimensions:
+      channel: [natural_search, paid_ads, livestream, short_video]
+    note: 大促窗口，期后回落属正常形态而非执行问题
+
+  - name: 华东区域寒潮
+    type: 外部环境
+    window: ["2026-01-18", "2026-01-24"]
+    dimensions:
+      region: [east]
+    note: 极端天气影响线下履约，作为环境注释而非内部问题

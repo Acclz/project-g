@@ -8,24 +8,50 @@
 
 from .conservation import ConservationError, assert_conservation, conservation_residual
 from .diff import additive_contributions, contribution_rates
+from .inference import (
+    ConfidenceBreakdown,
+    InferenceError,
+    PermutationResult,
+    absolute_risk_difference,
+    composite_confidence,
+    coverage_score,
+    direction_consistency,
+    effect_score,
+    permutation_test,
+    significance_score,
+    spearman_correlation,
+    standardized_difference,
+)
 from .lmdi import LmdiError, lmdi_contributions
 from .metrics_loader import MetricNode, MetricTree, load_metrics_file, load_metrics_text
 from .tree import DecompositionError, NodeResult, TreeResult, decompose_tree
 
 __all__ = [
+    "ConfidenceBreakdown",
     "ConservationError",
     "DecompositionError",
+    "InferenceError",
     "LmdiError",
     "MetricNode",
     "MetricTree",
     "NodeResult",
+    "PermutationResult",
     "TreeResult",
+    "absolute_risk_difference",
     "additive_contributions",
     "assert_conservation",
+    "composite_confidence",
     "conservation_residual",
     "contribution_rates",
+    "coverage_score",
     "decompose_tree",
+    "direction_consistency",
+    "effect_score",
     "lmdi_contributions",
     "load_metrics_file",
     "load_metrics_text",
+    "permutation_test",
+    "significance_score",
+    "spearman_correlation",
+    "standardized_difference",
 ]

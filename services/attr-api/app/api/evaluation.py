@@ -1,4 +1,4 @@
-"""评测路由（技术规格 §4.7）：P3 先落地"沙箱对抗"数据集，归因评测集在 P6 接入。"""
+"""评测路由（技术规格 §4.7）：沙箱对抗（P3）+ 归因准确率 / 伪相关陷阱（P4）。"""
 
 from __future__ import annotations
 
@@ -12,26 +12,37 @@ from pydantic import BaseModel
 from app.db import connect_app
 from app.sandbox.adversarial import DATASET_NAME, run_suite
 from app.sandbox.runner import SandboxRunner
+from app.services.eval_suite import DATASETS as SUITE_DATASETS
+from app.services.eval_suite import run_dataset
 
 router = APIRouter(prefix="/eval", tags=["eval"])
 
-DATASETS = (DATASET_NAME,)
+DATASETS = (DATASET_NAME, *SUITE_DATASETS)
 
 
 class EvalRequest(BaseModel):
     """触发评测：数据集 + 标签（标签用于在 eval_runs 里区分批次）。"""
 
-    dataset: Literal["sandbox_adversarial"] = DATASET_NAME
+    dataset: Literal["sandbox_adversarial", "attribution_eval", "correlation_traps"] = (
+        DATASET_NAME
+    )
     label: str = "manual"
 
 
 @router.post("/run")
 def run_eval(payload: EvalRequest) -> dict[str, Any]:
-    """跑沙箱对抗集并落档：拦截率 100% 才算通过。"""
+    """跑指定数据集并落档：数据集的判定（拦截率 100% / 误纳率 ≤10% / 守恒）决定 passed。"""
 
     started = datetime.now()
-    report = run_suite(SandboxRunner(), actor=f"eval:{payload.label}")
-    payload_dict = report.as_dict()
+    if payload.dataset == DATASET_NAME:
+        report = run_suite(SandboxRunner(), actor=f"eval:{payload.label}")
+        payload_dict: dict[str, Any] = report.as_dict()
+        passed = report.ok
+    else:
+        suite = run_dataset(payload.dataset, label=payload.label)
+        payload_dict = suite.as_dict()
+        passed = suite.passed
+    payload_dict["passed"] = passed
     finished = datetime.now()
     connection = connect_app(SandboxRunner().settings.app_db)
     try:
@@ -51,7 +62,12 @@ def run_eval(payload: EvalRequest) -> dict[str, Any]:
     finally:
         connection.close()
     duration_ms = int((finished - started).total_seconds() * 1000)
-    return {"eval_run_id": run_id, "duration_ms": duration_ms, **payload_dict}
+    return {
+        "eval_run_id": run_id,
+        "duration_ms": duration_ms,
+        "passed": passed,
+        **payload_dict,
+    }
 
 
 @router.get("/runs")
@@ -76,6 +92,9 @@ def list_runs(limit: int = Query(default=20, ge=1, le=200)) -> dict[str, Any]:
             "interception_rate": metrics.get("interception_rate"),
             "escaped": metrics.get("escaped"),
             "false_blocks": metrics.get("false_blocks"),
+            "passed": metrics.get("passed"),
+            "top1_rate": (metrics.get("metrics") or {}).get("top1_rate"),
+            "accept_rate": (metrics.get("metrics") or {}).get("accept_rate"),
         }
         items.append(record)
     return {"items": items, "datasets": list(DATASETS)}

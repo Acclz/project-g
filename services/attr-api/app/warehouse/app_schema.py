@@ -35,8 +35,9 @@ TABLE_DDL: tuple[str, ...] = (
         formula    TEXT,
         unit       TEXT NOT NULL,
         precision  INTEGER NOT NULL DEFAULT 2,
+        -- 允许 atomic：叶子指标在指标字典里省略 structure，加载器默认判为 atomic
         structure  TEXT NOT NULL CHECK (structure IN
-                        ('additive', 'multiplicative', 'unresolvable')),
+                        ('atomic', 'additive', 'multiplicative', 'unresolvable')),
         created_at TEXT NOT NULL DEFAULT (datetime('now'))
     )
     """,

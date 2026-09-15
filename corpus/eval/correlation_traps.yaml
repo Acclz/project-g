@@ -1,0 +1,39 @@
+# 伪相关陷阱集（验收标准 E3：误纳率必须 ≤ 10%，且每条排除都要有理由文本）
+#
+# 每个用例都是一条"看起来成立、其实不该被采纳"的因果关系，模仿真实分析里最常见的坑：
+# 找错渠道/维度、把共享的季节性当因果、在样本不足的切片上硬下结论、拿噪声当信号。
+# 字段：scenario / factor（指标树节点）/ slice（维度切片）/ expected（期望判定）/ note（为什么是陷阱）
+version: 1
+updated: "2026-09-15"
+
+traps:
+  - id: trap-01-wrong-channel
+    scenario: ecom
+    factor: impressions
+    slice: { channel: [natural_search] }
+    expected: excluded
+    note: 真因在「付费投放 × 支付成功率」，自然搜索的曝光只是同期一起波动的旁观者
+  - id: trap-02-irrelevant-region
+    scenario: ecom
+    factor: cvr
+    slice: { region: [northwest] }
+    expected: excluded
+    note: 真因是渠道级差异，与西北区域的转化率波动无关（安慰剂维度）
+  - id: trap-03-tiny-slice
+    scenario: ecom
+    factor: pay_success_rate
+    slice: { channel: [catering] }
+    expected: excluded
+    note: 餐饮渠道在本数据里量级最小，样本与覆盖不足，属"证据不足"而不是结论
+  - id: trap-04-noise-factor
+    scenario: ecom
+    factor: aov
+    slice: {}
+    expected: excluded
+    note: AOV 在该窗口只是噪声级波动，把它当主因属"拿噪声当信号"
+  - id: trap-05-shared-seasonality
+    scenario: fmcg
+    factor: raw_material_cost
+    slice: { sku: [SKU-0002] }
+    expected: excluded
+    note: 单一 SKU 的原料成本波动被当成公司级主因；实测该切片贡献占比仅 1.2%，够不上"主因"

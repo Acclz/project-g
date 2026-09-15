@@ -59,6 +59,26 @@ class Settings(BaseSettings):
     attr_default_dimensions: str = "channel,category,region,segment"
     attr_max_hypotheses: int = 5
     attr_min_confidence: float = 0.6
+    #: 贡献占比门禁：切片对总变动的贡献占比低于该值时，不允许把该切片称为"主因"
+    #: （依据：需求说明书 §5.11「每条结论必须绑定量化贡献」）
+    attr_min_contribution_share: float = 0.05
+    # 统计检验与置信度：效应量分档阈值（小/大），以及证据所需的最少覆盖天数
+    attr_effect_small: float = 0.2
+    attr_effect_large: float = 0.8
+    attr_required_coverage_days: int = 21
+    # 观察窗口 42 天：检验用「切片内 vs 切片外」两组日序列（42+42=84 个观测），
+    # 满足 §5.9 第 4 条"样本量 ≥ 60"；贡献额比对仍用注入窗口本身，两者不混用
+    attr_observation_days: int = 42
+    attr_permutations: int = 10_000
+    attr_event_window_days: int = 3
+
+    # 大模型（只产出假设文本、SQL 草案与报告文字；数值一律不进模型）
+    llm_provider: str = "openai_compat"
+    llm_base_url: str = "https://api.deepseek.com/v1"
+    llm_api_key: str = ""
+    llm_model: str = "deepseek-chat"
+    llm_temperature: float = 0.2
+    llm_max_tokens: int = 2048
 
     # 合成数仓（参数默认值必须与 corpus/warehouse/calibration.csv 口径一致）
     warehouse_seed: int = 20260915
