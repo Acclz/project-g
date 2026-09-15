@@ -1,0 +1,202 @@
+# 指标字典初版（P1）
+# 用途：P2 的数仓生成器、指标树引擎、前端指标字典页共用同一份定义。
+# 约定：
+#   structure: additive（可加）/ multiplicative（可乘）/ unresolvable（不可分解，禁止作为分解对象）
+#   method:    diff（差额分析）/ lmdi（对数平均迪氏指数法）
+#   unit:      金额统一以"分"入仓，展示按 precision 转"元"
+#   caliber:   口径标识，必须能在 calibers 段找到；口径变更 → 新版本，不改旧版本
+
+version: 1
+updated: "2026-09-15"
+
+dimensions:
+  - code: channel
+    name: 渠道
+    table: dw.dim_channel
+    key: channel_id
+    note: 含 is_paid 标记；直播/短视频为内容渠道，商超/经销商/餐饮为线下渠道
+  - code: category
+    name: 品类
+    table: dw.dim_category
+    key: category_id
+    note: 两级结构（父类 / 子类）
+  - code: region
+    name: 区域
+    table: dw.dim_region
+    key: region_id
+    note: 七大区
+  - code: segment
+    name: 客群
+    table: dw.dim_segment
+    key: segment_id
+    note: 新客 / 高价值老客 / 价格敏感 / 沉默召回 / 企业客户
+  - code: sku
+    name: 物料
+    table: dw.dim_sku
+    key: sku_id
+    note: 仅快消场景使用
+
+calibers:
+  gmv_paid_success:
+    version: 1
+    statement: 支付成功且观察期内未取消、未退款的订单金额
+    time_field: dw.fact_order.paid_at
+    excludes: [下单未支付, 已取消, 已退款]
+    version_policy: 口径变更必须升版本，历史会话与报告绑定当时版本
+  gross_profit_ex_tax:
+    version: 1
+    statement: 不含税口径的营收减去不含税直接成本（原材料/物流履约/渠道佣金/其他）
+    note: 毛利额用于分解；毛利率只展示、不参与分解
+
+anomaly_rules:
+  default:
+    compare: [mom, yoy]
+    abs_change_threshold: 0.05     # 变动幅度绝对值 > 5%
+    zscore_threshold: 2.0          # 相对基线 Z 分数 > 2
+    baseline_window_days: 28       # 过去 4 周同时段
+    season_factor_source: dw.dim_date.season_factor
+
+scenarios:
+  - code: ecom
+    name: 电商零售
+    domain_label: 电商零售
+    fact_tables: [dw.fact_ecom_daily, dw.fact_order]
+    dimensions: [channel, category, region, segment]
+    root:
+      code: gmv
+      name: GMV
+      level: composite
+      caliber: gmv_paid_success
+      unit: cent
+      precision: 2
+      structure: multiplicative
+      formula: "uv * cvr * aov"
+      method: lmdi
+      sql: "SUM(fact.gmv_cents)"
+      children:
+        - code: uv
+          name: 访客数
+          level: derived
+          structure: multiplicative
+          formula: "impressions * ctr"
+          method: lmdi
+          sql: "SUM(fact.visitors)"
+          children:
+            - {code: impressions, name: 曝光量, level: atomic, sql: "SUM(fact.impressions)"}
+            - code: ctr
+              name: 点击率
+              level: derived
+              structure: unresolvable     # 比率型：只展示，禁止作为分解对象
+              formula: "clicks / impressions"
+              sql: "SUM(fact.clicks)::numeric / NULLIF(SUM(fact.impressions), 0)"
+        - code: cvr
+          name: 支付转化率
+          level: derived
+          structure: multiplicative
+          formula: "cart_rate * order_rate * pay_success_rate"
+          method: lmdi
+          sql: "SUM(fact.orders_paid)::numeric / NULLIF(SUM(fact.visitors), 0)"
+          children:
+            - code: cart_rate
+              name: 加购率
+              level: derived
+              structure: unresolvable
+              formula: "add_to_cart / visitors"
+              sql: "SUM(fact.add_to_cart)::numeric / NULLIF(SUM(fact.visitors), 0)"
+            - code: order_rate
+              name: 下单率
+              level: derived
+              structure: unresolvable
+              formula: "orders_created / add_to_cart"
+              sql: "SUM(fact.orders_created)::numeric / NULLIF(SUM(fact.add_to_cart), 0)"
+            - code: pay_success_rate
+              name: 支付成功率
+              level: derived
+              structure: unresolvable
+              formula: "orders_paid / orders_created"
+              sql: "SUM(fact.orders_paid)::numeric / NULLIF(SUM(fact.orders_created), 0)"
+        - code: aov
+          name: 客单价
+          level: derived
+          structure: multiplicative
+          formula: "unit_price * attach_rate"
+          method: lmdi
+          sql: "SUM(fact.gmv_cents)::numeric / NULLIF(SUM(fact.orders_paid), 0)"
+          children:
+            - code: unit_price
+              name: 件单价
+              level: derived
+              structure: unresolvable
+              formula: "gmv / units"
+              sql: "SUM(fact.gmv_cents)::numeric / NULLIF(SUM(fact.units), 0)"
+            - code: attach_rate
+              name: 连带率
+              level: derived
+              structure: unresolvable
+              formula: "units / orders_paid"
+              sql: "SUM(fact.units)::numeric / NULLIF(SUM(fact.orders_paid), 0)"
+
+  - code: fmcg
+    name: 快消品
+    domain_label: 快消品
+    fact_tables: [dw.fact_fmcg_daily]
+    dimensions: [channel, sku, region]
+    root:
+      code: gross_profit
+      name: 毛利额
+      level: composite
+      caliber: gross_profit_ex_tax
+      unit: cent
+      precision: 2
+      structure: additive
+      formula: "revenue - raw_material_cost - logistics_cost - channel_commission - other_cost"
+      method: diff
+      sql: "SUM(fact.revenue_cents - fact.raw_material_cents - fact.logistics_cents - fact.channel_commission_cents - fact.other_cost_cents)"
+      children:
+        - code: revenue
+          name: 营收
+          level: derived
+          structure: multiplicative
+          formula: "units * avg_price"
+          method: lmdi
+          sql: "SUM(fact.revenue_cents)"
+          children:
+            - {code: units, name: 销量, level: atomic, sql: "SUM(fact.units)"}
+            - {code: avg_price, name: 平均单价, level: derived, structure: unresolvable, formula: "revenue / units", sql: "SUM(fact.revenue_cents)::numeric / NULLIF(SUM(fact.units), 0)"}
+        - code: raw_material_cost
+          name: 原材料成本
+          level: derived
+          structure: multiplicative
+          formula: "units * unit_cost"
+          method: lmdi
+          sql: "SUM(fact.raw_material_cents)"
+          children:
+            - {code: raw_units, name: 耗用数量, level: atomic, sql: "SUM(fact.units)"}
+            - {code: unit_cost, name: 单位原料成本, level: derived, structure: unresolvable, formula: "raw_material_cost / units", sql: "SUM(fact.raw_material_cents)::numeric / NULLIF(SUM(fact.units), 0)"}
+        - code: logistics_cost
+          name: 物流履约成本
+          level: atomic
+          structure: additive
+          method: diff
+          sql: "SUM(fact.logistics_cents)"
+        - code: channel_commission
+          name: 渠道佣金
+          level: derived
+          structure: multiplicative
+          formula: "revenue * commission_rate"
+          method: lmdi
+          sql: "SUM(fact.channel_commission_cents)"
+          children:
+            - {code: commission_base, name: 计佣基数, level: derived, structure: unresolvable, formula: "revenue", sql: "SUM(fact.revenue_cents)"}
+            - {code: commission_rate, name: 佣金率, level: derived, structure: unresolvable, formula: "channel_commission / revenue", sql: "SUM(fact.channel_commission_cents)::numeric / NULLIF(SUM(fact.revenue_cents), 0)"}
+        - code: other_cost
+          name: 其他成本
+          level: atomic
+          structure: additive
+          method: diff
+          sql: "SUM(fact.other_cents)"
+
+# What-If 可干预因子（只有出现在这里的因子才允许进入推演输入）
+intervenable_factors:
+  ecom: [budget_share, price_index, commission_rate]
+  fmcg: [price_index, commission_rate, logistics_mode]
