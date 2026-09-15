@@ -32,6 +32,12 @@ from app.services.drilldown import (
     run_drilldown,
 )
 from app.services.seed import seed_reference_data
+from app.services.whatif import (
+    DEFAULT_ADJUSTMENTS,
+    WhatIfRequest,
+    resolve_knob,
+    run_whatif,
+)
 
 STATUS_CREATED = "created"
 STATUS_ANALYSING = "analysing"
@@ -435,6 +441,98 @@ class SessionService:
         thread.start()
         return self.get(session_id)
 
+    # ---------------------------------------------------------- L3 What-If 推演
+
+    def whatif(
+        self,
+        session_id: int,
+        *,
+        factor: str,
+        adjustments: tuple[float, ...] = (),
+        dimensions: tuple[tuple[str, ...], ...] = (),
+        window_days: int | None = None,
+        max_adjustment: float | None = None,
+        actor: str = "analyst",
+    ) -> dict[str, Any]:
+        """在会话的锁定上下文里做一次 What-If 推演（同步返回区间与曲线）。
+
+        两处刻意的顺序：
+
+        * **先校验因子再占执行位**：不可干预 / 不可估的因子直接 400，不占会话的执行位；
+        * **占用与释放走并发隔离的同一把闸**：推演期间同一会话不接受第二个任务（§5.9）。
+
+        推演本身是查数 + 纯算法（毫秒到秒级），所以同步返回；前端要的"实时曲线"就是这个响应。
+        """
+
+        state = self.get(session_id)
+        resolve_knob(self.engine, state.scenario, factor)  # 不合法就别占着会话说"在跑"
+        with self._lock:
+            if session_id in self._running:
+                raise SessionBusy(
+                    f"会话 {session_id} 已有执行中的任务：同一会话同时只允许一个任务"
+                    "（需求说明书 §5.9 并发隔离）"
+                )
+            self._running.add(session_id)
+            self._transition(
+                session_id, STATUS_ANALYSING, f"What-If 推演已受理：{factor}", actor
+            )
+        try:
+            report = run_whatif(
+                WhatIfRequest(
+                    scenario=state.scenario,
+                    base=state.base,
+                    current=state.current,
+                    factor=factor,
+                    slice_filter=state.slice_filter,
+                    adjustments=adjustments or DEFAULT_ADJUSTMENTS,
+                    dimensions=dimensions,
+                    window_days=window_days,
+                    max_adjustment=max_adjustment,
+                    title=state.title,
+                    actor=actor,
+                ),
+                engine=self.engine,
+                settings=self.settings,
+            )
+            for step in report.steps:
+                self._emit(session_id, step["kind"], step["status"], step["payload"])
+            self._persist_steps(session_id, report.steps)
+            payload = report.as_dict()
+            self._persist_steps(
+                session_id,
+                [
+                    {
+                        "kind": "whatif",
+                        "status": "completed",
+                        "duration_ms": report.duration_ms,
+                        "payload": {
+                            "summary": True,
+                            "factor": report.knob.as_dict(),
+                            "window": report.window.as_dict(),
+                            "curve": report.curve.as_dict(),
+                            "assumptions": report.assumptions,
+                            "warnings": report.warnings,
+                            "confidence": report.confidence,
+                            "breakdown": report.breakdown,
+                        },
+                    }
+                ],
+            )
+            note = (
+                f"What-If 完成：{report.knob.name} 弹性 {report.curve.elasticity.value:+.3f}"
+                f"（把握度 {report.confidence:.0%}）"
+            )
+            self._transition(session_id, STATUS_AWAITING, note, actor)
+            return {"session_id": session_id, "status": STATUS_AWAITING, "whatif": payload}
+        except Exception as error:  # noqa: BLE001 - 失败要落到 failed 与事件流
+            message = f"{type(error).__name__}: {error}"
+            self._emit(session_id, "report", "failed", {"error": message})
+            self._transition(session_id, STATUS_FAILED, message, actor)
+            raise
+        finally:
+            with self._lock:
+                self._running.discard(session_id)
+
     @staticmethod
     def _narrow(locked: SliceFilter, extra: SliceFilter) -> dict[str, tuple[str, ...]]:
         """在锁定切片之上收紧：只允许把取值收成子集，放宽或替换一律拒绝。"""
@@ -504,6 +602,32 @@ class SessionService:
             rows = connection.execute(
                 "SELECT seq, status, payload_json, duration_ms FROM session_steps"
                 " WHERE session_id = ? AND kind = 'drilldown' ORDER BY seq",
+                (session_id,),
+            ).fetchall()
+        finally:
+            connection.close()
+        return [
+            {
+                "seq": row["seq"],
+                "status": row["status"],
+                "duration_ms": row["duration_ms"],
+                "payload": json.loads(row["payload_json"] or "{}"),
+            }
+            for row in rows
+        ]
+
+    def whatif_records(self, session_id: int) -> list[dict[str, Any]]:
+        """会话里所有 What-If 步骤的载荷（弹性、区间曲线、前提条件与把握度）。
+
+        报告第 6 段（What-If 情景模拟结论）读的就是这里——页面上看到的曲线与报告里写的
+        是同一份持久化数据，不允许各算一遍。
+        """
+
+        connection = connect_app(self.settings.app_db)
+        try:
+            rows = connection.execute(
+                "SELECT seq, status, payload_json, duration_ms FROM session_steps"
+                " WHERE session_id = ? AND kind = 'whatif' ORDER BY seq",
                 (session_id,),
             ).fetchall()
         finally:

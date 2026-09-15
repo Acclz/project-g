@@ -554,7 +554,6 @@ class MetricEngine:
             self.settings.attr_conservation_tolerance if tolerance is None else tolerance
         )
         names = tuple(str(item) for item in dimensions)
-        tree = self.tree(scenario)
         if not names:
             raise DecompositionError("下钻至少要指定一个维度")
         if len(set(names)) != len(names):
@@ -578,17 +577,20 @@ class MetricEngine:
         own_connection = connection is None
         conn = connection or connect_warehouse_readonly(self.settings.warehouse_db)
         try:
-            selects, joins, groups = self._group_sources(scenario, names)
-            where = self._slice_clause(conn, scenario, active_slice)
-            query = (
-                f"SELECT {', '.join(selects)}, {tree.root.sql} AS value"
-                f" FROM {self.fact_table(scenario)} AS fact"
-                f" {' '.join(joins)}"
-                f" WHERE fact.day BETWEEN ? AND ?{where}"
-                f" GROUP BY {', '.join(groups)}"
+            base_rows = self.metric_totals(
+                scenario,
+                base,
+                dimensions=names,
+                slice_filter=active_slice,
+                connection=conn,
             )
-            base_rows = self._group_rows(conn, query, base)
-            current_rows = self._group_rows(conn, query, current)
+            current_rows = self.metric_totals(
+                scenario,
+                current,
+                dimensions=names,
+                slice_filter=active_slice,
+                connection=conn,
+            )
             layer_base = self._root_value(conn, scenario, base, active_slice)
             layer_current = self._root_value(conn, scenario, current, active_slice)
         finally:
@@ -689,17 +691,134 @@ class MetricEngine:
             groups.append(code)
         return selects, joins, groups
 
-    @staticmethod
-    def _group_rows(conn, query: str, period: Period) -> dict[tuple[str, ...], float | None]:
-        """执行分组查询：``{(组合编码…): 取值}``；取值为 NULL 时保留 None（触发降级路径）。"""
+    def metric_totals(
+        self,
+        scenario: str,
+        period: Period,
+        *,
+        dimensions: tuple[str, ...] = (),
+        slice_filter: SliceFilter | None = None,
+        expression: str | None = None,
+        extra_joins: Sequence[str] = (),
+        connection=None,
+    ) -> dict[tuple[str, ...], float | None]:
+        """期间内按维度组合聚合指标：``{(组合编码…): 取值}``（不分组时键为空元组）。
 
-        rows = conn.execute(query, (period.start, period.end)).fetchall()
-        values: dict[tuple[str, ...], float | None] = {}
+        取值为 NULL 时保留 ``None``（调用方据此走降级路径，而不是当成 0 蒙混）。
+        ``expression`` 省略时用指标树根节点的 SQL，保证"看的是同一个口径"。
+        """
+
+        rows = self._aggregate(
+            scenario,
+            period,
+            dimensions=dimensions,
+            slice_filter=slice_filter,
+            expression=expression,
+            extra_joins=extra_joins,
+            by_day=False,
+            connection=connection,
+        )
+        return {
+            key: (None if value is None else float(value)) for key, value in rows.items()
+        }
+
+    def daily_series(
+        self,
+        scenario: str,
+        period: Period,
+        *,
+        expression: str | None = None,
+        slice_filter: SliceFilter | None = None,
+        dimensions: tuple[str, ...] = (),
+        extra_joins: Sequence[str] = (),
+        connection=None,
+    ) -> dict[tuple[str, ...], list[tuple[str, float]]]:
+        """按天取序列（What-If 估弹性用）：``{(组合…): [(天, 取值), …]}``。
+
+        只返回有值的日期（NULL 直接跳过）：弹性估计要求每个观测点都是真实观测，
+        不能拿 0 或前值填充凑样本量。
+        """
+
+        rows = self._aggregate(
+            scenario,
+            period,
+            dimensions=dimensions,
+            slice_filter=slice_filter,
+            expression=expression,
+            extra_joins=extra_joins,
+            by_day=True,
+            connection=connection,
+        )
+        series: dict[tuple[str, ...], list[tuple[str, float]]] = {}
+        for key, points in rows.items():
+            cleaned = [
+                (str(day), float(value))
+                for day, value in points  # type: ignore[misc]
+                if value is not None
+            ]
+            series[key] = cleaned
+        return series
+
+    def _aggregate(
+        self,
+        scenario: str,
+        period: Period,
+        *,
+        dimensions: tuple[str, ...],
+        slice_filter: SliceFilter | None,
+        expression: str | None,
+        extra_joins: Sequence[str],
+        by_day: bool,
+        connection=None,
+    ) -> dict[tuple[str, ...], Any]:
+        """聚合查询的唯一实现：分组列、维表 join、切片与期间都在这里拼一次。"""
+
+        active_slice = slice_filter or SliceFilter()
+        names = tuple(str(item) for item in dimensions)
+        allowed = self.supported_group_dimensions(scenario)
+        unsupported = [name for name in names if name not in allowed]
+        if unsupported:
+            raise DecompositionError(
+                f"场景 {scenario} 不支持这些维度分组：{unsupported}（可用：{list(allowed)}）"
+            )
+        if len(names) > MAX_DRILLDOWN_DIMENSIONS:
+            raise DecompositionError(
+                f"单次交叉最多 {MAX_DRILLDOWN_DIMENSIONS} 个维度（需求说明书 §5.3）：{list(names)}"
+            )
+        tree = self.tree(scenario)
+        active_expression = expression or tree.root.sql
+        own_connection = connection is None
+        conn = connection or connect_warehouse_readonly(self.settings.warehouse_db)
+        try:
+            selects, joins, groups = self._group_sources(scenario, names)
+            where = self._slice_clause(conn, scenario, active_slice)
+            columns = (["fact.day"] if by_day else []) + selects + [f"{active_expression} AS value"]
+            group_by = (["fact.day"] if by_day else []) + groups
+            order_by = (["fact.day"] if by_day else []) + groups
+            query = (
+                f"SELECT {', '.join(columns)} FROM {self.fact_table(scenario)} AS fact"
+                f" {' '.join([*joins, *extra_joins])}"
+                f" WHERE fact.day BETWEEN ? AND ?{where}"
+            )
+            if group_by:
+                query += f" GROUP BY {', '.join(group_by)}"
+            if order_by:
+                query += f" ORDER BY {', '.join(order_by)}"
+            rows = conn.execute(query, (period.start, period.end)).fetchall()
+        finally:
+            if own_connection:
+                conn.close()
+
+        offset = 1 if by_day else 0
+        result: dict[tuple[str, ...], Any] = {}
         for row in rows:
-            key = tuple(str(item) for item in row[:-1])
-            raw = row[-1]
-            values[key] = None if raw is None else float(raw)
-        return values
+            key = tuple(str(item) for item in row[offset : offset + len(names)])
+            value = row[-1]
+            if by_day:
+                result.setdefault(key, []).append((row[0], value))
+            else:
+                result[key] = value
+        return result
 
     def _root_value(
         self, conn, scenario: str, period: Period, slice_filter: SliceFilter

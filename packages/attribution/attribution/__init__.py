@@ -15,6 +15,15 @@ from .allocation import (
 )
 from .conservation import ConservationError, assert_conservation, conservation_residual
 from .diff import additive_contributions, contribution_rates
+from .elasticity import (
+    CurvePoint,
+    ElasticityError,
+    ElasticityEstimate,
+    ScenarioCurve,
+    estimate_elasticity,
+    finite_difference_elasticity,
+    simulate_curve,
+)
 from .inference import (
     ConfidenceBreakdown,
     InferenceError,
@@ -39,13 +48,17 @@ __all__ = [
     "ConservationError",
     "Contribution",
     "ContributionTable",
+    "CurvePoint",
     "DecompositionError",
+    "ElasticityError",
+    "ElasticityEstimate",
     "InferenceError",
     "LmdiError",
     "MetricNode",
     "MetricTree",
     "NodeResult",
     "PermutationResult",
+    "ScenarioCurve",
     "TreeResult",
     "absolute_risk_difference",
     "additive_contributions",
@@ -58,12 +71,15 @@ __all__ = [
     "decompose_tree",
     "direction_consistency",
     "effect_score",
+    "estimate_elasticity",
     "exact_contributions",
+    "finite_difference_elasticity",
     "lmdi_contributions",
     "load_metrics_file",
     "load_metrics_text",
     "permutation_test",
     "significance_score",
+    "simulate_curve",
     "spearman_correlation",
     "standardized_difference",
 ]

@@ -29,6 +29,7 @@ from app.services.sessions import (
     SessionError,
     SessionService,
 )
+from app.services.whatif import WhatIfError, intervenable_factors
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
 
@@ -87,6 +88,17 @@ class DrilldownRequest(MessageRequest):
     top_n: int = Field(default=5, ge=1, le=50)
 
 
+class WhatIfApiRequest(BaseModel):
+    """What-If 推演：只允许可干预因子（不可干预的因子会被 400 拒绝）。"""
+
+    factor: str = Field(description="可干预因子编码，见 GET /api/sessions/{id}/factors")
+    adjustments: list[float] = Field(default_factory=list)
+    dimensions: list[list[str] | str] | None = None
+    window_days: int | None = Field(default=None, ge=14, le=540)
+    max_adjustment: float | None = Field(default=None, gt=0.0, le=1.0)
+    actor: str = "analyst"
+
+
 def _slice_from(payload: Any) -> SliceFilter:
     values = {
         key: (getattr(payload, key),)
@@ -101,7 +113,7 @@ def _translate(error: Exception) -> HTTPException:
 
     if isinstance(error, (SessionBusy, ContextLocked)):
         return HTTPException(status_code=409, detail=str(error))
-    if isinstance(error, SessionError):
+    if isinstance(error, (SessionError, WhatIfError)):
         return HTTPException(status_code=400, detail=str(error))
     return HTTPException(status_code=500, detail=f"{type(error).__name__}: {error}")
 
@@ -199,6 +211,47 @@ def drilldown(session_id: int, payload: DrilldownRequest) -> dict[str, Any]:
         ).as_dict()
     except Exception as error:  # noqa: BLE001
         raise _translate(error) from error
+
+
+@router.get("/{session_id}/factors")
+def factors(session_id: int) -> dict[str, Any]:
+    """该场景的可干预因子清单与可估性（What-If 面板的输入白名单）。"""
+
+    state = service().get(session_id)
+    return {
+        "scenario": state.scenario,
+        "items": intervenable_factors(service().engine, state.scenario),
+    }
+
+
+@router.post("/{session_id}/whatif")
+def whatif(session_id: int, payload: WhatIfApiRequest) -> dict[str, Any]:
+    """What-If 推演：只接受可干预因子，返回区间曲线 + 前提条件 + 把握度。
+
+    注意：这条路由必须注册在通配的 ``/{session_id}/{action}``（任务控制）之前，
+    否则 ``whatif`` 会被当成控制动作（FastAPI 按注册顺序匹配）。
+    """
+
+    try:
+        dimensions = parse_dimensions(payload.dimensions)
+        return service().whatif(
+            session_id,
+            factor=payload.factor,
+            adjustments=tuple(payload.adjustments),
+            dimensions=dimensions,
+            window_days=payload.window_days,
+            max_adjustment=payload.max_adjustment,
+            actor=payload.actor,
+        )
+    except Exception as error:  # noqa: BLE001
+        raise _translate(error) from error
+
+
+@router.get("/{session_id}/whatifs")
+def whatifs(session_id: int) -> dict[str, Any]:
+    """历史推演记录（报告第 6 段与前端看板取同一份数据）。"""
+
+    return {"items": service().whatif_records(session_id)}
 
 
 @router.post("/{session_id}/{action}")

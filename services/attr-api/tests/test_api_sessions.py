@@ -121,6 +121,31 @@ def test_drilldowns_endpoint_returns_records(client: TestClient) -> None:
     assert listed.json()["items"], "下钻受理后要能查到记录"
 
 
+def test_whatif_endpoint_returns_curve_and_blocks_bad_factor(client: TestClient) -> None:
+    session_id = _create(client)
+    factors = client.get(f"/api/sessions/{session_id}/factors")
+    assert factors.status_code == 200
+    codes = [item["code"] for item in factors.json()["items"]]
+    assert codes == ["budget_share", "price_index", "commission_rate"]
+    ok = client.post(
+        f"/api/sessions/{session_id}/whatif",
+        json={"factor": "price_index", "adjustments": [0.0, 0.1]},
+    )
+    assert ok.status_code == 200, ok.text
+    body = ok.json()
+    assert body["whatif"]["curve"]["points"]
+    assert body["whatif"]["assumptions"]
+    blocked = client.post(
+        f"/api/sessions/{session_id}/whatif",
+        json={"factor": "cvr", "adjustments": [0.1]},
+    )
+    assert blocked.status_code == 400
+    assert "可干预" in blocked.json()["detail"]
+    listed = client.get(f"/api/sessions/{session_id}/whatifs")
+    assert listed.status_code == 200
+    assert listed.json()["items"]
+
+
 def test_message_starts_run_and_second_is_conflict(client: TestClient) -> None:
     session_id = _create(client)
     first = client.post(f"/api/sessions/{session_id}/messages", json={"message": "为什么下滑"})

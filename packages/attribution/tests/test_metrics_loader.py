@@ -25,6 +25,22 @@ def test_loads_real_metrics_dictionary():
     assert ecom.dimensions == ["channel", "category", "region", "segment"]
 
 
+def test_intervenable_factors_are_loaded_per_scenario():
+    """What-If 的可干预白名单来自指标字典（顶层 intervenable_factors 段）。"""
+
+    trees = load_metrics_file(METRICS_PATH)
+    assert trees["ecom"].intervenable_factors == [
+        "budget_share",
+        "price_index",
+        "commission_rate",
+    ]
+    assert trees["fmcg"].intervenable_factors == [
+        "price_index",
+        "commission_rate",
+        "logistics_mode",
+    ]
+
+
 def test_ratio_metric_is_not_decomposable():
     trees = load_metrics_file(METRICS_PATH)
     ctr = trees["ecom"].find("ctr")

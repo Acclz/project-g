@@ -1,0 +1,1417 @@
+{
+  "cases": [
+    {
+      "scenario": "ecom",
+      "factor": "budget_share",
+      "report": {
+        "request": {
+          "scenario": "ecom",
+          "base": {
+            "start": "2026-05-29",
+            "end": "2026-06-04",
+            "days": 7,
+            "label": "上一期"
+          },
+          "current": {
+            "start": "2026-06-05",
+            "end": "2026-06-11",
+            "days": 7,
+            "label": "真因窗口"
+          },
+          "factor": "budget_share",
+          "slice": {
+            "channel": [
+              "paid_ads"
+            ]
+          },
+          "adjustments": [
+            -0.3,
+            -0.2,
+            -0.1,
+            0.0,
+            0.1,
+            0.2,
+            0.3
+          ],
+          "dimensions": [],
+          "window_days": null,
+          "max_adjustment": null
+        },
+        "factor": {
+          "code": "budget_share",
+          "name": "预算分配",
+          "proxy_label": "付费渠道访客占比",
+          "proxy_note": "投放预算没进仓，用付费渠道访客占比代理：预算投向哪里，流量结构就往哪里偏",
+          "estimable": true,
+          "reject_reason": ""
+        },
+        "target_metric": {
+          "code": "gmv",
+          "name": "GMV",
+          "unit": "cent",
+          "caliber": "gmv_paid_success",
+          "caliber_version": 1
+        },
+        "window": {
+          "start": "2026-02-12",
+          "end": "2026-06-11",
+          "days": 120,
+          "label": "弹性估计窗口"
+        },
+        "curve": {
+          "base_value": 66488171.0,
+          "factor_base": 1.0,
+          "max_adjustment": 0.3,
+          "out_of_range": false,
+          "warnings": [
+            "拟合偏弱（r²=0.000）：只能看方向与量级，不能当承诺值"
+          ],
+          "elasticity": {
+            "value": 0.0,
+            "low": 0.0,
+            "high": 0.0,
+            "method": "log_log",
+            "degraded": false,
+            "sample_size": 120,
+            "r_squared": 0.0,
+            "seed": 20260915,
+            "iterations": 1000,
+            "level": 0.9,
+            "confidence": 0.4,
+            "confidence_parts": {
+              "sample": 1.0,
+              "fit": 0.0,
+              "width": 1.0,
+              "weak_fit_ceiling": 0.4
+            },
+            "notes": [
+              "拟合偏弱（r²=0.000 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+            ]
+          },
+          "points": [
+            {
+              "adjustment": -0.3,
+              "factor_value": 0.7,
+              "expected": 66488171.0,
+              "low": 66488171.0,
+              "high": 66488171.0,
+              "out_of_range": false
+            },
+            {
+              "adjustment": -0.2,
+              "factor_value": 0.8,
+              "expected": 66488171.0,
+              "low": 66488171.0,
+              "high": 66488171.0,
+              "out_of_range": false
+            },
+            {
+              "adjustment": -0.1,
+              "factor_value": 0.9,
+              "expected": 66488171.0,
+              "low": 66488171.0,
+              "high": 66488171.0,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.0,
+              "factor_value": 1.0,
+              "expected": 66488171.0,
+              "low": 66488171.0,
+              "high": 66488171.0,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.1,
+              "factor_value": 1.1,
+              "expected": 66488171.0,
+              "low": 66488171.0,
+              "high": 66488171.0,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.2,
+              "factor_value": 1.2,
+              "expected": 66488171.0,
+              "low": 66488171.0,
+              "high": 66488171.0,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.3,
+              "factor_value": 1.3,
+              "expected": 66488171.0,
+              "low": 66488171.0,
+              "high": 66488171.0,
+              "out_of_range": false
+            }
+          ]
+        },
+        "breakdown": [],
+        "assumptions": [
+          "单因子局部均衡：只动这一个因子，其他因子与竞争环境保持不变",
+          "弹性窗口 2026-02-12~2026-06-11（120 天，n=120）内目标与因子代理的历史共动关系，在未来同样成立",
+          "因子代理口径：付费渠道访客占比（投放预算没进仓，用付费渠道访客占比代理：预算投向哪里，流量结构就往哪里偏）",
+          "目标指标口径：ecom 根指标的现期取值，切片 {\"channel\": [\"paid_ads\"]}",
+          "区间为 bootstrap 1000 次（种子 20260915，置信水平 90%）的百分位区间，可复现：同一输入必得同一输出",
+          "调整档位限制在 ±30%（配置项 attr_whatif_max_adjustment=0.3），超出的档位只算外推",
+          "弹性是历史共动的映射，不是因果保证：它回答「调了会怎样」，不回答「为什么会这样」"
+        ],
+        "warnings": [
+          "拟合偏弱（r²=0.000）：只能看方向与量级，不能当承诺值",
+          "拟合偏弱（r²=0.000 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+        ],
+        "confidence": 0.4,
+        "steps": [
+          {
+            "kind": "whatif",
+            "status": "series",
+            "duration_ms": 28,
+            "payload": {
+              "paired_days": 120,
+              "window": {
+                "start": "2026-02-12",
+                "end": "2026-06-11",
+                "days": 120,
+                "label": "弹性估计窗口"
+              },
+              "factor_proxy": "付费渠道访客占比"
+            }
+          },
+          {
+            "kind": "whatif",
+            "status": "elasticity",
+            "duration_ms": 72,
+            "payload": {
+              "factor": "budget_share",
+              "value": 0.0,
+              "low": 0.0,
+              "high": 0.0,
+              "method": "log_log",
+              "degraded": false,
+              "sample_size": 120,
+              "r_squared": 0.0,
+              "seed": 20260915,
+              "iterations": 1000,
+              "level": 0.9,
+              "confidence": 0.4,
+              "confidence_parts": {
+                "sample": 1.0,
+                "fit": 0.0,
+                "width": 1.0,
+                "weak_fit_ceiling": 0.4
+              },
+              "notes": [
+                "拟合偏弱（r²=0.000 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+              ]
+            }
+          },
+          {
+            "kind": "whatif",
+            "status": "curve",
+            "duration_ms": 3,
+            "payload": {
+              "base_value": 66488171.0,
+              "factor_base": 1.0,
+              "points": [
+                {
+                  "adjustment": -0.3,
+                  "factor_value": 0.7,
+                  "expected": 66488171.0,
+                  "low": 66488171.0,
+                  "high": 66488171.0,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": -0.2,
+                  "factor_value": 0.8,
+                  "expected": 66488171.0,
+                  "low": 66488171.0,
+                  "high": 66488171.0,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": -0.1,
+                  "factor_value": 0.9,
+                  "expected": 66488171.0,
+                  "low": 66488171.0,
+                  "high": 66488171.0,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.0,
+                  "factor_value": 1.0,
+                  "expected": 66488171.0,
+                  "low": 66488171.0,
+                  "high": 66488171.0,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.1,
+                  "factor_value": 1.1,
+                  "expected": 66488171.0,
+                  "low": 66488171.0,
+                  "high": 66488171.0,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.2,
+                  "factor_value": 1.2,
+                  "expected": 66488171.0,
+                  "low": 66488171.0,
+                  "high": 66488171.0,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.3,
+                  "factor_value": 1.3,
+                  "expected": 66488171.0,
+                  "low": 66488171.0,
+                  "high": 66488171.0,
+                  "out_of_range": false
+                }
+              ],
+              "out_of_range": false
+            }
+          }
+        ],
+        "duration_ms": 105
+      }
+    },
+    {
+      "scenario": "ecom",
+      "factor": "price_index",
+      "report": {
+        "request": {
+          "scenario": "ecom",
+          "base": {
+            "start": "2026-05-29",
+            "end": "2026-06-04",
+            "days": 7,
+            "label": "上一期"
+          },
+          "current": {
+            "start": "2026-06-05",
+            "end": "2026-06-11",
+            "days": 7,
+            "label": "真因窗口"
+          },
+          "factor": "price_index",
+          "slice": {
+            "channel": [
+              "paid_ads"
+            ]
+          },
+          "adjustments": [
+            -0.3,
+            -0.2,
+            -0.1,
+            0.0,
+            0.1,
+            0.2,
+            0.3
+          ],
+          "dimensions": [],
+          "window_days": null,
+          "max_adjustment": null
+        },
+        "factor": {
+          "code": "price_index",
+          "name": "价格水平",
+          "proxy_label": "件单价（元）",
+          "proxy_note": "件单价 = GMV ÷ 件数，是价格水平在数仓里唯一可观测的对应量",
+          "estimable": true,
+          "reject_reason": ""
+        },
+        "target_metric": {
+          "code": "gmv",
+          "name": "GMV",
+          "unit": "cent",
+          "caliber": "gmv_paid_success",
+          "caliber_version": 1
+        },
+        "window": {
+          "start": "2026-02-12",
+          "end": "2026-06-11",
+          "days": 120,
+          "label": "弹性估计窗口"
+        },
+        "curve": {
+          "base_value": 66488171.0,
+          "factor_base": 9381.708903626359,
+          "max_adjustment": 0.3,
+          "out_of_range": false,
+          "warnings": [],
+          "elasticity": {
+            "value": 0.4392730735974747,
+            "low": 0.37078341645157403,
+            "high": 0.49684599168995236,
+            "method": "log_log",
+            "degraded": false,
+            "sample_size": 120,
+            "r_squared": 0.5318935554619972,
+            "seed": 20260915,
+            "iterations": 1000,
+            "level": 0.9,
+            "confidence": 0.8596,
+            "confidence_parts": {
+              "sample": 1.0,
+              "fit": 0.5319,
+              "width": 1.0
+            },
+            "notes": []
+          },
+          "points": [
+            {
+              "adjustment": -0.3,
+              "factor_value": 6567.196232538451,
+              "expected": 56846028.202322826,
+              "low": 55690609.157610275,
+              "high": 58251794.44323785,
+              "out_of_range": false
+            },
+            {
+              "adjustment": -0.2,
+              "factor_value": 7505.367122901087,
+              "expected": 60280164.24770449,
+              "low": 59510696.71391627,
+              "high": 61208503.37024232,
+              "out_of_range": false
+            },
+            {
+              "adjustment": -0.1,
+              "factor_value": 8443.538013263724,
+              "expected": 63481086.71917196,
+              "low": 63097181.556691736,
+              "high": 63940829.726226196,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.0,
+              "factor_value": 9381.708903626359,
+              "expected": 66488171.0,
+              "low": 66488171.0,
+              "high": 66488171.0,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.1,
+              "factor_value": 10319.879793988996,
+              "expected": 69330938.37496789,
+              "low": 68879836.48672502,
+              "high": 69712422.70473616,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.2,
+              "factor_value": 11258.05068435163,
+              "expected": 72032182.8211739,
+              "low": 71138299.44285692,
+              "high": 72792271.35288183,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.3,
+              "factor_value": 12196.221574714267,
+              "expected": 74609930.05401154,
+              "low": 73281220.1300921,
+              "high": 75745473.38448757,
+              "out_of_range": false
+            }
+          ]
+        },
+        "breakdown": [],
+        "assumptions": [
+          "单因子局部均衡：只动这一个因子，其他因子与竞争环境保持不变",
+          "弹性窗口 2026-02-12~2026-06-11（120 天，n=120）内目标与因子代理的历史共动关系，在未来同样成立",
+          "因子代理口径：件单价（元）（件单价 = GMV ÷ 件数，是价格水平在数仓里唯一可观测的对应量）",
+          "目标指标口径：ecom 根指标的现期取值，切片 {\"channel\": [\"paid_ads\"]}",
+          "区间为 bootstrap 1000 次（种子 20260915，置信水平 90%）的百分位区间，可复现：同一输入必得同一输出",
+          "调整档位限制在 ±30%（配置项 attr_whatif_max_adjustment=0.3），超出的档位只算外推",
+          "弹性是历史共动的映射，不是因果保证：它回答「调了会怎样」，不回答「为什么会这样」"
+        ],
+        "warnings": [],
+        "confidence": 0.8596,
+        "steps": [
+          {
+            "kind": "whatif",
+            "status": "series",
+            "duration_ms": 36,
+            "payload": {
+              "paired_days": 120,
+              "window": {
+                "start": "2026-02-12",
+                "end": "2026-06-11",
+                "days": 120,
+                "label": "弹性估计窗口"
+              },
+              "factor_proxy": "件单价（元）"
+            }
+          },
+          {
+            "kind": "whatif",
+            "status": "elasticity",
+            "duration_ms": 65,
+            "payload": {
+              "factor": "price_index",
+              "value": 0.4392730735974747,
+              "low": 0.37078341645157403,
+              "high": 0.49684599168995236,
+              "method": "log_log",
+              "degraded": false,
+              "sample_size": 120,
+              "r_squared": 0.5318935554619972,
+              "seed": 20260915,
+              "iterations": 1000,
+              "level": 0.9,
+              "confidence": 0.8596,
+              "confidence_parts": {
+                "sample": 1.0,
+                "fit": 0.5319,
+                "width": 1.0
+              },
+              "notes": []
+            }
+          },
+          {
+            "kind": "whatif",
+            "status": "curve",
+            "duration_ms": 2,
+            "payload": {
+              "base_value": 66488171.0,
+              "factor_base": 9381.708903626359,
+              "points": [
+                {
+                  "adjustment": -0.3,
+                  "factor_value": 6567.196232538451,
+                  "expected": 56846028.202322826,
+                  "low": 55690609.157610275,
+                  "high": 58251794.44323785,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": -0.2,
+                  "factor_value": 7505.367122901087,
+                  "expected": 60280164.24770449,
+                  "low": 59510696.71391627,
+                  "high": 61208503.37024232,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": -0.1,
+                  "factor_value": 8443.538013263724,
+                  "expected": 63481086.71917196,
+                  "low": 63097181.556691736,
+                  "high": 63940829.726226196,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.0,
+                  "factor_value": 9381.708903626359,
+                  "expected": 66488171.0,
+                  "low": 66488171.0,
+                  "high": 66488171.0,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.1,
+                  "factor_value": 10319.879793988996,
+                  "expected": 69330938.37496789,
+                  "low": 68879836.48672502,
+                  "high": 69712422.70473616,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.2,
+                  "factor_value": 11258.05068435163,
+                  "expected": 72032182.8211739,
+                  "low": 71138299.44285692,
+                  "high": 72792271.35288183,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.3,
+                  "factor_value": 12196.221574714267,
+                  "expected": 74609930.05401154,
+                  "low": 73281220.1300921,
+                  "high": 75745473.38448757,
+                  "out_of_range": false
+                }
+              ],
+              "out_of_range": false
+            }
+          }
+        ],
+        "duration_ms": 105
+      }
+    },
+    {
+      "scenario": "fmcg",
+      "factor": "price_index",
+      "report": {
+        "request": {
+          "scenario": "fmcg",
+          "base": {
+            "start": "2026-03-23",
+            "end": "2026-04-05",
+            "days": 14,
+            "label": "上一期"
+          },
+          "current": {
+            "start": "2026-04-06",
+            "end": "2026-04-19",
+            "days": 14,
+            "label": "真因窗口"
+          },
+          "factor": "price_index",
+          "slice": {
+            "category": [
+              "grain_oil",
+              "dairy"
+            ]
+          },
+          "adjustments": [
+            -0.3,
+            -0.2,
+            -0.1,
+            0.0,
+            0.1,
+            0.2,
+            0.3
+          ],
+          "dimensions": [],
+          "window_days": null,
+          "max_adjustment": null
+        },
+        "factor": {
+          "code": "price_index",
+          "name": "价格水平",
+          "proxy_label": "平均单价（元）",
+          "proxy_note": "平均单价 = 营收 ÷ 销量，对应快消的出厂价水平",
+          "estimable": true,
+          "reject_reason": ""
+        },
+        "target_metric": {
+          "code": "gross_profit",
+          "name": "毛利额",
+          "unit": "cent",
+          "caliber": "gross_profit_ex_tax",
+          "caliber_version": 1
+        },
+        "window": {
+          "start": "2025-12-21",
+          "end": "2026-04-19",
+          "days": 120,
+          "label": "弹性估计窗口"
+        },
+        "curve": {
+          "base_value": 39104703.0,
+          "factor_base": 4538.062149579348,
+          "max_adjustment": 0.3,
+          "out_of_range": false,
+          "warnings": [
+            "拟合偏弱（r²=0.002）：只能看方向与量级，不能当承诺值"
+          ],
+          "elasticity": {
+            "value": -0.001453335972890024,
+            "low": -0.006615196041799464,
+            "high": 0.003760120408368547,
+            "method": "log_log",
+            "degraded": false,
+            "sample_size": 120,
+            "r_squared": 0.001984911263641642,
+            "seed": 20260915,
+            "iterations": 1000,
+            "level": 0.9,
+            "confidence": 0.4,
+            "confidence_parts": {
+              "sample": 1.0,
+              "fit": 0.002,
+              "width": 0.1401,
+              "weak_fit_ceiling": 0.4
+            },
+            "notes": [
+              "拟合偏弱（r²=0.002 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+            ]
+          },
+          "points": [
+            {
+              "adjustment": -0.3,
+              "factor_value": 3176.643504705544,
+              "expected": 39124978.90202008,
+              "low": 39052293.2421293,
+              "high": 39197078.49245606,
+              "out_of_range": false
+            },
+            {
+              "adjustment": -0.2,
+              "factor_value": 3630.449719663479,
+              "expected": 39117386.811494455,
+              "low": 39071906.09206269,
+              "high": 39162469.576510936,
+              "out_of_range": false
+            },
+            {
+              "adjustment": -0.1,
+              "factor_value": 4084.255934621414,
+              "expected": 39110691.335907534,
+              "low": 39089214.027538985,
+              "high": 39131967.71450826,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.0,
+              "factor_value": 4538.062149579348,
+              "expected": 39104703.0,
+              "low": 39104703.0,
+              "high": 39104703.0,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.1,
+              "factor_value": 4991.868364537284,
+              "expected": 39099286.681113824,
+              "low": 39080055.43069149,
+              "high": 39118719.7670606,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.2,
+              "factor_value": 5445.674579495218,
+              "expected": 39094342.62444773,
+              "low": 39057567.52825995,
+              "high": 39131520.459821895,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.3,
+              "factor_value": 5899.480794453153,
+              "expected": 39089795.08526923,
+              "low": 39036892.09072766,
+              "high": 39143299.65459585,
+              "out_of_range": false
+            }
+          ]
+        },
+        "breakdown": [],
+        "assumptions": [
+          "单因子局部均衡：只动这一个因子，其他因子与竞争环境保持不变",
+          "弹性窗口 2025-12-21~2026-04-19（120 天，n=120）内目标与因子代理的历史共动关系，在未来同样成立",
+          "因子代理口径：平均单价（元）（平均单价 = 营收 ÷ 销量，对应快消的出厂价水平）",
+          "目标指标口径：fmcg 根指标的现期取值，切片 {\"category\": [\"grain_oil\", \"dairy\"]}",
+          "区间为 bootstrap 1000 次（种子 20260915，置信水平 90%）的百分位区间，可复现：同一输入必得同一输出",
+          "调整档位限制在 ±30%（配置项 attr_whatif_max_adjustment=0.3），超出的档位只算外推",
+          "弹性是历史共动的映射，不是因果保证：它回答「调了会怎样」，不回答「为什么会这样」"
+        ],
+        "warnings": [
+          "拟合偏弱（r²=0.002）：只能看方向与量级，不能当承诺值",
+          "拟合偏弱（r²=0.002 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+        ],
+        "confidence": 0.4,
+        "steps": [
+          {
+            "kind": "whatif",
+            "status": "series",
+            "duration_ms": 95,
+            "payload": {
+              "paired_days": 120,
+              "window": {
+                "start": "2025-12-21",
+                "end": "2026-04-19",
+                "days": 120,
+                "label": "弹性估计窗口"
+              },
+              "factor_proxy": "平均单价（元）"
+            }
+          },
+          {
+            "kind": "whatif",
+            "status": "elasticity",
+            "duration_ms": 78,
+            "payload": {
+              "factor": "price_index",
+              "value": -0.001453335972890024,
+              "low": -0.006615196041799464,
+              "high": 0.003760120408368547,
+              "method": "log_log",
+              "degraded": false,
+              "sample_size": 120,
+              "r_squared": 0.001984911263641642,
+              "seed": 20260915,
+              "iterations": 1000,
+              "level": 0.9,
+              "confidence": 0.4,
+              "confidence_parts": {
+                "sample": 1.0,
+                "fit": 0.002,
+                "width": 0.1401,
+                "weak_fit_ceiling": 0.4
+              },
+              "notes": [
+                "拟合偏弱（r²=0.002 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+              ]
+            }
+          },
+          {
+            "kind": "whatif",
+            "status": "curve",
+            "duration_ms": 8,
+            "payload": {
+              "base_value": 39104703.0,
+              "factor_base": 4538.062149579348,
+              "points": [
+                {
+                  "adjustment": -0.3,
+                  "factor_value": 3176.643504705544,
+                  "expected": 39124978.90202008,
+                  "low": 39052293.2421293,
+                  "high": 39197078.49245606,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": -0.2,
+                  "factor_value": 3630.449719663479,
+                  "expected": 39117386.811494455,
+                  "low": 39071906.09206269,
+                  "high": 39162469.576510936,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": -0.1,
+                  "factor_value": 4084.255934621414,
+                  "expected": 39110691.335907534,
+                  "low": 39089214.027538985,
+                  "high": 39131967.71450826,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.0,
+                  "factor_value": 4538.062149579348,
+                  "expected": 39104703.0,
+                  "low": 39104703.0,
+                  "high": 39104703.0,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.1,
+                  "factor_value": 4991.868364537284,
+                  "expected": 39099286.681113824,
+                  "low": 39080055.43069149,
+                  "high": 39118719.7670606,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.2,
+                  "factor_value": 5445.674579495218,
+                  "expected": 39094342.62444773,
+                  "low": 39057567.52825995,
+                  "high": 39131520.459821895,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.3,
+                  "factor_value": 5899.480794453153,
+                  "expected": 39089795.08526923,
+                  "low": 39036892.09072766,
+                  "high": 39143299.65459585,
+                  "out_of_range": false
+                }
+              ],
+              "out_of_range": false
+            }
+          }
+        ],
+        "duration_ms": 181
+      }
+    },
+    {
+      "scenario": "fmcg",
+      "factor": "commission_rate",
+      "report": {
+        "request": {
+          "scenario": "fmcg",
+          "base": {
+            "start": "2026-03-23",
+            "end": "2026-04-05",
+            "days": 14,
+            "label": "上一期"
+          },
+          "current": {
+            "start": "2026-04-06",
+            "end": "2026-04-19",
+            "days": 14,
+            "label": "真因窗口"
+          },
+          "factor": "commission_rate",
+          "slice": {
+            "category": [
+              "grain_oil",
+              "dairy"
+            ]
+          },
+          "adjustments": [
+            -0.3,
+            -0.2,
+            -0.1,
+            0.0,
+            0.1,
+            0.2,
+            0.3
+          ],
+          "dimensions": [],
+          "window_days": null,
+          "max_adjustment": null
+        },
+        "factor": {
+          "code": "commission_rate",
+          "name": "渠道佣金率",
+          "proxy_label": "佣金率",
+          "proxy_note": "佣金率 = 渠道佣金 ÷ 营收，与指标树的 commission_rate 节点同口径",
+          "estimable": true,
+          "reject_reason": ""
+        },
+        "target_metric": {
+          "code": "gross_profit",
+          "name": "毛利额",
+          "unit": "cent",
+          "caliber": "gross_profit_ex_tax",
+          "caliber_version": 1
+        },
+        "window": {
+          "start": "2025-12-21",
+          "end": "2026-04-19",
+          "days": 120,
+          "label": "弹性估计窗口"
+        },
+        "curve": {
+          "base_value": 39104703.0,
+          "factor_base": 0.015014472749840996,
+          "max_adjustment": 0.3,
+          "out_of_range": false,
+          "warnings": [
+            "拟合偏弱（r²=0.027）：只能看方向与量级，不能当承诺值"
+          ],
+          "elasticity": {
+            "value": -0.0269442430490287,
+            "low": -0.055795246796372926,
+            "high": 0.0013385006891294745,
+            "method": "log_log",
+            "degraded": false,
+            "sample_size": 120,
+            "r_squared": 0.02702324760385655,
+            "seed": 20260915,
+            "iterations": 1000,
+            "level": 0.9,
+            "confidence": 0.4,
+            "confidence_parts": {
+              "sample": 1.0,
+              "fit": 0.027,
+              "width": 0.4716,
+              "weak_fit_ceiling": 0.4
+            },
+            "notes": [
+              "拟合偏弱（r²=0.027 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+            ]
+          },
+          "points": [
+            {
+              "adjustment": -0.3,
+              "factor_value": 0.010510130924888696,
+              "expected": 39482323.975757495,
+              "low": 39086038.492767036,
+              "high": 39890711.71151684,
+              "out_of_range": false
+            },
+            {
+              "adjustment": -0.2,
+              "factor_value": 0.012011578199872797,
+              "expected": 39340525.67279622,
+              "low": 39093025.037508324,
+              "high": 39594613.67118286,
+              "out_of_range": false
+            },
+            {
+              "adjustment": -0.1,
+              "factor_value": 0.013513025474856897,
+              "expected": 39215873.475424185,
+              "low": 39099188.64329734,
+              "high": 39335261.550319605,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.0,
+              "factor_value": 0.015014472749840996,
+              "expected": 39104703.0,
+              "low": 39104703.0,
+              "high": 39104703.0,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.1,
+              "factor_value": 0.016515920024825097,
+              "expected": 39004408.58719476,
+              "low": 38897301.81294456,
+              "high": 39109692.01238558,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.2,
+              "factor_value": 0.018017367299809194,
+              "expected": 38913071.589169785,
+              "low": 38708920.01538902,
+              "high": 39114247.179630145,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.3,
+              "factor_value": 0.019518814574793295,
+              "expected": 38829238.583598405,
+              "low": 38536431.33099065,
+              "high": 39118437.995803334,
+              "out_of_range": false
+            }
+          ]
+        },
+        "breakdown": [],
+        "assumptions": [
+          "单因子局部均衡：只动这一个因子，其他因子与竞争环境保持不变",
+          "弹性窗口 2025-12-21~2026-04-19（120 天，n=120）内目标与因子代理的历史共动关系，在未来同样成立",
+          "因子代理口径：佣金率（佣金率 = 渠道佣金 ÷ 营收，与指标树的 commission_rate 节点同口径）",
+          "目标指标口径：fmcg 根指标的现期取值，切片 {\"category\": [\"grain_oil\", \"dairy\"]}",
+          "区间为 bootstrap 1000 次（种子 20260915，置信水平 90%）的百分位区间，可复现：同一输入必得同一输出",
+          "调整档位限制在 ±30%（配置项 attr_whatif_max_adjustment=0.3），超出的档位只算外推",
+          "弹性是历史共动的映射，不是因果保证：它回答「调了会怎样」，不回答「为什么会这样」"
+        ],
+        "warnings": [
+          "拟合偏弱（r²=0.027）：只能看方向与量级，不能当承诺值",
+          "拟合偏弱（r²=0.027 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+        ],
+        "confidence": 0.4,
+        "steps": [
+          {
+            "kind": "whatif",
+            "status": "series",
+            "duration_ms": 97,
+            "payload": {
+              "paired_days": 120,
+              "window": {
+                "start": "2025-12-21",
+                "end": "2026-04-19",
+                "days": 120,
+                "label": "弹性估计窗口"
+              },
+              "factor_proxy": "佣金率"
+            }
+          },
+          {
+            "kind": "whatif",
+            "status": "elasticity",
+            "duration_ms": 70,
+            "payload": {
+              "factor": "commission_rate",
+              "value": -0.0269442430490287,
+              "low": -0.055795246796372926,
+              "high": 0.0013385006891294745,
+              "method": "log_log",
+              "degraded": false,
+              "sample_size": 120,
+              "r_squared": 0.02702324760385655,
+              "seed": 20260915,
+              "iterations": 1000,
+              "level": 0.9,
+              "confidence": 0.4,
+              "confidence_parts": {
+                "sample": 1.0,
+                "fit": 0.027,
+                "width": 0.4716,
+                "weak_fit_ceiling": 0.4
+              },
+              "notes": [
+                "拟合偏弱（r²=0.027 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+              ]
+            }
+          },
+          {
+            "kind": "whatif",
+            "status": "curve",
+            "duration_ms": 10,
+            "payload": {
+              "base_value": 39104703.0,
+              "factor_base": 0.015014472749840996,
+              "points": [
+                {
+                  "adjustment": -0.3,
+                  "factor_value": 0.010510130924888696,
+                  "expected": 39482323.975757495,
+                  "low": 39086038.492767036,
+                  "high": 39890711.71151684,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": -0.2,
+                  "factor_value": 0.012011578199872797,
+                  "expected": 39340525.67279622,
+                  "low": 39093025.037508324,
+                  "high": 39594613.67118286,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": -0.1,
+                  "factor_value": 0.013513025474856897,
+                  "expected": 39215873.475424185,
+                  "low": 39099188.64329734,
+                  "high": 39335261.550319605,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.0,
+                  "factor_value": 0.015014472749840996,
+                  "expected": 39104703.0,
+                  "low": 39104703.0,
+                  "high": 39104703.0,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.1,
+                  "factor_value": 0.016515920024825097,
+                  "expected": 39004408.58719476,
+                  "low": 38897301.81294456,
+                  "high": 39109692.01238558,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.2,
+                  "factor_value": 0.018017367299809194,
+                  "expected": 38913071.589169785,
+                  "low": 38708920.01538902,
+                  "high": 39114247.179630145,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.3,
+                  "factor_value": 0.019518814574793295,
+                  "expected": 38829238.583598405,
+                  "low": 38536431.33099065,
+                  "high": 39118437.995803334,
+                  "out_of_range": false
+                }
+              ],
+              "out_of_range": false
+            }
+          }
+        ],
+        "duration_ms": 178
+      }
+    },
+    {
+      "scenario": "fmcg",
+      "factor": "logistics_mode",
+      "report": {
+        "request": {
+          "scenario": "fmcg",
+          "base": {
+            "start": "2026-03-23",
+            "end": "2026-04-05",
+            "days": 14,
+            "label": "上一期"
+          },
+          "current": {
+            "start": "2026-04-06",
+            "end": "2026-04-19",
+            "days": 14,
+            "label": "真因窗口"
+          },
+          "factor": "logistics_mode",
+          "slice": {
+            "category": [
+              "grain_oil",
+              "dairy"
+            ]
+          },
+          "adjustments": [
+            -0.3,
+            -0.2,
+            -0.1,
+            0.0,
+            0.1,
+            0.2,
+            0.3
+          ],
+          "dimensions": [],
+          "window_days": null,
+          "max_adjustment": null
+        },
+        "factor": {
+          "code": "logistics_mode",
+          "name": "物流模式",
+          "proxy_label": "单件物流成本（元）",
+          "proxy_note": "物流模式没有直接字段，用单件物流成本代理：换模式最终体现在单件履约成本上",
+          "estimable": true,
+          "reject_reason": ""
+        },
+        "target_metric": {
+          "code": "gross_profit",
+          "name": "毛利额",
+          "unit": "cent",
+          "caliber": "gross_profit_ex_tax",
+          "caliber_version": 1
+        },
+        "window": {
+          "start": "2025-12-21",
+          "end": "2026-04-19",
+          "days": 120,
+          "label": "弹性估计窗口"
+        },
+        "curve": {
+          "base_value": 39104703.0,
+          "factor_base": 433.71372210578227,
+          "max_adjustment": 0.3,
+          "out_of_range": false,
+          "warnings": [
+            "拟合偏弱（r²=0.014）：只能看方向与量级，不能当承诺值"
+          ],
+          "elasticity": {
+            "value": -0.011377786350203527,
+            "low": -0.02183910766387975,
+            "high": -0.004525074370736198,
+            "method": "log_log",
+            "degraded": false,
+            "sample_size": 120,
+            "r_squared": 0.013503885195552567,
+            "seed": 20260915,
+            "iterations": 1000,
+            "level": 0.9,
+            "confidence": 0.4,
+            "confidence_parts": {
+              "sample": 1.0,
+              "fit": 0.0135,
+              "width": 0.6571,
+              "weak_fit_ceiling": 0.4
+            },
+            "notes": [
+              "拟合偏弱（r²=0.014 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+            ]
+          },
+          "points": [
+            {
+              "adjustment": -0.3,
+              "factor_value": 303.59960547404756,
+              "expected": 39263719.02264357,
+              "low": 39167868.193856746,
+              "high": 39410497.0571406,
+              "out_of_range": false
+            },
+            {
+              "adjustment": -0.2,
+              "factor_value": 346.97097768462584,
+              "expected": 39204111.27417934,
+              "low": 39144208.570209704,
+              "high": 39295735.32680936,
+              "out_of_range": false
+            },
+            {
+              "adjustment": -0.1,
+              "factor_value": 390.34234989520405,
+              "expected": 39151608.631697245,
+              "low": 39123351.16626885,
+              "high": 39194785.72513887,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.0,
+              "factor_value": 433.71372210578227,
+              "expected": 39104703.0,
+              "low": 39104703.0,
+              "high": 39104703.0,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.1,
+              "factor_value": 477.08509431636054,
+              "expected": 39062320.10699981,
+              "low": 39023391.63370392,
+              "high": 39087841.33903177,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.2,
+              "factor_value": 520.4564665269387,
+              "expected": 39023667.66890319,
+              "low": 38949307.81257433,
+              "high": 39072454.19728605,
+              "out_of_range": false
+            },
+            {
+              "adjustment": 0.3,
+              "factor_value": 563.8278387375169,
+              "expected": 38988144.64832236,
+              "low": 38881281.508910075,
+              "high": 39058304.74805045,
+              "out_of_range": false
+            }
+          ]
+        },
+        "breakdown": [],
+        "assumptions": [
+          "单因子局部均衡：只动这一个因子，其他因子与竞争环境保持不变",
+          "弹性窗口 2025-12-21~2026-04-19（120 天，n=120）内目标与因子代理的历史共动关系，在未来同样成立",
+          "因子代理口径：单件物流成本（元）（物流模式没有直接字段，用单件物流成本代理：换模式最终体现在单件履约成本上）",
+          "目标指标口径：fmcg 根指标的现期取值，切片 {\"category\": [\"grain_oil\", \"dairy\"]}",
+          "区间为 bootstrap 1000 次（种子 20260915，置信水平 90%）的百分位区间，可复现：同一输入必得同一输出",
+          "调整档位限制在 ±30%（配置项 attr_whatif_max_adjustment=0.3），超出的档位只算外推",
+          "弹性是历史共动的映射，不是因果保证：它回答「调了会怎样」，不回答「为什么会这样」"
+        ],
+        "warnings": [
+          "拟合偏弱（r²=0.014）：只能看方向与量级，不能当承诺值",
+          "拟合偏弱（r²=0.014 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+        ],
+        "confidence": 0.4,
+        "steps": [
+          {
+            "kind": "whatif",
+            "status": "series",
+            "duration_ms": 103,
+            "payload": {
+              "paired_days": 120,
+              "window": {
+                "start": "2025-12-21",
+                "end": "2026-04-19",
+                "days": 120,
+                "label": "弹性估计窗口"
+              },
+              "factor_proxy": "单件物流成本（元）"
+            }
+          },
+          {
+            "kind": "whatif",
+            "status": "elasticity",
+            "duration_ms": 72,
+            "payload": {
+              "factor": "logistics_mode",
+              "value": -0.011377786350203527,
+              "low": -0.02183910766387975,
+              "high": -0.004525074370736198,
+              "method": "log_log",
+              "degraded": false,
+              "sample_size": 120,
+              "r_squared": 0.013503885195552567,
+              "seed": 20260915,
+              "iterations": 1000,
+              "level": 0.9,
+              "confidence": 0.4,
+              "confidence_parts": {
+                "sample": 1.0,
+                "fit": 0.0135,
+                "width": 0.6571,
+                "weak_fit_ceiling": 0.4
+              },
+              "notes": [
+                "拟合偏弱（r²=0.014 < 0.3）：曲线只能当方向参考，把握度上限 0.4"
+              ]
+            }
+          },
+          {
+            "kind": "whatif",
+            "status": "curve",
+            "duration_ms": 8,
+            "payload": {
+              "base_value": 39104703.0,
+              "factor_base": 433.71372210578227,
+              "points": [
+                {
+                  "adjustment": -0.3,
+                  "factor_value": 303.59960547404756,
+                  "expected": 39263719.02264357,
+                  "low": 39167868.193856746,
+                  "high": 39410497.0571406,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": -0.2,
+                  "factor_value": 346.97097768462584,
+                  "expected": 39204111.27417934,
+                  "low": 39144208.570209704,
+                  "high": 39295735.32680936,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": -0.1,
+                  "factor_value": 390.34234989520405,
+                  "expected": 39151608.631697245,
+                  "low": 39123351.16626885,
+                  "high": 39194785.72513887,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.0,
+                  "factor_value": 433.71372210578227,
+                  "expected": 39104703.0,
+                  "low": 39104703.0,
+                  "high": 39104703.0,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.1,
+                  "factor_value": 477.08509431636054,
+                  "expected": 39062320.10699981,
+                  "low": 39023391.63370392,
+                  "high": 39087841.33903177,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.2,
+                  "factor_value": 520.4564665269387,
+                  "expected": 39023667.66890319,
+                  "low": 38949307.81257433,
+                  "high": 39072454.19728605,
+                  "out_of_range": false
+                },
+                {
+                  "adjustment": 0.3,
+                  "factor_value": 563.8278387375169,
+                  "expected": 38988144.64832236,
+                  "low": 38881281.508910075,
+                  "high": 39058304.74805045,
+                  "out_of_range": false
+                }
+              ],
+              "out_of_range": false
+            }
+          }
+        ],
+        "duration_ms": 183
+      }
+    }
+  ],
+  "rejected": [
+    {
+      "scenario": "ecom",
+      "factor": "cvr",
+      "reason": "cvr 不在 ecom 的可干预白名单 ['budget_share', 'price_index', 'commission_rate'] 里：不可干预因子（宏观、天气、竞品动作）只能作为情景注释，不能作为推演输入（需求说明书 §5.8）"
+    },
+    {
+      "scenario": "ecom",
+      "factor": "competitor_price",
+      "reason": "competitor_price 不在 ecom 的可干预白名单 ['budget_share', 'price_index', 'commission_rate'] 里：不可干预因子（宏观、天气、竞品动作）只能作为情景注释，不能作为推演输入（需求说明书 §5.8）"
+    },
+    {
+      "scenario": "ecom",
+      "factor": "weather",
+      "reason": "weather 不在 ecom 的可干预白名单 ['budget_share', 'price_index', 'commission_rate'] 里：不可干预因子（宏观、天气、竞品动作）只能作为情景注释，不能作为推演输入（需求说明书 §5.8）"
+    },
+    {
+      "scenario": "fmcg",
+      "factor": "raw_material_cost",
+      "reason": "raw_material_cost 不在 fmcg 的可干预白名单 ['price_index', 'commission_rate', 'logistics_mode'] 里：不可干预因子（宏观、天气、竞品动作）只能作为情景注释，不能作为推演输入（需求说明书 §5.8）"
+    },
+    {
+      "scenario": "fmcg",
+      "factor": "macro_ppi",
+      "reason": "macro_ppi 不在 fmcg 的可干预白名单 ['price_index', 'commission_rate', 'logistics_mode'] 里：不可干预因子（宏观、天气、竞品动作）只能作为情景注释，不能作为推演输入（需求说明书 §5.8）"
+    }
+  ],
+  "total": 5,
+  "rejected_total": 5,
+  "all_with_ranges": true,
+  "note": "口径说明：弹性由目标指标与因子代理的日序列估计（对数—对数回归；样本不足降级为有限差分），区间为 bootstrap 百分位区间；所有金额单位为分（代理口径除外，件单价/佣金率为无量纲或元）。弹性是历史共动，不是因果保证。"
+}

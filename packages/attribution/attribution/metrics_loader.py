@@ -70,6 +70,8 @@ class MetricTree:
     root: MetricNode
     calibers: dict[str, dict[str, Any]]
     raw: dict[str, Any]
+    #: What-If 的可干预因子白名单（顶层 ``intervenable_factors`` 段按场景取）
+    intervenable_factors: list[str] = field(default_factory=list)
 
     def find(self, code: str) -> MetricNode | None:
         return self.root.find(code)
@@ -156,6 +158,10 @@ def load_metrics_text(text: str) -> dict[str, MetricTree]:
             root=root,
             calibers=calibers,
             raw=scenario,
+            intervenable_factors=[
+                str(item)
+                for item in payload.get("intervenable_factors", {}).get(code, [])
+            ],
         )
     return trees
 

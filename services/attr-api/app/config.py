@@ -71,6 +71,14 @@ class Settings(BaseSettings):
     attr_observation_days: int = 42
     attr_permutations: int = 10_000
     attr_event_window_days: int = 3
+    # What-If 推演（技术规格 §5.6、需求说明书 §5.8）
+    #: 弹性估计窗口天数：按天序列要 ≥60 个观测点才走对数回归（主路径）
+    attr_whatif_window_days: int = 120
+    #: 调整档位默认上限：超出这个幅度只算外推，必须在输出里显式警告
+    attr_whatif_max_adjustment: float = 0.30
+    #: bootstrap 次数与固定种子：同一输入必须得到完全一致的输出
+    attr_whatif_bootstrap_iterations: int = 1000
+    attr_whatif_seed: int = 20260915
 
     # 大模型（只产出假设文本、SQL 草案与报告文字；数值一律不进模型）
     llm_provider: str = "openai_compat"

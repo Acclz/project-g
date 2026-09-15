@@ -151,3 +151,34 @@ def test_drilldown_rejects_empty_request(service: SessionService) -> None:
     session_id = _create(service)
     with pytest.raises(SessionError):
         service.drilldown(session_id, dimensions=())
+
+
+def test_whatif_runs_and_persists_curve(service: SessionService) -> None:
+    """What-If：同步返回区间曲线，并把弹性、前提条件与把握度落库（报告第 6 段的证据源）。"""
+
+    session_id = _create(service)
+    result = service.whatif(session_id, factor="price_index", adjustments=(0.0, 0.1))
+    assert result["session_id"] == session_id
+    assert result["status"] == STATUS_AWAITING
+    curve = result["whatif"]["curve"]
+    assert curve["points"] and curve["elasticity"]["sample_size"] >= 4
+    assert curve["base_value"] > 0
+    assert result["whatif"]["assumptions"]
+    records = service.whatif_records(session_id)
+    summary = [item for item in records if item["payload"].get("summary")]
+    assert summary, "推演小结必须落库"
+    assert summary[-1]["payload"]["factor"]["code"] == "price_index"
+    assert summary[-1]["payload"]["curve"]["points"]
+    # 推演结束后会话回到"等待用户"，执行位必须释放（可以接着再推一次）
+    again = service.whatif(session_id, factor="budget_share", adjustments=(0.0, -0.1))
+    assert again["whatif"]["factor"]["code"] == "budget_share"
+
+
+def test_whatif_rejects_non_intervenable_factor(service: SessionService) -> None:
+    session_id = _create(service)
+    with pytest.raises(ValueError) as excinfo:
+        service.whatif(session_id, factor="cvr")
+    assert "可干预" in str(excinfo.value)
+    # 被拒的请求不占执行位：会话状态没被改成 analysing/failed，推演可以照常进行
+    assert service.get(session_id).status == STATUS_CREATED
+    assert service.whatif_records(session_id) == []
