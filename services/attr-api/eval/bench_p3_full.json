@@ -1,0 +1,92 @@
+{
+  "label": "p3_full",
+  "command": "python services/attr-api/scripts/bench.py --label p3_full --repeat 50",
+  "date": "2026-09-15T14:21:11",
+  "environment": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.12.7",
+    "cpu_logical": 24,
+    "cpu_physical": 12,
+    "memory_gb": 31.2
+  },
+  "data_rows": {
+    "fact_ecom_daily": 1009706,
+    "fact_order": 1920179,
+    "fact_fmcg_daily": 1223040
+  },
+  "concurrency": 1,
+  "repeat": 50,
+  "results": [
+    {
+      "name": "dashboard_day",
+      "repeat": 50,
+      "p50_ms": 1.98,
+      "p95_ms": 2.15,
+      "max_ms": 2.44,
+      "min_ms": 1.92,
+      "error_rate": 0.0,
+      "threshold_ms": 2000,
+      "meets_threshold": true
+    },
+    {
+      "name": "dashboard_baseline_28d",
+      "repeat": 50,
+      "p50_ms": 13.31,
+      "p95_ms": 13.61,
+      "max_ms": 13.8,
+      "min_ms": 12.94,
+      "error_rate": 0.0,
+      "threshold_ms": null,
+      "meets_threshold": null
+    },
+    {
+      "name": "decompose_level1",
+      "repeat": 50,
+      "p50_ms": 131.17,
+      "p95_ms": 151.89,
+      "max_ms": 167.2,
+      "min_ms": 119.79,
+      "error_rate": 0.0,
+      "threshold_ms": 3000,
+      "meets_threshold": true
+    },
+    {
+      "name": "decompose_mixed_fmcg",
+      "repeat": 50,
+      "p50_ms": 175.91,
+      "p95_ms": 193.46,
+      "max_ms": 208.3,
+      "min_ms": 162.22,
+      "error_rate": 0.0,
+      "threshold_ms": null,
+      "meets_threshold": null
+    },
+    {
+      "name": "drilldown_orders",
+      "repeat": 50,
+      "p50_ms": 95.0,
+      "p95_ms": 113.57,
+      "max_ms": 122.94,
+      "min_ms": 82.2,
+      "error_rate": 0.0,
+      "threshold_ms": null,
+      "meets_threshold": null
+    },
+    {
+      "name": "sandbox_probe",
+      "repeat": 50,
+      "p50_ms": 562.99,
+      "p95_ms": 568.58,
+      "max_ms": 618.48,
+      "min_ms": 511.12,
+      "error_rate": 0.0,
+      "threshold_ms": 5000,
+      "meets_threshold": true
+    }
+  ],
+  "not_measured": [
+    "端到端完整归因（含 LLM，P4 起）",
+    "报告三格式导出（P5）",
+    "10 并发劣化（P6）"
+  ]
+}

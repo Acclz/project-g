@@ -10,16 +10,21 @@ from .conservation import ConservationError, assert_conservation, conservation_r
 from .diff import additive_contributions, contribution_rates
 from .lmdi import LmdiError, lmdi_contributions
 from .metrics_loader import MetricNode, MetricTree, load_metrics_file, load_metrics_text
+from .tree import DecompositionError, NodeResult, TreeResult, decompose_tree
 
 __all__ = [
     "ConservationError",
+    "DecompositionError",
     "LmdiError",
     "MetricNode",
     "MetricTree",
+    "NodeResult",
+    "TreeResult",
     "additive_contributions",
     "assert_conservation",
     "conservation_residual",
     "contribution_rates",
+    "decompose_tree",
     "lmdi_contributions",
     "load_metrics_file",
     "load_metrics_text",

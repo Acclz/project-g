@@ -1,0 +1,203 @@
+# 沙箱对抗测试集（验收标准 E4：≥10 个用例，拦截率必须 100%）
+#
+# 约定：
+#   expect: blocked —— 必须被拦下，且必须留下 sandbox_runs 审计记录
+#   expect: allowed —— 正控：正常查数 / 正常计算必须能跑通
+#                      （没有正控的 100% 拦截率没有意义：把一切都拒绝也能得到 100%）
+#   quotas          —— 个别用例覆盖配额，目的是让"超配额"类用例快速失败而不是等满 20 秒
+#
+# 覆盖 E4 要求的五类：逃逸 / 越权读表 / 超配额 / 网络访问 / 写业务表。
+version: 1
+updated: "2026-09-15"
+
+cases:
+  # ---------- 越权读表 ----------
+  - id: adv-01-read-app-table
+    category: 越权读表
+    kind: sql
+    expect: blocked
+    code: "SELECT * FROM users"
+    note: 业务表不在 dw.db 这个文件里，表名白名单必须拦下
+
+  - id: adv-02-read-app-schema
+    category: 越权读表
+    kind: sql
+    expect: blocked
+    code: "SELECT id, actor, action FROM app.audit_logs"
+    note: 带 schema 前缀同样要拦（只有空 schema 与 dw 放行）
+
+  # ---------- 逃逸 ----------
+  - id: adv-03-multi-statement
+    category: 逃逸
+    kind: sql
+    expect: blocked
+    code: "SELECT 1; DROP TABLE dim_region"
+    note: 多语句拼接
+
+  - id: adv-04-comment-bypass
+    category: 逃逸
+    kind: sql
+    expect: blocked
+    code: |
+      SELECT 1;
+      -- 下面这行看起来像注释，实际是第二条语句
+      DROP TABLE dim_region
+    note: 注释绕过（AST 判定后仍是两条语句）
+
+  - id: adv-05-attach-database
+    category: 逃逸
+    kind: sql
+    expect: blocked
+    code: "ATTACH DATABASE 'evil.db' AS evil"
+    note: 挂载外部数据库文件绕过只读
+
+  - id: adv-06-python-dunder-escape
+    category: 逃逸
+    kind: python
+    expect: blocked
+    code: |
+      result = ().__class__.__bases__[0].__subclasses__()
+    note: 经典 Python 沙箱逃逸链（dunder 属性被封）
+
+  - id: adv-07-python-eval
+    category: 逃逸
+    kind: python
+    expect: blocked
+    code: 'result = eval("1 + 1")'
+    note: 动态执行被封
+
+  # ---------- 写业务表 / 破坏数据 ----------
+  - id: adv-08-insert-audit-log
+    category: 写业务表
+    kind: sql
+    expect: blocked
+    code: >
+      INSERT INTO audit_logs (actor, action, target_type, detail_json)
+      VALUES ('attacker', 'tamper', 'sandbox', '{}')
+    note: 伪造审计记录（写业务表）
+
+  - id: adv-09-drop-table
+    category: 写业务表
+    kind: sql
+    expect: blocked
+    code: "DROP TABLE dw.dim_region"
+    note: DDL
+
+  - id: adv-10-update-fact
+    category: 写业务表
+    kind: sql
+    expect: blocked
+    code: "UPDATE dw.fact_ecom_daily SET gmv_cents = 0"
+    note: DML（改数仓数据）
+
+  - id: adv-11-sqlite-file-function
+    category: 写业务表
+    kind: sql
+    expect: blocked
+    code: "SELECT readfile('C:/Windows/win.ini')"
+    note: SQLite 文件读取函数
+
+  - id: adv-12-load-extension
+    category: 逃逸
+    kind: sql
+    expect: blocked
+    code: "SELECT load_extension('evil.dll')"
+    note: 加载外部扩展库
+
+  # ---------- 网络访问 ----------
+  - id: adv-13-python-import-os
+    category: 网络访问
+    kind: python
+    expect: blocked
+    code: |
+      import os
+      result = os.listdir(".")
+    note: 导入 os（进程与文件面）
+
+  - id: adv-14-python-import-socket
+    category: 网络访问
+    kind: python
+    expect: blocked
+    code: |
+      import socket
+      result = socket.create_connection(("example.com", 80))
+    note: 直接开套接字
+
+  - id: adv-15-pandas-url-read
+    category: 网络访问
+    kind: python
+    expect: blocked
+    code: |
+      import pandas as pd
+      df = pd.read_csv("https://example.com/data.csv")
+      result = len(df)
+    note: 从第三方库绕路联网（socket 被运行时掐死）
+
+  - id: adv-16-python-write-file
+    category: 写业务表
+    kind: python
+    expect: blocked
+    code: |
+      with open("C:/Windows/Temp/evil.txt", "w") as handle:
+          handle.write("x")
+    note: 沙箱目录之外写文件
+
+  # ---------- 超配额 ----------
+  - id: adv-17-row-limit
+    category: 超配额
+    kind: sql
+    expect: blocked
+    code: "SELECT * FROM dw.fact_order LIMIT 5000"
+    quotas: { max_rows: 1000 }
+    note: 结果集超过行数上限
+
+  - id: adv-18-scan-limit
+    category: 超配额
+    kind: sql
+    expect: blocked
+    code: "SELECT COUNT(*) FROM dw.fact_order AS a, dw.fact_order AS b"
+    quotas: { scan_steps: 200000, timeout_seconds: 15 }
+    note: 交叉连接制造全表扫描炸弹（progress handler 拦下）
+
+  - id: adv-19-dead-loop
+    category: 超配额
+    kind: python
+    expect: blocked
+    code: |
+      while True:
+          pass
+    quotas: { timeout_seconds: 3 }
+    note: 死循环（硬超时后 terminate→kill）
+
+  - id: adv-20-memory-bomb
+    category: 超配额
+    kind: python
+    expect: blocked
+    code: |
+      blocks = []
+      for _ in range(80):
+          blocks.append([0] * 1000000)
+      result = len(blocks)
+    quotas: { memory_mb: 256, timeout_seconds: 30 }
+    note: 内存炸弹（父进程轮询 RSS 后强杀；此处用列表而不是 bytes，否则 Windows 上按需分页不会计入 RSS）
+
+  # ---------- 正控：正常请求必须能跑通 ----------
+  - id: ctl-01-normal-sql
+    category: 正控
+    kind: sql
+    expect: allowed
+    code: >
+      SELECT COUNT(*) AS orders_paid, SUM(gmv_cents) AS gmv_cents
+      FROM dw.fact_ecom_daily
+      WHERE day BETWEEN '2026-06-01' AND '2026-06-07' AND channel_id = 2
+    note: 正常查数（沙箱不能把一切都拒绝）
+
+  - id: ctl-02-normal-python
+    category: 正控
+    kind: python
+    expect: allowed
+    code: |
+      import numpy as np
+      sample = np.array([12, 18, 7, 25, 9])
+      result = {"mean": float(sample.mean()), "max": int(sample.max())}
+    note: 正常数值计算（numpy 在白名单内）

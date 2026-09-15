@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pytest
 
+from app.config import Settings
 from app.warehouse.generator import GenerationStats, WarehouseGenerator
 
 
@@ -44,3 +45,15 @@ def fmcg_injection_warehouse(tmp_path_factory: pytest.TempPathFactory) -> SmallW
 
     root = tmp_path_factory.mktemp("dw_fmcg")
     return _generate(root, start=date(2026, 4, 1), days=21)
+
+
+@pytest.fixture(scope="session")
+def sandbox_settings(ecom_injection_warehouse: SmallWarehouse) -> Settings:
+    """指向临时数仓的配置：沙箱测试绝不允许碰仓库里的 ``.data/``。"""
+
+    root = ecom_injection_warehouse.dw_path.parent
+    return Settings(
+        warehouse_db_path=ecom_injection_warehouse.dw_path,
+        app_db_path=ecom_injection_warehouse.app_path,
+        sandbox_tmp_dir=root / "sandbox_tmp",
+    )

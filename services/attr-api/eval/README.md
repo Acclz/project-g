@@ -6,7 +6,9 @@
 | 文件 | 内容 | 产出阶段 |
 | --- | --- | --- |
 | `warehouse_gen_<profile>.json` | 数仓生成行数与耗时（生成器直接落盘） | P2 |
-| `bench_<label>.json` | 大盘 / 拆解 / 沙箱 / 导出的 P50、P95、最大值 | P3 起 |
+| `bench_<label>.json` | 大盘 / 拆解 / 沙箱 / 导出的 P50、P95、最大值与错误率（含机器规格与数据行数） | P3 起 |
+| `sandbox_adversarial.json` | 沙箱对抗用例逐条结果与拦截率（E4 证据） | P3 |
+| `decompose_demo.json` | 端到端分解演示：4 条预埋真因的分层贡献与真值核对 | P3 |
 | `attribution_eval_<label>.json` | 归因评测集：Top-1 / Top-3 / 贡献额相对误差 | P6 |
 | `trap_eval_<label>.json` | 伪相关陷阱集：误纳率 | P6 |
 

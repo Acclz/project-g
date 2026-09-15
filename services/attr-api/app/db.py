@@ -49,10 +49,22 @@ def connect_warehouse_readonly(path: Path) -> sqlite3.Connection:
     ``mode=ro`` 保证文件写不进去，``PRAGMA query_only`` 保证连临时表也建不了。
     """
 
-    uri = warehouse_readonly_uri(path)
+    return open_readonly_connection(warehouse_readonly_uri(path))
+
+
+def open_readonly_connection(dsn: str) -> sqlite3.Connection:
+    """按只读 DSN 建立连接（服务、沙箱子进程共用这一处实现）。
+
+    ``dsn`` 必须是 ``warehouse_readonly_uri()`` 的产物；沙箱子进程从环境变量拿到同一个串，
+    因此"只读"这件事只有一份实现，不存在两边规则不一致的可能。
+    """
+
+    if not dsn:
+        raise ValueError("只读连接必须提供 DSN")
+    uri = dsn
     conn = sqlite3.connect(uri, uri=True, timeout=5.0)
     conn.execute("PRAGMA query_only = ON")
-    if path.exists():
+    if "memory:" not in uri:
         conn.execute(f"ATTACH DATABASE '{uri}' AS {WAREHOUSE_ALIAS}")
     conn.row_factory = sqlite3.Row
     return conn

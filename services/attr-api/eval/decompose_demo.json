@@ -1,0 +1,936 @@
+{
+  "cases": [
+    {
+      "ground_truth_id": 1,
+      "scenario": "ecom",
+      "note": "大促后付费投放渠道支付成功率下滑 22%，GMV 随之走低（场景 A 主案例）；因子口径 cvr（0.127689 → 0.101281）；LMDI 复核残差 3.191e-01 分",
+      "slice": {
+        "channel": [
+          "paid_ads"
+        ]
+      },
+      "base": {
+        "start": "2026-05-29",
+        "end": "2026-06-04",
+        "days": 7,
+        "label": "上一期"
+      },
+      "current": {
+        "start": "2026-06-05",
+        "end": "2026-06-11",
+        "days": 7,
+        "label": "注入窗口"
+      },
+      "expected_factor": "cvr",
+      "truth_contribution_cents": -17336421,
+      "observed_contribution_cents": -18511951,
+      "relative_error": 0.06780695969485281,
+      "top1_hit": true,
+      "top3_hit": true,
+      "top3": [
+        {
+          "factor": "cvr",
+          "contribution": -18511951.1392699,
+          "rate": 0.651962022381878
+        },
+        {
+          "factor": "aov",
+          "contribution": -13142627.561956165,
+          "rate": 0.4628628273833424
+        },
+        {
+          "factor": "uv",
+          "contribution": 3260361.701225954,
+          "rate": -0.11482484976521642
+        }
+      ],
+      "max_relative_residual": 1.4134934656014426e-14,
+      "ok": true,
+      "report": {
+        "scenario": "ecom",
+        "scenario_name": "电商零售",
+        "metric": {
+          "code": "gmv",
+          "name": "GMV"
+        },
+        "base": {
+          "start": "2026-05-29",
+          "end": "2026-06-04",
+          "days": 7,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-06-05",
+          "end": "2026-06-11",
+          "days": 7,
+          "label": "注入窗口"
+        },
+        "slice": {
+          "channel": [
+            "paid_ads"
+          ]
+        },
+        "tolerance": 1e-09,
+        "max_residual": 1.1175870895385742e-07,
+        "max_relative_residual": 1.4134934656014426e-14,
+        "ok": true,
+        "nodes": [
+          {
+            "code": "gmv",
+            "name": "GMV",
+            "method": "lmdi",
+            "base_total": 94882388.0,
+            "current_total": 66488171.0,
+            "delta": -28394217.0,
+            "residual": 1.1175870895385742e-07,
+            "relative_residual": 3.9359672765006135e-15,
+            "contributions": [
+              {
+                "factor": "cvr",
+                "contribution": -18511951.1392699,
+                "rate": 0.651962022381878
+              },
+              {
+                "factor": "aov",
+                "contribution": -13142627.561956165,
+                "rate": 0.4628628273833424
+              },
+              {
+                "factor": "uv",
+                "contribution": 3260361.701225954,
+                "rate": -0.11482484976521642
+              }
+            ],
+            "detail": {
+              "residual": 1.1175870895385742e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 94882388.0,
+              "original_total_current": 66488171.0,
+              "recomputed_total_base": 94882388.0,
+              "recomputed_total_current": 66488171.0,
+              "decomposable": true,
+              "level": "composite",
+              "structure": "multiplicative",
+              "formula": "uv * cvr * aov",
+              "caliber": "gmv_paid_success",
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "uv",
+            "name": "访客数",
+            "method": "lmdi",
+            "base_total": 49402.0,
+            "current_total": 51461.0,
+            "delta": 2059.0,
+            "residual": 2.9103830456733704e-11,
+            "relative_residual": 1.4134934656014426e-14,
+            "contributions": [
+              {
+                "factor": "impressions",
+                "contribution": 2525.3353245056473,
+                "rate": 1.2264863159328059
+              },
+              {
+                "factor": "ctr",
+                "contribution": -466.3353245056182,
+                "rate": -0.22648631593279173
+              }
+            ],
+            "detail": {
+              "residual": 2.9103830456733704e-11,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 49402.0,
+              "original_total_current": 51461.0,
+              "recomputed_total_base": 49402.0,
+              "recomputed_total_current": 51461.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "impressions * ctr",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "cvr",
+            "name": "支付转化率",
+            "method": "lmdi",
+            "base_total": 0.12770738026800535,
+            "current_total": 0.10128058141116573,
+            "delta": -0.026426798856839614,
+            "residual": 1.3877787807814457e-17,
+            "relative_residual": 1.3877787807814457e-17,
+            "contributions": [
+              {
+                "factor": "pay_success_rate",
+                "contribution": -0.026376973088931093,
+                "rate": 0.9981145742176932
+              },
+              {
+                "factor": "cart_rate",
+                "contribution": -0.00011464330879331868,
+                "rate": 0.004338145887981716
+              },
+              {
+                "factor": "order_rate",
+                "contribution": 6.481754088478332e-05,
+                "rate": -0.0024527201056743827
+              }
+            ],
+            "detail": {
+              "residual": 1.3877787807814457e-17,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 0.12770738026800535,
+              "original_total_current": 0.10128058141116573,
+              "recomputed_total_base": 0.12770738026800535,
+              "recomputed_total_current": 0.10128058141116573,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "cart_rate * order_rate * pay_success_rate",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "aov",
+            "name": "客单价",
+            "method": "lmdi",
+            "base_total": 15039.211919480107,
+            "current_total": 12756.74808135073,
+            "delta": -2282.463838129377,
+            "residual": 9.094947017729282e-13,
+            "relative_residual": 3.9847058541716763e-16,
+            "contributions": [
+              {
+                "factor": "unit_price",
+                "contribution": -2467.3848401767973,
+                "rate": 1.0810181519453883
+              },
+              {
+                "factor": "attach_rate",
+                "contribution": 184.92100204742127,
+                "rate": -0.08101815194538883
+              }
+            ],
+            "detail": {
+              "residual": 9.094947017729282e-13,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 15039.211919480107,
+              "original_total_current": 12756.74808135073,
+              "recomputed_total_base": 15039.211919480107,
+              "recomputed_total_current": 12756.74808135073,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "unit_price * attach_rate",
+              "caliber": null,
+              "sign": 1.0
+            }
+          }
+        ],
+        "skipped_targets": []
+      }
+    },
+    {
+      "ground_truth_id": 2,
+      "scenario": "ecom",
+      "note": "家电厨具品类曝光量下滑 28%，转化率不变，属\"流量侧\"异动；因子口径 uv（12516.000000 → 8997.000000）；LMDI 复核残差 -1.849e-01 分",
+      "slice": {
+        "category": [
+          "appliance"
+        ]
+      },
+      "base": {
+        "start": "2026-03-02",
+        "end": "2026-03-08",
+        "days": 7,
+        "label": "上一期"
+      },
+      "current": {
+        "start": "2026-03-09",
+        "end": "2026-03-15",
+        "days": 7,
+        "label": "注入窗口"
+      },
+      "expected_factor": "uv",
+      "truth_contribution_cents": -28991673,
+      "observed_contribution_cents": -35148876,
+      "relative_error": 0.21237832670091167,
+      "top1_hit": true,
+      "top3_hit": true,
+      "top3": [
+        {
+          "factor": "uv",
+          "contribution": -35148876.169517,
+          "rate": 0.9156221403188255
+        },
+        {
+          "factor": "aov",
+          "contribution": -4001173.646091973,
+          "rate": 0.10422988092004062
+        },
+        {
+          "factor": "cvr",
+          "contribution": 762078.8156092364,
+          "rate": -0.019852021238872884
+        }
+      ],
+      "max_relative_residual": 6.793021722672813e-15,
+      "ok": true,
+      "report": {
+        "scenario": "ecom",
+        "scenario_name": "电商零售",
+        "metric": {
+          "code": "gmv",
+          "name": "GMV"
+        },
+        "base": {
+          "start": "2026-03-02",
+          "end": "2026-03-08",
+          "days": 7,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-03-09",
+          "end": "2026-03-15",
+          "days": 7,
+          "label": "注入窗口"
+        },
+        "slice": {
+          "category": [
+            "appliance"
+          ]
+        },
+        "tolerance": 1e-09,
+        "max_residual": 2.60770320892334e-07,
+        "max_relative_residual": 6.793021722672813e-15,
+        "ok": true,
+        "nodes": [
+          {
+            "code": "gmv",
+            "name": "GMV",
+            "method": "lmdi",
+            "base_total": 112510757.0,
+            "current_total": 74122786.0,
+            "delta": -38387971.0,
+            "residual": 2.60770320892334e-07,
+            "relative_residual": 6.793021722672813e-15,
+            "contributions": [
+              {
+                "factor": "uv",
+                "contribution": -35148876.169517,
+                "rate": 0.9156221403188255
+              },
+              {
+                "factor": "aov",
+                "contribution": -4001173.646091973,
+                "rate": 0.10422988092004062
+              },
+              {
+                "factor": "cvr",
+                "contribution": 762078.8156092364,
+                "rate": -0.019852021238872884
+              }
+            ],
+            "detail": {
+              "residual": 2.60770320892334e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 112510757.0,
+              "original_total_current": 74122786.0,
+              "recomputed_total_base": 112510757.0,
+              "recomputed_total_current": 74122786.0,
+              "decomposable": true,
+              "level": "composite",
+              "structure": "multiplicative",
+              "formula": "uv * cvr * aov",
+              "caliber": "gmv_paid_success",
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "uv",
+            "name": "访客数",
+            "method": "lmdi",
+            "base_total": 13184.0,
+            "current_total": 8997.0,
+            "delta": -4187.0,
+            "residual": 4.547473508864641e-12,
+            "relative_residual": 1.0860935058191165e-15,
+            "contributions": [
+              {
+                "factor": "impressions",
+                "contribution": -4298.478524442247,
+                "rate": 1.0266249162747187
+              },
+              {
+                "factor": "ctr",
+                "contribution": 111.47852444225173,
+                "rate": -0.02662491627471978
+              }
+            ],
+            "detail": {
+              "residual": 4.547473508864641e-12,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 13184.0,
+              "original_total_current": 8997.0,
+              "recomputed_total_base": 13184.0,
+              "recomputed_total_current": 8997.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "impressions * ctr",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "cvr",
+            "name": "支付转化率",
+            "method": "lmdi",
+            "base_total": 0.12742718446601942,
+            "current_total": 0.12848727353562298,
+            "delta": 0.0010600890696035592,
+            "residual": 5.5294310796760726e-17,
+            "relative_residual": 5.5294310796760726e-17,
+            "contributions": [
+              {
+                "factor": "cart_rate",
+                "contribution": 0.0009051148173687219,
+                "rate": 0.8538101592795472
+              },
+              {
+                "factor": "order_rate",
+                "contribution": 0.0007392189759205021,
+                "rate": 0.6973177982081707
+              },
+              {
+                "factor": "pay_success_rate",
+                "contribution": -0.0005842447236857201,
+                "rate": -0.5511279574877701
+              }
+            ],
+            "detail": {
+              "residual": 5.5294310796760726e-17,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 0.12742718446601942,
+              "original_total_current": 0.12848727353562298,
+              "recomputed_total_base": 0.12742718446601942,
+              "recomputed_total_current": 0.12848727353562298,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "cart_rate * order_rate * pay_success_rate",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "aov",
+            "name": "客单价",
+            "method": "lmdi",
+            "base_total": 66970.68869047619,
+            "current_total": 64120.0570934256,
+            "delta": -2850.6315970505893,
+            "residual": 1.1368683772161603e-11,
+            "relative_residual": 3.988128028863579e-15,
+            "contributions": [
+              {
+                "factor": "unit_price",
+                "contribution": -2267.442156205715,
+                "rate": 0.7954174641688978
+              },
+              {
+                "factor": "attach_rate",
+                "contribution": -583.1894408448628,
+                "rate": 0.20458253583109817
+              }
+            ],
+            "detail": {
+              "residual": 1.1368683772161603e-11,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 66970.68869047619,
+              "original_total_current": 64120.0570934256,
+              "recomputed_total_base": 66970.68869047619,
+              "recomputed_total_current": 64120.0570934256,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "unit_price * attach_rate",
+              "caliber": null,
+              "sign": 1.0
+            }
+          }
+        ],
+        "skipped_targets": []
+      }
+    },
+    {
+      "ground_truth_id": 3,
+      "scenario": "fmcg",
+      "note": "粮油与乳制品单位原料成本上升 8%（PPI 成本形态），毛利额被侵蚀；成本项变动 45165017 分，毛利额贡献 = −Δ成本（差额分析，sign = -1）",
+      "slice": {
+        "category": [
+          "grain_oil",
+          "dairy"
+        ]
+      },
+      "base": {
+        "start": "2026-03-23",
+        "end": "2026-04-05",
+        "days": 14,
+        "label": "上一期"
+      },
+      "current": {
+        "start": "2026-04-06",
+        "end": "2026-04-19",
+        "days": 14,
+        "label": "注入窗口"
+      },
+      "expected_factor": "raw_material_cost",
+      "truth_contribution_cents": -45165017,
+      "observed_contribution_cents": -46759210,
+      "relative_error": 0.035297075167712216,
+      "top1_hit": true,
+      "top3_hit": true,
+      "top3": [
+        {
+          "factor": "raw_material_cost",
+          "contribution": -46759210.0,
+          "rate": 1.0354792726808892
+        },
+        {
+          "factor": "revenue",
+          "contribution": 1614999.0,
+          "rate": -0.035764034291861715
+        },
+        {
+          "factor": "logistics_cost",
+          "contribution": 273504.0,
+          "rate": -0.006056726001044798
+        }
+      ],
+      "max_relative_residual": 3.073654734585285e-13,
+      "ok": true,
+      "report": {
+        "scenario": "fmcg",
+        "scenario_name": "快消品",
+        "metric": {
+          "code": "gross_profit",
+          "name": "毛利额"
+        },
+        "base": {
+          "start": "2026-03-23",
+          "end": "2026-04-05",
+          "days": 14,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-04-06",
+          "end": "2026-04-19",
+          "days": 14,
+          "label": "注入窗口"
+        },
+        "slice": {
+          "category": [
+            "grain_oil",
+            "dairy"
+          ]
+        },
+        "tolerance": 1e-09,
+        "max_residual": 5.960464477539062e-07,
+        "max_relative_residual": 3.073654734585285e-13,
+        "ok": true,
+        "nodes": [
+          {
+            "code": "gross_profit",
+            "name": "毛利额",
+            "method": "diff",
+            "base_total": 84261773.0,
+            "current_total": 39104703.0,
+            "delta": -45157070.0,
+            "residual": 0.0,
+            "relative_residual": 0.0,
+            "contributions": [
+              {
+                "factor": "raw_material_cost",
+                "contribution": -46759210.0,
+                "rate": 1.0354792726808892
+              },
+              {
+                "factor": "revenue",
+                "contribution": 1614999.0,
+                "rate": -0.035764034291861715
+              },
+              {
+                "factor": "logistics_cost",
+                "contribution": 273504.0,
+                "rate": -0.006056726001044798
+              },
+              {
+                "factor": "channel_commission",
+                "contribution": -205670.0,
+                "rate": 0.004554547050993344
+              },
+              {
+                "factor": "other_cost",
+                "contribution": -80693.0,
+                "rate": 0.001786940561023999
+              }
+            ],
+            "detail": {
+              "decomposable": true,
+              "level": "composite",
+              "structure": "additive",
+              "formula": "revenue - raw_material_cost - logistics_cost - channel_commission - other_cost",
+              "caliber": "gross_profit_ex_tax",
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "revenue",
+            "name": "营收",
+            "method": "lmdi",
+            "base_total": 771357665.0,
+            "current_total": 772972664.0,
+            "delta": 1614999.0,
+            "residual": 4.9639493227005e-07,
+            "relative_residual": 3.073654734585285e-13,
+            "contributions": [
+              {
+                "factor": "avg_price",
+                "contribution": 4172085.969118669,
+                "rate": 2.583336564987761
+              },
+              {
+                "factor": "units",
+                "contribution": -2557086.9691191656,
+                "rate": -1.5833365649880684
+              }
+            ],
+            "detail": {
+              "residual": 4.9639493227005e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 771357665.0,
+              "original_total_current": 772972664.0,
+              "recomputed_total_base": 771357665.0,
+              "recomputed_total_current": 772972664.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "units * avg_price",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "raw_material_cost",
+            "name": "原材料成本",
+            "method": "lmdi",
+            "base_total": 562979472.0,
+            "current_total": 609738682.0,
+            "delta": 46759210.0,
+            "residual": 5.960464477539062e-07,
+            "relative_residual": 1.2747145380640653e-14,
+            "contributions": [
+              {
+                "factor": "unit_cost",
+                "contribution": 48699956.43353777,
+                "rate": 1.0415051159661972
+              },
+              {
+                "factor": "raw_units",
+                "contribution": -1940746.433538365,
+                "rate": -0.04150511596620997
+              }
+            ],
+            "detail": {
+              "residual": 5.960464477539062e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 562979472.0,
+              "original_total_current": 609738682.0,
+              "recomputed_total_base": 562979472.0,
+              "recomputed_total_current": 609738682.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "units * unit_cost",
+              "caliber": null,
+              "sign": -1.0
+            }
+          },
+          {
+            "code": "channel_commission",
+            "name": "渠道佣金",
+            "method": "lmdi",
+            "base_total": 11400107.0,
+            "current_total": 11605777.0,
+            "delta": 205670.0,
+            "residual": 2.3865140974521637e-09,
+            "relative_residual": 1.1603608194934427e-14,
+            "contributions": [
+              {
+                "factor": "commission_rate",
+                "contribution": 181611.9972111306,
+                "rate": 0.8830261934707571
+              },
+              {
+                "factor": "commission_base",
+                "contribution": 24058.002788871792,
+                "rate": 0.1169738065292546
+              }
+            ],
+            "detail": {
+              "residual": 2.3865140974521637e-09,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 11400107.0,
+              "original_total_current": 11605777.0,
+              "recomputed_total_base": 11400107.0,
+              "recomputed_total_current": 11605777.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "revenue * commission_rate",
+              "caliber": null,
+              "sign": -1.0
+            }
+          }
+        ],
+        "skipped_targets": []
+      }
+    },
+    {
+      "ground_truth_id": 4,
+      "scenario": "fmcg",
+      "note": "经销商渠道物流履约成本上涨 60%，属可核对的单点成本异动；成本项变动 18333617 分，毛利额贡献 = −Δ成本（差额分析，sign = -1）",
+      "slice": {
+        "channel": [
+          "distributor"
+        ]
+      },
+      "base": {
+        "start": "2026-01-26",
+        "end": "2026-02-01",
+        "days": 7,
+        "label": "上一期"
+      },
+      "current": {
+        "start": "2026-02-02",
+        "end": "2026-02-08",
+        "days": 7,
+        "label": "注入窗口"
+      },
+      "expected_factor": "logistics_cost",
+      "truth_contribution_cents": -18333617,
+      "observed_contribution_cents": -18384857,
+      "relative_error": 0.0027948658467120808,
+      "top1_hit": false,
+      "top3_hit": true,
+      "top3": [
+        {
+          "factor": "revenue",
+          "contribution": -26891771.0,
+          "rate": 0.9044738404309169
+        },
+        {
+          "factor": "logistics_cost",
+          "contribution": -18384857.0,
+          "rate": 0.6183535556867276
+        },
+        {
+          "factor": "raw_material_cost",
+          "contribution": 14200095.0,
+          "rate": -0.47760389076397614
+        }
+      ],
+      "max_relative_residual": 5.627249458683766e-14,
+      "ok": true,
+      "report": {
+        "scenario": "fmcg",
+        "scenario_name": "快消品",
+        "metric": {
+          "code": "gross_profit",
+          "name": "毛利额"
+        },
+        "base": {
+          "start": "2026-01-26",
+          "end": "2026-02-01",
+          "days": 7,
+          "label": "上一期"
+        },
+        "current": {
+          "start": "2026-02-02",
+          "end": "2026-02-08",
+          "days": 7,
+          "label": "注入窗口"
+        },
+        "slice": {
+          "channel": [
+            "distributor"
+          ]
+        },
+        "tolerance": 1e-09,
+        "max_residual": 9.648501873016357e-07,
+        "max_relative_residual": 5.627249458683766e-14,
+        "ok": true,
+        "nodes": [
+          {
+            "code": "gross_profit",
+            "name": "毛利额",
+            "method": "diff",
+            "base_total": 176429844.0,
+            "current_total": 146697894.0,
+            "delta": -29731950.0,
+            "residual": 0.0,
+            "relative_residual": 0.0,
+            "contributions": [
+              {
+                "factor": "revenue",
+                "contribution": -26891771.0,
+                "rate": 0.9044738404309169
+              },
+              {
+                "factor": "logistics_cost",
+                "contribution": -18384857.0,
+                "rate": 0.6183535556867276
+              },
+              {
+                "factor": "raw_material_cost",
+                "contribution": 14200095.0,
+                "rate": -0.47760389076397614
+              },
+              {
+                "factor": "other_cost",
+                "contribution": 1344583.0,
+                "rate": -0.04522350535366836
+              },
+              {
+                "factor": "channel_commission",
+                "contribution": 0.0,
+                "rate": -0.0
+              }
+            ],
+            "detail": {
+              "decomposable": true,
+              "level": "composite",
+              "structure": "additive",
+              "formula": "revenue - raw_material_cost - logistics_cost - channel_commission - other_cost",
+              "caliber": "gross_profit_ex_tax",
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "revenue",
+            "name": "营收",
+            "method": "lmdi",
+            "base_total": 708375183.0,
+            "current_total": 681483412.0,
+            "delta": -26891771.0,
+            "residual": 9.648501873016357e-07,
+            "relative_residual": 3.587901247938024e-14,
+            "contributions": [
+              {
+                "factor": "avg_price",
+                "contribution": -27049548.57343001,
+                "rate": 1.0058671321211983
+              },
+              {
+                "factor": "units",
+                "contribution": 157777.5734309744,
+                "rate": -0.005867132121234201
+              }
+            ],
+            "detail": {
+              "residual": 9.648501873016357e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 708375183.0,
+              "original_total_current": 681483412.0,
+              "recomputed_total_base": 708375183.0,
+              "recomputed_total_current": 681483412.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "units * avg_price",
+              "caliber": null,
+              "sign": 1.0
+            }
+          },
+          {
+            "code": "raw_material_cost",
+            "name": "原材料成本",
+            "method": "lmdi",
+            "base_total": 466021822.0,
+            "current_total": 451821727.0,
+            "delta": -14200095.0,
+            "residual": 7.990747690200806e-07,
+            "relative_residual": 5.627249458683766e-14,
+            "contributions": [
+              {
+                "factor": "unit_cost",
+                "contribution": -14304293.835435694,
+                "rate": 1.0073378970658784
+              },
+              {
+                "factor": "raw_units",
+                "contribution": 104198.83543649263,
+                "rate": -0.007337897065934604
+              }
+            ],
+            "detail": {
+              "residual": 7.990747690200806e-07,
+              "zero_substituted": false,
+              "substituted_factors": [],
+              "totals_recomputed": false,
+              "original_total_base": 466021822.0,
+              "original_total_current": 451821727.0,
+              "recomputed_total_base": 466021822.0,
+              "recomputed_total_current": 451821727.0,
+              "decomposable": true,
+              "level": "derived",
+              "structure": "multiplicative",
+              "formula": "units * unit_cost",
+              "caliber": null,
+              "sign": -1.0
+            }
+          }
+        ],
+        "skipped_targets": [
+          {
+            "code": "channel_commission",
+            "reason": "子因子取值非正（commission_rate）：LMDI 要求因子严格为正，按零值预案改为不分解"
+          }
+        ]
+      }
+    }
+  ],
+  "total": 4,
+  "top1_hits": 3,
+  "top3_hits": 4,
+  "all_conserved": true,
+  "note": "口径说明：真值记录的是注入本身的贡献，分解看到的是两期全部变化，因此这里只核对方向与 Top-1 排名；贡献额的严格比较由 P6 评测集（配套对照窗口）负责"
+}
