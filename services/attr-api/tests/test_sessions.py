@@ -1,0 +1,107 @@
+"""会话层测试：状态机、上下文锁定、并发隔离、步骤流与"结果过期"。"""
+
+from __future__ import annotations
+
+import os
+import time
+
+import pytest
+from conftest import SmallWarehouse
+
+from app.config import Settings
+from app.sandbox.runner import SandboxRunner
+from app.services.decomposition import MetricEngine, Period, SliceFilter
+from app.services.sessions import (
+    STATUS_AWAITING,
+    STATUS_CREATED,
+    ContextLocked,
+    SessionBusy,
+    SessionError,
+    SessionService,
+)
+
+
+@pytest.fixture(scope="module")
+def service(sandbox_settings: Settings, ecom_injection_warehouse: SmallWarehouse) -> SessionService:
+    return SessionService(
+        sandbox_settings,
+        engine=MetricEngine(sandbox_settings),
+        sandbox=SandboxRunner(sandbox_settings),
+    )
+
+
+def _create(service: SessionService) -> int:
+    state = service.create(
+        scenario="ecom",
+        base=Period("2026-06-01", "2026-06-04"),
+        current=Period("2026-06-05", "2026-06-08"),
+        slice_filter=SliceFilter({"channel": ("paid_ads",)}),
+        title="pytest 会话",
+    )
+    assert state.status == STATUS_CREATED
+    assert state.current.start == "2026-06-05" and state.current.end == "2026-06-08"
+    return state.id
+
+
+def test_create_locks_context_and_lists(service: SessionService) -> None:
+    session_id = _create(service)
+    state = service.get(session_id)
+    assert state.caliber_version == 1
+    assert state.slice_filter.filters == {"channel": ("paid_ads",)}
+    assert state.data_digest and state.data_digest != "missing"
+    listed = service.list(limit=5)
+    assert any(item["id"] == session_id for item in listed)
+
+
+def test_unknown_session_raises(service: SessionService) -> None:
+    with pytest.raises(SessionError):
+        service.get(999999)
+
+
+def test_drilldown_can_only_narrow(service: SessionService) -> None:
+    session_id = _create(service)
+    narrowed = service.drilldown(
+        session_id,
+        extra_slice=SliceFilter({"channel": ("paid_ads",), "region": ("east",)}),
+    )
+    assert narrowed.slice_filter.filters == {"channel": ("paid_ads",), "region": ("east",)}
+    with pytest.raises(ContextLocked):
+        service.drilldown(session_id, extra_slice=SliceFilter({"channel": ("catering",)}))
+
+
+def test_run_transitions_and_persists_results(service: SessionService) -> None:
+    session_id = _create(service)
+    service.start(session_id)
+    # 并发隔离：同一会话第二个任务必须被拒
+    with pytest.raises(SessionBusy):
+        service.start(session_id)
+    done = service.wait(session_id, timeout=600)
+    assert done.status in (STATUS_AWAITING, "failed"), done.status
+    assert done.steps, "每次状态迁移都要落步骤"
+    if done.status == STATUS_AWAITING:
+        assert service.hypotheses(session_id), "分析完成后应落库假设"
+        assert service.evidence(session_id), "每条假设都要有证据"
+        events = service.events(session_id)
+        assert len(events) >= 2
+        assert [event["seq"] for event in events] == sorted(event["seq"] for event in events)
+
+
+def test_result_expires_after_data_refresh(
+    service: SessionService, sandbox_settings: Settings
+) -> None:
+    session_id = _create(service)
+    assert service.is_stale(session_id) is False
+    # 模拟"数据刷新"：改一下数仓文件的时间戳，指纹随之变化
+    time.sleep(0.01)
+    os.utime(sandbox_settings.warehouse_db, None)
+    assert service.is_stale(session_id) is True, "数据刷新后旧结论必须判为过期"
+
+
+def test_control_actions(service: SessionService) -> None:
+    session_id = _create(service)
+    paused = service.control(session_id, "pause")
+    assert paused.status == STATUS_AWAITING
+    cancelled = service.control(session_id, "cancel")
+    assert cancelled.status == "failed"
+    with pytest.raises(SessionError):
+        service.control(session_id, "not-a-real-action")

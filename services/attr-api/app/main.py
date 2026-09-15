@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app import __version__
-from app.api import evaluation, events_api, health, metrics, sandbox_api
+from app.api import evaluation, events_api, health, metrics, sandbox_api, sessions_api
 from app.config import get_settings
 
 
@@ -31,6 +31,7 @@ def create_app() -> FastAPI:
     app.include_router(sandbox_api.router, prefix="/api")
     app.include_router(evaluation.router, prefix="/api")
     app.include_router(events_api.router, prefix="/api")
+    app.include_router(sessions_api.router, prefix="/api")
     return app
 
 
