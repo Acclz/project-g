@@ -1,0 +1,268 @@
+/* 样式从简：先把三条链路在界面跑通，视觉细节不抢功能（需求说明书 §4 的页面结构优先） */
+
+:root {
+  --bg: #f5f7fa;
+  --panel: #ffffff;
+  --line: #d8dee9;
+  --text: #1f2933;
+  --muted: #6b7684;
+  --accent: #1f6feb;
+  --danger: #c0392b;
+  --warn: #b7791f;
+  --ok: #2f855a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Microsoft YaHei', 'PingFang SC', system-ui, sans-serif;
+  font-size: 13px;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 10px 18px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand strong {
+  font-size: 15px;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.tab {
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.tab:hover {
+  background: #eef2f7;
+}
+
+.tab--active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: #eaf1fd;
+}
+
+.page {
+  padding: 14px 18px 32px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.panel h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 260px minmax(360px, 1fr) minmax(360px, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--muted);
+}
+
+input,
+select,
+textarea {
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font: inherit;
+  color: var(--text);
+  background: #fff;
+}
+
+button {
+  padding: 6px 12px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+
+button.secondary {
+  background: #fff;
+  color: var(--accent);
+}
+
+button.ghost {
+  background: #fff;
+  color: var(--muted);
+  border-color: var(--line);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--line);
+  padding: 4px 6px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.scroll {
+  max-height: 340px;
+  overflow: auto;
+}
+
+.pill {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.pill--ok {
+  color: var(--ok);
+  border-color: var(--ok);
+}
+
+.pill--warn {
+  color: var(--warn);
+  border-color: var(--warn);
+}
+
+.pill--danger {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.error {
+  color: var(--danger);
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.step {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  border-left: 3px solid var(--line);
+  padding: 2px 6px;
+}
+
+.step--running {
+  border-left-color: var(--accent);
+}
+
+.step--ok {
+  border-left-color: var(--ok);
+}
+
+.step--bad {
+  border-left-color: var(--danger);
+}
+
+.chart {
+  width: 100%;
+  height: 240px;
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 2px 8px;
+}
+
+.kv dt {
+  color: var(--muted);
+}
+
+.kv dd {
+  margin: 0;
+}
+
+.segment {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+  background: #fff;
+}
+
+.segment h4 {
+  margin: 0 0 6px;
+}
+
+.checkline {
+  font-family: 'Consolas', monospace;
+}

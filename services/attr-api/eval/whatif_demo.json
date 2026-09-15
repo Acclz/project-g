@@ -166,7 +166,7 @@
           {
             "kind": "whatif",
             "status": "series",
-            "duration_ms": 28,
+            "duration_ms": 30,
             "payload": {
               "paired_days": 120,
               "window": {
@@ -181,7 +181,7 @@
           {
             "kind": "whatif",
             "status": "elasticity",
-            "duration_ms": 72,
+            "duration_ms": 85,
             "payload": {
               "factor": "budget_share",
               "value": 0.0,
@@ -275,7 +275,7 @@
             }
           }
         ],
-        "duration_ms": 105
+        "duration_ms": 119
       }
     },
     {
@@ -436,7 +436,7 @@
           {
             "kind": "whatif",
             "status": "series",
-            "duration_ms": 36,
+            "duration_ms": 33,
             "payload": {
               "paired_days": 120,
               "window": {
@@ -451,7 +451,7 @@
           {
             "kind": "whatif",
             "status": "elasticity",
-            "duration_ms": 65,
+            "duration_ms": 66,
             "payload": {
               "factor": "price_index",
               "value": 0.4392730735974747,
@@ -542,7 +542,7 @@
             }
           }
         ],
-        "duration_ms": 105
+        "duration_ms": 102
       }
     },
     {
@@ -712,7 +712,7 @@
           {
             "kind": "whatif",
             "status": "series",
-            "duration_ms": 95,
+            "duration_ms": 88,
             "payload": {
               "paired_days": 120,
               "window": {
@@ -727,7 +727,7 @@
           {
             "kind": "whatif",
             "status": "elasticity",
-            "duration_ms": 78,
+            "duration_ms": 66,
             "payload": {
               "factor": "price_index",
               "value": -0.001453335972890024,
@@ -821,7 +821,7 @@
             }
           }
         ],
-        "duration_ms": 181
+        "duration_ms": 163
       }
     },
     {
@@ -991,7 +991,7 @@
           {
             "kind": "whatif",
             "status": "series",
-            "duration_ms": 97,
+            "duration_ms": 92,
             "payload": {
               "paired_days": 120,
               "window": {
@@ -1006,7 +1006,7 @@
           {
             "kind": "whatif",
             "status": "elasticity",
-            "duration_ms": 70,
+            "duration_ms": 84,
             "payload": {
               "factor": "commission_rate",
               "value": -0.0269442430490287,
@@ -1034,7 +1034,7 @@
           {
             "kind": "whatif",
             "status": "curve",
-            "duration_ms": 10,
+            "duration_ms": 7,
             "payload": {
               "base_value": 39104703.0,
               "factor_base": 0.015014472749840996,
@@ -1100,7 +1100,7 @@
             }
           }
         ],
-        "duration_ms": 178
+        "duration_ms": 185
       }
     },
     {
@@ -1270,7 +1270,7 @@
           {
             "kind": "whatif",
             "status": "series",
-            "duration_ms": 103,
+            "duration_ms": 112,
             "payload": {
               "paired_days": 120,
               "window": {
@@ -1285,7 +1285,7 @@
           {
             "kind": "whatif",
             "status": "elasticity",
-            "duration_ms": 72,
+            "duration_ms": 75,
             "payload": {
               "factor": "logistics_mode",
               "value": -0.011377786350203527,
@@ -1313,7 +1313,7 @@
           {
             "kind": "whatif",
             "status": "curve",
-            "duration_ms": 8,
+            "duration_ms": 10,
             "payload": {
               "base_value": 39104703.0,
               "factor_base": 433.71372210578227,
@@ -1379,7 +1379,7 @@
             }
           }
         ],
-        "duration_ms": 183
+        "duration_ms": 199
       }
     }
   ],

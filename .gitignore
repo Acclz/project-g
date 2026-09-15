@@ -22,6 +22,8 @@ dist/
 logs/
 *.log
 .runtime/
+# 界面冒烟与截图产物（playwright 脚本落盘目录）
+output/
 
 # 编辑器与系统
 .idea/

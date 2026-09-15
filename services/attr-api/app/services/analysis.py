@@ -191,6 +191,10 @@ def run_analysis(
         {
             "nodes": [node.code for node in decomposition.nodes],
             "max_relative_residual": decomposition.max_relative_residual,
+            # 根节点摘要进步骤载荷：前端与报告都从这一份数据画瀑布图，不再各自重算
+            "conserved": decomposition.ok,
+            "root": decomposition.root.as_dict(),
+            "skipped_targets": decomposition.skipped_targets,
         },
         marker,
     )
