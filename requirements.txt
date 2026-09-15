@@ -1,0 +1,36 @@
+# -*- coding: utf-8 -*-
+# 运行时 + 开发依赖（本地开发与后续上线包共用同一份，保证「本地跑通=线上跑通」）。
+# 注意：本项目**不依赖 Docker**，数据沙箱用受限子进程实现，因此不引入任何容器运行时依赖。
+
+# Web 服务
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30
+pydantic>=2.7
+pydantic-settings>=2.3
+python-multipart>=0.0.9
+
+# 存储
+sqlalchemy>=2.0.30,<2.1
+psycopg[binary]>=3.2
+alembic>=1.13
+
+# 认证
+PyJWT>=2.8
+argon2-cffi>=23.1
+
+# 数值与统计（分解算法、显著性检验、合成数据生成）
+numpy>=1.26
+scipy>=1.13
+pandas>=2.2
+
+# 报告导出（PDF 走 reportlab 内置中文 CID 字体，避免引入系统级字体依赖）
+openpyxl>=3.1
+reportlab>=4.1
+
+# 模型调用
+httpx>=0.27
+
+# dev / test
+pytest>=8.2
+pytest-asyncio>=0.23
+ruff>=0.5

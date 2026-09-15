@@ -1,0 +1,18 @@
+# 全仓库统一的 lint 配置（本地与 CI 共用同一份，避免两处规则打架）
+line-length = 100
+target-version = "py312"
+
+[lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008"]  # FastAPI 的 Depends 默认值写法会触发 B008
+
+[lint.per-file-ignores]
+# 测试里常有较长的中文断言与请求体，硬断行反而更难读
+"**/tests/*" = ["E501"]
+# 演示/运维脚本里的命令行参数与提示语同理
+"**/scripts/*" = ["E501"]
+# Alembic 自动生成的迁移文件：行宽与"未使用的导入"由生成器决定，不做人工约束
+"**/migrations/versions/*" = ["E501", "F401", "I001"]
+
+[lint.isort]
+known-first-party = ["attribution", "app"]
