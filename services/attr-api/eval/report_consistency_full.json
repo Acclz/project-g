@@ -1,0 +1,124 @@
+{
+  "session_id": 25,
+  "report_id": 1,
+  "context": {
+    "scenario": "ecom",
+    "note": "大促后付费投放渠道支付成功率下滑 22%，GMV 随之走低（场景 A 主案例）；因子口径 cvr（0.127689 → 0.101281）；LMDI 复核残差 3.191e-01 分"
+  },
+  "segments": [
+    {
+      "index": 1,
+      "title": "异动背景与问题定义",
+      "fields": 8
+    },
+    {
+      "index": 2,
+      "title": "因子贡献率拆解",
+      "fields": 12
+    },
+    {
+      "index": 3,
+      "title": "细分维度下钻证据",
+      "fields": 7
+    },
+    {
+      "index": 4,
+      "title": "核心归因结论",
+      "fields": 5
+    },
+    {
+      "index": 5,
+      "title": "因果证据链与检验置信度",
+      "fields": 19
+    },
+    {
+      "index": 6,
+      "title": "What-If 情景模拟结论",
+      "fields": 10
+    },
+    {
+      "index": 7,
+      "title": "可落地策略行动清单",
+      "fields": 15
+    }
+  ],
+  "exports": [
+    {
+      "id": 1,
+      "report_id": 1,
+      "format": "md",
+      "status": "completed",
+      "file_path": ".data\\exports\\report-1-58bf0be5.md",
+      "file_name": "report-1-58bf0be5.md",
+      "file_size": 15934,
+      "content_checksum": "sha256:58bf0be5275f34abd8fd78ef37363331",
+      "file_sha256": "80322ed47683f8a0a959d950ca7986739ecccef784f73e513d37c9f22bf6daaa",
+      "download_url": "/api/exports/1/download"
+    },
+    {
+      "id": 2,
+      "report_id": 1,
+      "format": "pdf",
+      "status": "completed",
+      "file_path": ".data\\exports\\report-1-58bf0be5.pdf",
+      "file_name": "report-1-58bf0be5.pdf",
+      "file_size": 16956,
+      "content_checksum": "sha256:58bf0be5275f34abd8fd78ef37363331",
+      "file_sha256": "7c97eff8a9599d4b0ae8b57ab57bc0fb486380d1f31b43083ebd6196b0c8a36b",
+      "download_url": "/api/exports/2/download"
+    },
+    {
+      "id": 3,
+      "report_id": 1,
+      "format": "xlsx",
+      "status": "completed",
+      "file_path": ".data\\exports\\report-1-58bf0be5.xlsx",
+      "file_name": "report-1-58bf0be5.xlsx",
+      "file_size": 14585,
+      "content_checksum": "sha256:58bf0be5275f34abd8fd78ef37363331",
+      "file_sha256": "a2fbed62540ca59bdf958c24760d014652f113df952f09eeb4588660b8686416",
+      "download_url": "/api/exports/3/download"
+    }
+  ],
+  "verification": {
+    "checksum": "sha256:58bf0be5275f34abd8fd78ef37363331",
+    "fields_total": 76,
+    "segments_total": 7,
+    "formats": {
+      "md": {
+        "checksum_match": true,
+        "fields_total": 76,
+        "fields_missing": 0,
+        "missing_fields": [],
+        "field_match": true,
+        "bytes": 15934,
+        "text_chars": 7473
+      },
+      "xlsx": {
+        "checksum_match": true,
+        "fields_total": 76,
+        "fields_missing": 0,
+        "missing_fields": [],
+        "field_match": true,
+        "bytes": 14585,
+        "text_chars": 7718
+      },
+      "pdf": {
+        "checksum_match": true,
+        "fields_total": 76,
+        "fields_missing": 0,
+        "missing_fields": [],
+        "field_match": true,
+        "bytes": 16956,
+        "text_chars": 6992
+      }
+    },
+    "formats_present": [
+      "md",
+      "pdf",
+      "xlsx"
+    ],
+    "consistent": true
+  },
+  "note": "E6 口径：三种格式与页面由同一份 structure_json 渲染；判定 = 内容校验和一致 + 每个字段的取值文本都能在三种格式的抽取文本里找到（PDF 用 pypdf 抽取内置 CID 字体）。"
+}

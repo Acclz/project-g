@@ -10,7 +10,16 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app import __version__
-from app.api import evaluation, events_api, health, metrics, sandbox_api, sessions_api
+from app.api import (
+    dashboard,
+    evaluation,
+    events_api,
+    health,
+    metrics,
+    reports_api,
+    sandbox_api,
+    sessions_api,
+)
 from app.config import get_settings
 
 
@@ -31,7 +40,11 @@ def create_app() -> FastAPI:
     app.include_router(sandbox_api.router, prefix="/api")
     app.include_router(evaluation.router, prefix="/api")
     app.include_router(events_api.router, prefix="/api")
+    # 报告路由要先于会话路由注册：会话的 `/{session_id}/{action}`（任务控制）是通配路由，
+    # 否则 `POST /api/sessions/{id}/reports` 会被当成"控制动作 reports"。
+    app.include_router(reports_api.router, prefix="/api")
     app.include_router(sessions_api.router, prefix="/api")
+    app.include_router(dashboard.router, prefix="/api")
     return app
 
 

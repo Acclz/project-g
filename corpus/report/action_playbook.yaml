@@ -1,0 +1,67 @@
+# 行动项台账（需求说明书 §5.11 第 4 条：禁止"加强运营、优化投放"这类泛化建议）
+#
+# 这里只写三件**必须绑定**的事：驱动因子、可干预因子、业务动作与责任岗位 / 预估周期。
+# 预期收益区间**不在这里写**——它一律来自 What-If 推演（区间上下界），
+# 没有可干预口径的因子就不给区间，只给排查动作，理由写进 note。
+#
+# 来源声明：责任岗位与周期为**项目自定参数**（无权威公开口径），与 calibration.csv 的自定参数同一性质；
+# 报告与材料中引用时必须说明是模拟值，不得包装成行业实践。
+
+version: 1
+updated: "2026-09-15"
+source_note: 责任岗位与预估周期为项目自定参数；预期收益区间来自 What-If 推演，不由本文件给数。
+
+factors:
+  ecom:
+    uv:
+      knob: budget_share
+      action: 调整付费渠道预算分配：按贡献排序，把预算从低效渠道挪向高效渠道
+      owner: 增长投放负责人
+      cycle: 2 周（一个投放迭代）
+      adjustment: 0.10
+    cvr:
+      knob: null
+      action: 支付链路转化专项：按加购 → 下单 → 支付成功逐环节排查，先定位卡点再改版
+      owner: 转化率运营负责人
+      cycle: 3 周
+      adjustment: null
+      note: 该驱动因子在数仓里没有可干预口径（属运营动作而非可调参数），因此不给预期收益区间
+    aov:
+      knob: price_index
+      action: 价格与商品结构优化：对贡献最大的品类做价格带与连带组合测试
+      owner: 商品与定价负责人
+      cycle: 4 周（一个定价测试周期）
+      adjustment: 0.05
+  fmcg:
+    revenue:
+      knob: price_index
+      action: 出厂价与渠道价格体系复盘：对毛利贡献最大的品类做价格弹性测试
+      owner: 商务与定价负责人
+      cycle: 4 周
+      adjustment: 0.05
+    raw_material_cost:
+      knob: null
+      action: 原料成本跟踪与采购谈判（PPI 属外生变量）：锁定长协价、评估替代料
+      owner: 采购负责人
+      cycle: 6 周
+      adjustment: null
+      note: 原料成本由外部价格驱动，属外生变量，不给收益承诺，只给跟踪与对冲动作
+    logistics_cost:
+      knob: logistics_mode
+      action: 物流模式调整：仓配一体与承运商切换试点，按单件履约成本验收
+      owner: 供应链负责人
+      cycle: 4 周
+      adjustment: -0.10
+    channel_commission:
+      knob: commission_rate
+      action: 渠道佣金条款重谈：按渠道贡献与获客成本重新分层定佣金
+      owner: 渠道商务负责人
+      cycle: 8 周
+      adjustment: -0.10
+    other_cost:
+      knob: null
+      action: 其他费用明细核查：先分类再定额，暂不给收益区间
+      owner: 财务 BP
+      cycle: 5 周
+      adjustment: null
+      note: 其他成本口径过宽，分类之前估不出可靠弹性

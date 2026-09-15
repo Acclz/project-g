@@ -71,6 +71,9 @@ class Settings(BaseSettings):
     attr_observation_days: int = 42
     attr_permutations: int = 10_000
     attr_event_window_days: int = 3
+    # 异动判定阈值（需求说明书 §5.4：阈值调整要留痕）
+    attr_change_threshold: float = 0.05
+    attr_z_threshold: float = 2.0
     # What-If 推演（技术规格 §5.6、需求说明书 §5.8）
     #: 弹性估计窗口天数：按天序列要 ≥60 个观测点才走对数回归（主路径）
     attr_whatif_window_days: int = 120
