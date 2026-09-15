@@ -1,0 +1,13 @@
+[project]
+name = "attribution"
+version = "0.1.0"
+description = "经营归因分析系统的纯算法包：指标树、差额分析、LMDI、守恒断言"
+requires-python = ">=3.12"
+dependencies = ["numpy>=1.26", "PyYAML>=6.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["attribution*"]

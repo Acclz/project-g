@@ -169,6 +169,7 @@ scenarios:
           structure: multiplicative
           formula: "units * unit_cost"
           method: lmdi
+          sign: -1
           sql: "SUM(fact.raw_material_cents)"
           children:
             - {code: raw_units, name: 耗用数量, level: atomic, sql: "SUM(fact.units)"}
@@ -178,6 +179,7 @@ scenarios:
           level: atomic
           structure: additive
           method: diff
+          sign: -1
           sql: "SUM(fact.logistics_cents)"
         - code: channel_commission
           name: 渠道佣金
@@ -185,6 +187,7 @@ scenarios:
           structure: multiplicative
           formula: "revenue * commission_rate"
           method: lmdi
+          sign: -1
           sql: "SUM(fact.channel_commission_cents)"
           children:
             - {code: commission_base, name: 计佣基数, level: derived, structure: unresolvable, formula: "revenue", sql: "SUM(fact.revenue_cents)"}
@@ -194,6 +197,7 @@ scenarios:
           level: atomic
           structure: additive
           method: diff
+          sign: -1
           sql: "SUM(fact.other_cents)"
 
 # What-If 可干预因子（只有出现在这里的因子才允许进入推演输入）
